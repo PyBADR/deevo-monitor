@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deevo Monitor — GCC Intelligence Dashboard</title>
+  <meta name="description" content="Real-time GCC intelligence dashboard — AI-powered insurance risk monitoring, geopolitical tracking, and infrastructure surveillance" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg-primary: #0a0e17;
+      --bg-secondary: #111827;
+      --bg-panel: #1a2332;
+      --bg-card: #1e293b;
+      --bg-hover: #243044;
+      --border: #2a3a50;
+      --border-active: #3b82f6;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-blue: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --accent-purple: #8b5cf6;
+      --accent-orange: #f97316;
+      --deevo-gold: #d4a843;
+      --deevo-dark-gold: #a8842f;
+      --font-sans: 'Inter', 'Noto Sans Arabic', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+      --radius: 8px;
+      --radius-lg: 12px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow: hidden;
+      height: 100vh;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* ─── Header ─── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      height: 42px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .logo {
+      display: flex; align-items: center; gap: 8px;
+      font-weight: 800; font-size: 14px; letter-spacing: 1.5px;
+      color: var(--deevo-gold);
+    }
+    .logo-icon {
+      width: 26px; height: 26px; background: linear-gradient(135deg, var(--deevo-gold), var(--deevo-dark-gold));
+      border-radius: 6px; display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 900; color: #0a0e17;
+    }
+    .version { font-size: 10px; color: var(--text-muted); font-family: var(--font-mono); }
+    .defcon-badge {
+      display: flex; align-items: center; gap: 6px;
+      padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 700;
+      background: rgba(239, 68, 68, 0.15); color: var(--accent-red);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .defcon-badge.elevated { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); border-color: rgba(245, 158, 11, 0.3); }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .header-btn {
+      padding: 4px 10px; font-size: 11px; background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--text-secondary); border-radius: 4px; cursor: pointer; font-family: var(--font-sans);
+    }
+    .header-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+    .header-btn.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
+    .time-display { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
+
+    /* ─── Layout ─── */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 200px 1fr 320px;
+      grid-template-rows: auto 1fr auto;
+      height: calc(100vh - 42px);
+    }
+    .situation-bar {
+      grid-column: 1 / -1;
+      padding: 6px 16px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 12px;
+    }
+    .situation-title { font-weight: 700; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; }
+    .situation-time { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
+
+    /* ─── Layers Panel ─── */
+    .layers-panel {
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 8px;
+    }
+    .layers-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 8px; margin-bottom: 6px;
+      font-size: 12px; font-weight: 600; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .layer-search {
+      width: 100%; padding: 6px 8px; margin-bottom: 8px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--text-primary); font-size: 11px; border-radius: 4px;
+      font-family: var(--font-sans);
+    }
+    .layer-search::placeholder { color: var(--text-muted); }
+    .layer-category { margin-bottom: 4px; }
+    .layer-category-header {
+      font-size: 10px; font-weight: 600; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.5px; padding: 4px 8px;
+    }
+    .layer-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 5px 8px; cursor: pointer; border-radius: 4px;
+      font-size: 12px; transition: background 0.15s;
+    }
+    .layer-item:hover { background: var(--bg-hover); }
+    .layer-check {
+      width: 16px; height: 16px; border-radius: 3px;
+      border: 2px solid var(--border); display: flex;
+      align-items: center; justify-content: center;
+      font-size: 10px; transition: all 0.15s;
+    }
+    .layer-check.on { border-color: var(--accent-green); background: var(--accent-green); color: #0a0e17; }
+    .layer-icon { font-size: 14px; }
+    .layer-name { flex: 1; }
+    .layer-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* ─── Map Container ─── */
+    .map-container { position: relative; overflow: hidden; }
+    #map { width: 100%; height: 100%; }
+    .map-controls {
+      position: absolute; top: 10px; right: 10px;
+      display: flex; flex-direction: column; gap: 4px; z-index: 10;
+    }
+    .map-ctrl-btn {
+      width: 32px; height: 32px; background: var(--bg-panel);
+      border: 1px solid var(--border); border-radius: 4px;
+      color: var(--text-primary); cursor: pointer; font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .map-ctrl-btn:hover { background: var(--bg-hover); }
+    .map-legend {
+      position: absolute; bottom: 8px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 16px; padding: 6px 16px;
+      background: rgba(10, 14, 23, 0.9); border-radius: 6px;
+      border: 1px solid var(--border); font-size: 10px;
+    }
+    .legend-item { display: flex; align-items: center; gap: 4px; color: var(--text-secondary); }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .view-toggle {
+      position: absolute; top: 10px; right: 50px;
+      display: flex; border-radius: 4px; overflow: hidden; z-index: 10;
+      border: 1px solid var(--border);
+    }
+    .view-btn {
+      padding: 4px 12px; font-size: 11px; font-weight: 600;
+      background: var(--bg-panel); color: var(--text-muted);
+      border: none; cursor: pointer;
+    }
+    .view-btn.active { background: var(--accent-blue); color: white; }
+
+    /* ─── Right Panel ─── */
+    .right-panel {
+      background: var(--bg-secondary);
+      border-left: 1px solid var(--border);
+      overflow-y: auto;
+      display: flex; flex-direction: column;
+    }
+    .panel-section {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .panel-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .panel-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--text-muted);
+    }
+    .panel-badge {
+      padding: 1px 6px; border-radius: 3px; font-size: 9px; font-weight: 700;
+    }
+    .badge-live { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+    .badge-count { background: var(--bg-card); color: var(--text-muted); }
+
+    /* ─── AI Insights ─── */
+    .ai-insight {
+      padding: 8px 10px; border-radius: 6px;
+      background: var(--bg-card); margin-bottom: 6px;
+      border-left: 3px solid var(--accent-cyan);
+    }
+    .ai-insight-label {
+      font-size: 9px; font-weight: 700; color: var(--accent-cyan);
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
+    }
+    .ai-insight-text { font-size: 12px; line-height: 1.5; color: var(--text-secondary); }
+
+    /* ─── Strategic Posture ─── */
+    .posture-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 10px; border-radius: 6px; margin-bottom: 4px;
+      background: var(--bg-card);
+    }
+    .posture-name { font-size: 12px; font-weight: 600; }
+    .posture-level {
+      padding: 2px 8px; border-radius: 3px;
+      font-size: 10px; font-weight: 800; letter-spacing: 0.5px;
+    }
+    .posture-level.CRIT { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+    .posture-level.HIGH { background: rgba(249, 115, 22, 0.2); color: var(--accent-orange); }
+    .posture-level.ELEV { background: rgba(245, 158, 11, 0.2); color: var(--accent-amber); }
+    .posture-level.NORM { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+
+    /* ─── Country Risk ─── */
+    .country-risk-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 6px 10px; border-radius: 6px; margin-bottom: 4px;
+      background: var(--bg-card); cursor: pointer; transition: background 0.15s;
+    }
+    .country-risk-item:hover { background: var(--bg-hover); }
+    .country-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .country-name { flex: 1; font-size: 12px; font-weight: 500; }
+    .country-score { font-size: 16px; font-weight: 800; font-family: var(--font-mono); }
+    .country-signals { font-size: 10px; color: var(--text-muted); font-family: var(--font-mono); }
+    .country-trend { font-size: 11px; }
+    .country-trend.up { color: var(--accent-red); }
+    .country-trend.down { color: var(--accent-green); }
+    .country-trend.flat { color: var(--text-muted); }
+
+    /* ─── AI Forecasts ─── */
+    .forecast-item {
+      padding: 8px 10px; border-radius: 6px;
+      background: var(--bg-card); margin-bottom: 6px;
+    }
+    .forecast-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .forecast-title { font-size: 12px; font-weight: 500; }
+    .forecast-prob { font-size: 14px; font-weight: 800; font-family: var(--font-mono); }
+    .forecast-prob.high { color: var(--accent-red); }
+    .forecast-prob.med { color: var(--accent-amber); }
+    .forecast-prob.low { color: var(--accent-green); }
+    .forecast-meta { font-size: 10px; color: var(--text-muted); }
+    .forecast-tags { display: flex; gap: 4px; margin-top: 4px; }
+    .forecast-tag {
+      padding: 1px 6px; border-radius: 3px; font-size: 9px; font-weight: 600;
+      background: var(--bg-hover); color: var(--text-muted);
+    }
+    .forecast-tag.conflict { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); }
+    .forecast-tag.market { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); }
+    .forecast-tag.supply { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }
+    .forecast-tag.insurance { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); }
+
+    /* ─── Bottom Bar ─── */
+    .bottom-bar {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 0.8fr;
+      height: 280px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-secondary);
+    }
+    .bottom-section {
+      border-right: 1px solid var(--border);
+      overflow: hidden; display: flex; flex-direction: column;
+    }
+    .bottom-section:last-child { border-right: none; }
+    .bottom-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 12px; border-bottom: 1px solid var(--border);
+      min-height: 36px;
+    }
+    .bottom-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+    .bottom-content { flex: 1; overflow-y: auto; padding: 8px; }
+
+    /* ─── News Feed ─── */
+    .news-channels {
+      display: flex; gap: 4px; flex-wrap: wrap;
+    }
+    .news-channel {
+      padding: 2px 8px; border-radius: 3px; font-size: 10px; font-weight: 600;
+      cursor: pointer; border: 1px solid transparent;
+      background: var(--bg-card); color: var(--text-muted);
+    }
+    .news-channel.active { color: white; }
+    .news-item {
+      padding: 6px 8px; border-radius: 4px; margin-bottom: 4px;
+      border-left: 3px solid var(--border); cursor: pointer;
+      transition: background 0.15s;
+    }
+    .news-item:hover { background: var(--bg-hover); }
+    .news-item.alert { border-left-color: var(--accent-red); }
+    .news-item.elevated { border-left-color: var(--accent-amber); }
+    .news-item.normal { border-left-color: var(--accent-green); }
+    .news-source { font-size: 9px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
+    .news-title { font-size: 12px; line-height: 1.4; margin-top: 2px; }
+    .news-time { font-size: 10px; color: var(--text-muted); font-family: var(--font-mono); margin-top: 2px; }
+
+    /* ─── Webcams ─── */
+    .webcam-filters { display: flex; gap: 4px; flex-wrap: wrap; }
+    .webcam-filter {
+      padding: 2px 8px; border-radius: 3px; font-size: 10px; font-weight: 600;
+      cursor: pointer; background: var(--bg-card); color: var(--text-muted);
+    }
+    .webcam-filter.active { background: var(--accent-blue); color: white; }
+    .webcam-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6px; padding: 4px 0;
+    }
+    .webcam-card {
+      border-radius: 6px; overflow: hidden; position: relative;
+      background: var(--bg-card); aspect-ratio: 16/9; cursor: pointer;
+      border: 1px solid var(--border); transition: border-color 0.15s;
+    }
+    .webcam-card:hover { border-color: var(--accent-blue); }
+    .webcam-placeholder {
+      width: 100%; height: 100%; display: flex; align-items: center;
+      justify-content: center; color: var(--text-muted); font-size: 20px;
+      background: linear-gradient(135deg, var(--bg-card), var(--bg-panel));
+    }
+    .webcam-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 3px 6px; background: rgba(0,0,0,0.7);
+      font-size: 9px; font-weight: 600;
+    }
+    .webcam-dot {
+      display: inline-block; width: 6px; height: 6px;
+      border-radius: 50%; background: var(--accent-red);
+      margin-right: 4px; animation: pulse 2s infinite;
+    }
+
+    /* ─── Risk Overview Chart ─── */
+    .risk-overview { padding: 8px; }
+    .risk-gauge {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 12px 0;
+    }
+    .risk-score-large {
+      font-size: 48px; font-weight: 900; font-family: var(--font-mono);
+      line-height: 1;
+    }
+    .risk-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+    .risk-trend-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .risk-chart-container { height: 100px; margin-top: 8px; }
+
+    /* ─── Intel Feed ─── */
+    .intel-feed { }
+    .intel-item {
+      padding: 6px 8px; border-radius: 4px; margin-bottom: 4px;
+      background: var(--bg-card);
+    }
+    .intel-badges { display: flex; gap: 4px; margin-bottom: 3px; }
+    .intel-badge {
+      padding: 1px 5px; border-radius: 2px; font-size: 8px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .intel-badge.alert { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+    .intel-badge.military { background: rgba(245, 158, 11, 0.2); color: var(--accent-amber); }
+    .intel-badge.cyber { background: rgba(139, 92, 246, 0.2); color: var(--accent-purple); }
+    .intel-badge.maritime { background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan); }
+    .intel-badge.insurance { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
+    .intel-badge.energy { background: rgba(249, 115, 22, 0.2); color: var(--accent-orange); }
+    .intel-text { font-size: 11px; line-height: 1.4; color: var(--text-secondary); }
+
+    /* ─── Footer ─── */
+    .footer {
+      grid-column: 1 / -1;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 4px 16px; height: 28px;
+      background: var(--bg-primary); border-top: 1px solid var(--border);
+      font-size: 10px; color: var(--text-muted);
+    }
+    .footer a { color: var(--deevo-gold); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 1200px) {
+      .main-layout { grid-template-columns: 180px 1fr 280px; }
+    }
+    @media (max-width: 900px) {
+      .main-layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+      .layers-panel, .right-panel { display: none; }
+      .bottom-bar { grid-template-columns: 1fr; height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ─── HEADER ─── -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">
+        <div class="logo-icon">D</div>
+        <span>DEEVO</span>
+      </div>
+      <span style="font-size: 13px; font-weight: 600; letter-spacing: 2px; color: var(--text-primary);">MONITOR</span>
+      <span class="version">v1.0.0</span>
+      <span style="font-size: 11px; color: var(--text-muted);">@BDRAI</span>
+      <span style="display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-muted);">
+        <span class="live-dot"></span> LIVE
+      </span>
+      <span style="font-size: 11px; color: var(--text-muted);">GCC</span>
+      <div class="defcon-badge elevated" id="riskBadge">
+        <span>RISK LEVEL</span>
+        <span id="riskLevelText">ELEVATED</span>
+        <span id="riskScoreSmall">32</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <span id="alertCount" style="display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--accent-amber);">
+        <span style="background: var(--accent-amber); color: #0a0e17; padding: 1px 6px; border-radius: 10px; font-weight: 700; font-size: 10px;">14</span>
+      </span>
+      <button class="header-btn" id="btnSearch">Search</button>
+      <button class="header-btn" id="btnLang">EN / عربي</button>
+      <button class="header-btn" id="btnSettings">Settings</button>
+      <span class="time-display" id="headerTime"></span>
+    </div>
+  </header>
+
+  <!-- ─── MAIN LAYOUT ─── -->
+  <div class="main-layout">
+    <!-- Situation Bar -->
+    <div class="situation-bar">
+      <span class="situation-title">GCC SITUATION</span>
+      <span class="situation-time" id="situationTime"></span>
+    </div>
+
+    <!-- Layers Panel -->
+    <div class="layers-panel">
+      <div class="layers-header">
+        <span>LAYERS</span>
+      </div>
+      <input type="text" class="layer-search" placeholder="Search layers ..." id="layerSearch" />
+      <div id="layersList"></div>
+      <div style="padding: 8px; margin-top: 8px; border-top: 1px solid var(--border);">
+        <div style="font-size: 10px; color: var(--deevo-gold); font-weight: 600;">
+          Deevo Analytics · BDRAI
+        </div>
+      </div>
+    </div>
+
+    <!-- Map -->
+    <div class="map-container">
+      <div id="map"></div>
+      <div class="view-toggle">
+        <button class="view-btn active" data-view="2d">2D</button>
+        <button class="view-btn" data-view="3d">3D</button>
+      </div>
+      <div class="map-controls">
+        <button class="map-ctrl-btn" id="zoomIn">+</button>
+        <button class="map-ctrl-btn" id="zoomOut">−</button>
+        <button class="map-ctrl-btn" id="resetView">⌂</button>
+      </div>
+      <div class="map-legend">
+        <div class="legend-item"><div class="legend-dot" style="background: #ff0000;"></div> High Alert</div>
+        <div class="legend-item"><div class="legend-dot" style="background: #ff6600;"></div> Elevated</div>
+        <div class="legend-item"><div class="legend-dot" style="background: #00cc66;"></div> Monitoring</div>
+        <div class="legend-item"><div class="legend-dot" style="background: #0066cc;"></div> Infrastructure</div>
+        <div class="legend-item"><div class="legend-dot" style="background: #9900cc;"></div> Insurance</div>
+        <div class="legend-item"><div class="legend-dot" style="background: #333;"></div> Oil & Gas</div>
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="right-panel">
+      <!-- AI Insights -->
+      <div class="panel-section">
+        <div class="panel-header">
+          <span class="panel-title">AI INSIGHTS</span>
+          <span class="panel-badge badge-live">LIVE</span>
+        </div>
+        <div id="aiInsights"></div>
+      </div>
+
+      <!-- Strategic Posture -->
+      <div class="panel-section">
+        <div class="panel-header">
+          <span class="panel-title">STRATEGIC POSTURE</span>
+        </div>
+        <div id="strategicPosture"></div>
+      </div>
+
+      <!-- Country Risk -->
+      <div class="panel-section">
+        <div class="panel-header">
+          <span class="panel-title">COUNTRY RISK INDEX</span>
+        </div>
+        <div id="countryRisk"></div>
+      </div>
+
+      <!-- AI Forecasts -->
+      <div class="panel-section">
+        <div class="panel-header">
+          <span class="panel-title">AI FORECASTS</span>
+          <span class="panel-badge badge-live">LIVE</span>
+        </div>
+        <div id="aiForecasts"></div>
+      </div>
+
+      <!-- Intel Feed -->
+      <div class="panel-section" style="flex: 1;">
+        <div class="panel-header">
+          <span class="panel-title">INTEL FEED</span>
+          <span class="panel-badge badge-live">LIVE</span>
+          <span class="panel-badge badge-count" id="intelCount">8</span>
+        </div>
+        <div id="intelFeed"></div>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+      <!-- Live News -->
+      <div class="bottom-section">
+        <div class="bottom-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="bottom-title">LIVE NEWS</span>
+            <span class="live-dot"></span>
+            <span class="panel-badge badge-count" id="newsCount">42</span>
+          </div>
+          <div class="news-channels" id="newsChannels"></div>
+        </div>
+        <div class="bottom-content" id="newsFeed"></div>
+      </div>
+
+      <!-- Live Webcams -->
+      <div class="bottom-section">
+        <div class="bottom-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="bottom-title">LIVE WEBCAMS</span>
+            <span class="live-dot"></span>
+            <span class="panel-badge badge-count" id="webcamCount">14</span>
+          </div>
+          <div class="webcam-filters" id="webcamFilters"></div>
+        </div>
+        <div class="bottom-content">
+          <div class="webcam-grid" id="webcamGrid"></div>
+        </div>
+      </div>
+
+      <!-- Risk Overview -->
+      <div class="bottom-section">
+        <div class="bottom-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="bottom-title">GCC RISK OVERVIEW</span>
+            <span class="panel-badge badge-live">LIVE</span>
+          </div>
+        </div>
+        <div class="bottom-content">
+          <div class="risk-gauge">
+            <div class="risk-score-large" id="overallRiskScore" style="color: var(--accent-amber);">32</div>
+            <div class="risk-label" style="color: var(--accent-amber);">ELEVATED</div>
+            <div class="risk-trend-label">Trend: <span id="riskTrend">→ Stable</span></div>
+          </div>
+          <div class="risk-chart-container">
+            <canvas id="riskChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <span>DEEVO MONITOR by <a href="https://github.com/PyBADR">BDRAI</a> · <a href="#">Pro</a> · <a href="#">Blog</a> · <a href="#">Docs</a> · <a href="https://github.com/PyBADR/deevo-monitor">GitHub</a></span>
+      <span>© 2026 Deevo Analytics · Powered by Ollama + Cortex</span>
+    </div>
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════
+    //  DEEVO MONITOR — GCC Intelligence Dashboard Engine
+    // ═══════════════════════════════════════════════════════════
+
+    // ─── Data ────────────────────────────────────────────────
+    const GCC = {
+      SA: { name: 'Saudi Arabia', nameAr: 'السعودية', lat: 24.7136, lon: 46.6753, score: 32, trend: -1.2, signals: { U: 15, C: 35, S: 20, I: 45, E: 40, F: 28 }, color: '#10b981' },
+      AE: { name: 'UAE', nameAr: 'الإمارات', lat: 24.4539, lon: 54.3773, score: 28, trend: -0.5, signals: { U: 10, C: 30, S: 15, I: 40, E: 35, F: 25 }, color: '#10b981' },
+      QA: { name: 'Qatar', nameAr: 'قطر', lat: 25.2854, lon: 51.5310, score: 22, trend: -2.1, signals: { U: 8, C: 25, S: 12, I: 35, E: 20, F: 18 }, color: '#3b82f6' },
+      KW: { name: 'Kuwait', nameAr: 'الكويت', lat: 29.3759, lon: 47.9774, score: 30, trend: 0.3, signals: { U: 12, C: 32, S: 18, I: 42, E: 30, F: 22 }, color: '#10b981' },
+      BH: { name: 'Bahrain', nameAr: 'البحرين', lat: 26.2285, lon: 50.5860, score: 35, trend: 1.8, signals: { U: 20, C: 38, S: 25, I: 45, E: 25, F: 32 }, color: '#f59e0b' },
+      OM: { name: 'Oman', nameAr: 'عُمان', lat: 23.5880, lon: 58.3829, score: 33, trend: 0.1, signals: { U: 10, C: 36, S: 22, I: 48, E: 35, F: 30 }, color: '#10b981' },
+    };
+
+    const LAYERS = [
+      { cat: 'RISK', items: [
+        { id: 'claims-heatmap', name: 'Claims Heatmap', icon: '🔥', color: '#ff4444', on: true },
+        { id: 'fraud-hotspots', name: 'Fraud Hotspots', icon: '⚠️', color: '#ff8800', on: true },
+        { id: 'risk-zones', name: 'Risk Zones', icon: '🎯', color: '#cc0000', on: true },
+        { id: 'cat-exposure', name: 'Cat Exposure', icon: '🌪️', color: '#9900cc', on: false },
+        { id: 'flood-zones', name: 'Flood Zones', icon: '🌊', color: '#0066ff', on: false },
+      ]},
+      { cat: 'INFRASTRUCTURE', items: [
+        { id: 'oil-gas', name: 'Oil & Gas', icon: '🛢️', color: '#333', on: true },
+        { id: 'ports', name: 'Ports & Terminals', icon: '⚓', color: '#0088cc', on: true },
+        { id: 'airports', name: 'Airports', icon: '✈️', color: '#00cc88', on: false },
+        { id: 'desal', name: 'Desalination', icon: '💧', color: '#00aaff', on: false },
+        { id: 'mega-projects', name: 'Mega Projects', icon: '🏗️', color: '#ff6600', on: false },
+        { id: 'cables', name: 'Undersea Cables', icon: '🔌', color: '#00ffcc', on: false },
+      ]},
+      { cat: 'GEOPOLITICAL', items: [
+        { id: 'conflict-zones', name: 'Conflict Zones', icon: '✕', color: '#ff0000', on: true },
+        { id: 'military-bases', name: 'Military Bases', icon: '🏛️', color: '#cc0000', on: false },
+        { id: 'shipping-lanes', name: 'Shipping Lanes', icon: '🚢', color: '#0066cc', on: true },
+        { id: 'hormuz', name: 'Strait of Hormuz', icon: '🌊', color: '#ff3366', on: true },
+        { id: 'sanctions', name: 'Sanctions', icon: '🚫', color: '#990000', on: false },
+      ]},
+      { cat: 'ENVIRONMENT', items: [
+        { id: 'weather', name: 'Weather Alerts', icon: '🌡️', color: '#ff6600', on: true },
+        { id: 'sandstorms', name: 'Sandstorms', icon: '🏜️', color: '#cc9900', on: false },
+        { id: 'seismic', name: 'Seismic', icon: '📊', color: '#9933cc', on: false },
+        { id: 'fires', name: 'Fire Hotspots', icon: '🔥', color: '#ff0000', on: false },
+      ]},
+      { cat: 'INSURANCE', items: [
+        { id: 'insured-assets', name: 'Insured Assets', icon: '🛡️', color: '#0066ff', on: true },
+        { id: 'treaty-zones', name: 'Treaty Zones', icon: '📋', color: '#6600cc', on: false },
+        { id: 'loss-accum', name: 'Loss Accumulation', icon: '📈', color: '#cc3300', on: false },
+      ]},
+    ];
+
+    const THEATERS = [
+      { name: 'Iran Theater', nameAr: 'المسرح الإيراني', level: 'CRIT', detail: '→ stable → Iran' },
+      { name: 'Yemen / Red Sea', nameAr: 'اليمن / البحر الأحمر', level: 'ELEV', detail: '→ Houthi maritime' },
+      { name: 'Arabian Gulf', nameAr: 'الخليج العربي', level: 'NORM', detail: '→ Naval stable' },
+      { name: 'Horn of Africa', nameAr: 'القرن الأفريقي', level: 'ELEV', detail: '→ Piracy risk' },
+      { name: 'Levant / Iraq', nameAr: 'المشرق / العراق', level: 'NORM', detail: '→ Reconstruction' },
+    ];
+
+    const NEWS = [
+      { source: 'REUTERS', title: 'Saudi Aramco reports record Q4 earnings amid rising oil demand', time: '12 min ago', level: 'normal', channel: 'bloomberg' },
+      { source: 'BLOOMBERG', title: 'Strait of Hormuz insurance premiums surge 15% on Iran escalation', time: '28 min ago', level: 'alert', channel: 'bloomberg' },
+      { source: 'ARAB NEWS', title: 'SAMA issues new IFRS 17 compliance guidelines for insurers', time: '42 min ago', level: 'elevated', channel: 'alarabiya' },
+      { source: 'AL ARABIYA', title: 'UAE announces $2.5B infrastructure protection program for 2026', time: '1h ago', level: 'normal', channel: 'alarabiya' },
+      { source: 'MEED', title: 'NEOM Phase 2 construction begins — $12B insured value at risk', time: '1h ago', level: 'elevated', channel: 'cnbc-ar' },
+      { source: 'GULF NEWS', title: 'Dubai floods aftermath: claims backlog reaches 45,000 cases', time: '2h ago', level: 'alert', channel: 'aljazeera' },
+      { source: 'ZAWYA', title: 'Qatar National Insurance reports 23% premium growth in GCC markets', time: '2h ago', level: 'normal', channel: 'cnbc-ar' },
+      { source: 'REUTERS', title: 'Houthi drone attack disrupts Red Sea shipping routes near Bab el-Mandeb', time: '3h ago', level: 'alert', channel: 'bloomberg' },
+      { source: 'AL MONITOR', title: 'Iran nuclear talks stall — Gulf states increase defense spending', time: '3h ago', level: 'elevated', channel: 'aljazeera' },
+      { source: 'ARTEMIS', title: 'GCC catastrophe bond issuance hits $1.8B — record quarter', time: '4h ago', level: 'normal', channel: 'bloomberg' },
+      { source: 'INSURANCE JOURNAL', title: 'Lloyd\'s syndicates expand GCC property book by 30%', time: '4h ago', level: 'normal', channel: 'cnbc-ar' },
+      { source: 'CNBC ARABIA', title: 'Tadawul insurance sector index up 4.2% on SAMA reform optimism', time: '5h ago', level: 'normal', channel: 'cnbc-ar' },
+    ];
+
+    const FORECASTS = [
+      { title: 'Oil price impact from Strait of Hormuz disruption', prob: 67, timeframe: '24h: 95% | 7d: 92% | 30d: 67%', region: 'Middle East | 30d | falling', tags: ['supply', 'insurance'] },
+      { title: 'GCC motor claims surge from summer heat wave', prob: 54, timeframe: '7d: 72% | 30d: 54%', region: 'GCC | 30d | rising', tags: ['insurance'] },
+      { title: 'Cyber attack on GCC financial infrastructure', prob: 23, timeframe: '7d: 35% | 30d: 23%', region: 'GCC | 30d | stable', tags: ['conflict'] },
+      { title: 'Saudi regulatory change affecting health insurance', prob: 78, timeframe: '7d: 85% | 30d: 78%', region: 'Saudi Arabia | 30d | rising', tags: ['market', 'insurance'] },
+    ];
+
+    const INTEL = [
+      { badges: ['alert', 'maritime'], text: 'AIS anomaly detected — 3 tankers diverted from Strait of Hormuz standard lane' },
+      { badges: ['insurance', 'alert'], text: 'SAMA circular: All insurers must submit IFRS 17 transition reports by April 30' },
+      { badges: ['military'], text: 'US 5th Fleet conducts exercise with Bahrain Navy in northern Arabian Gulf' },
+      { badges: ['energy'], text: 'Abqaiq processing facility reports routine maintenance shutdown — 2 day window' },
+      { badges: ['cyber', 'alert'], text: 'Saudi NCSC advisory: APT group targeting GCC financial sector via phishing' },
+      { badges: ['insurance'], text: 'Dubai flood claims processing update: 67% of 45K claims resolved' },
+      { badges: ['maritime', 'insurance'], text: 'P&I Club issues updated war risk advisory for Red Sea transit' },
+      { badges: ['energy', 'market'], text: 'Qatar North Field expansion Phase 2 contracts awarded — $28B total' },
+    ];
+
+    const WEBCAM_CITIES = [
+      { name: 'RIYADH', country: 'SA', emoji: '🏙️' },
+      { name: 'DUBAI', country: 'AE', emoji: '🌆' },
+      { name: 'DOHA', country: 'QA', emoji: '🏙️' },
+      { name: 'JEDDAH', country: 'SA', emoji: '🌊' },
+      { name: 'ABU DHABI', country: 'AE', emoji: '🏛️' },
+      { name: 'MAKKAH', country: 'SA', emoji: '🕋' },
+      { name: 'KUWAIT CITY', country: 'KW', emoji: '🏙️' },
+      { name: 'MANAMA', country: 'BH', emoji: '🏙️' },
+      { name: 'MUSCAT', country: 'OM', emoji: '⛰️' },
+      { name: 'NEOM', country: 'SA', emoji: '🏗️' },
+      { name: 'JEBEL ALI', country: 'AE', emoji: '⚓' },
+      { name: 'HORMUZ', country: 'OM', emoji: '🌊' },
+      { name: 'RAS LAFFAN', country: 'QA', emoji: '🏭' },
+      { name: 'YANBU', country: 'SA', emoji: '🛢️' },
+    ];
+
+    const CHANNELS = [
+      { id: 'all', name: 'ALL', color: '#3b82f6' },
+      { id: 'bloomberg', name: 'BLOOMBERG', color: '#ff6600' },
+      { id: 'alarabiya', name: 'AL ARABIYA', color: '#cc0000' },
+      { id: 'aljazeera', name: 'AL JAZEERA', color: '#cc9900' },
+      { id: 'cnbc-ar', name: 'CNBC', color: '#003399' },
+    ];
+
+    // ─── Render Functions ────────────────────────────────────
+    function updateTime() {
+      const now = new Date();
+      const utc = now.toUTCString().replace('GMT', 'UTC');
+      document.getElementById('headerTime').textContent = utc.split(' ').slice(1).join(' ');
+      document.getElementById('situationTime').textContent = now.toUTCString().toUpperCase().replace('GMT', 'UTC');
+    }
+
+    function renderLayers() {
+      const container = document.getElementById('layersList');
+      container.innerHTML = LAYERS.map(cat => `
+        <div class="layer-category">
+          <div class="layer-category-header">${cat.cat}</div>
+          ${cat.items.map(l => `
+            <div class="layer-item" data-layer="${l.id}" onclick="toggleLayer('${l.id}')">
+              <div class="layer-check ${l.on ? 'on' : ''}" id="check-${l.id}">${l.on ? '✓' : ''}</div>
+              <span class="layer-dot" style="background: ${l.color};"></span>
+              <span class="layer-icon">${l.icon}</span>
+              <span class="layer-name">${l.name}</span>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+    }
+
+    function toggleLayer(id) {
+      for (const cat of LAYERS) {
+        const layer = cat.items.find(l => l.id === id);
+        if (layer) {
+          layer.on = !layer.on;
+          const check = document.getElementById(`check-${id}`);
+          check.classList.toggle('on');
+          check.textContent = layer.on ? '✓' : '';
+          break;
+        }
+      }
+    }
+
+    function renderAIInsights() {
+      const insights = [
+        { label: 'GCC BRIEF', text: 'Strait of Hormuz tensions elevated after Iran naval exercises. Marine insurance premiums for Gulf transit have increased 15% week-over-week. Recommend reviewing treaty reinsurance exposure for GCC marine portfolios.' },
+        { label: 'INSURANCE ALERT', text: 'SAMA\'s new IFRS 17 circular requires all Saudi insurers to file transition impact assessments by Q2 2026. Combined ratio pressure expected across motor and health lines.' },
+      ];
+      document.getElementById('aiInsights').innerHTML = insights.map(i => `
+        <div class="ai-insight">
+          <div class="ai-insight-label">${i.label}</div>
+          <div class="ai-insight-text">${i.text}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderPosture() {
+      document.getElementById('strategicPosture').innerHTML = THEATERS.map(t => `
+        <div class="posture-item">
+          <div>
+            <div class="posture-name">${t.name}</div>
+            <div style="font-size: 10px; color: var(--text-muted);">${t.detail}</div>
+          </div>
+          <span class="posture-level ${t.level}">${t.level}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderCountryRisk() {
+      const sorted = Object.entries(GCC).sort((a, b) => b[1].score - a[1].score);
+      document.getElementById('countryRisk').innerHTML = sorted.map(([code, c]) => {
+        const trendClass = c.trend > 0 ? 'up' : c.trend < 0 ? 'down' : 'flat';
+        const trendArrow = c.trend > 0 ? '↑' : c.trend < 0 ? '↓' : '→';
+        const s = c.signals;
+        return `
+          <div class="country-risk-item">
+            <div class="country-dot" style="background: ${c.color};"></div>
+            <div class="country-name">${c.name}</div>
+            <div class="country-score">${c.score}</div>
+            <span class="country-trend ${trendClass}">${trendArrow} ${Math.abs(c.trend)}</span>
+          </div>
+          <div style="padding: 0 10px 4px 38px; font-size: 10px; color: var(--text-muted); font-family: var(--font-mono);">
+            U:${s.U} C:${s.C} S:${s.S} I:${s.I} E:${s.E} F:${s.F}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderForecasts() {
+      document.getElementById('aiForecasts').innerHTML = FORECASTS.map(f => {
+        const probClass = f.prob >= 60 ? 'high' : f.prob >= 40 ? 'med' : 'low';
+        return `
+          <div class="forecast-item">
+            <div class="forecast-header">
+              <div class="forecast-title">${f.title}</div>
+              <div class="forecast-prob ${probClass}">${f.prob}%</div>
+            </div>
+            <div class="forecast-meta">${f.timeframe}</div>
+            <div class="forecast-meta">${f.region}</div>
+            <div class="forecast-tags">
+              ${f.tags.map(t => `<span class="forecast-tag ${t}">${t.toUpperCase()}</span>`).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderIntelFeed() {
+      document.getElementById('intelFeed').innerHTML = INTEL.map(i => `
+        <div class="intel-item">
+          <div class="intel-badges">
+            ${i.badges.map(b => `<span class="intel-badge ${b}">${b.toUpperCase()}</span>`).join('')}
+          </div>
+          <div class="intel-text">${i.text}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderNewsChannels() {
+      const container = document.getElementById('newsChannels');
+      container.innerHTML = CHANNELS.map(ch => `
+        <span class="news-channel ${ch.id === 'all' ? 'active' : ''}"
+              style="${ch.id === 'all' ? 'background:' + ch.color + ';color:white;' : ''}"
+              data-channel="${ch.id}"
+              onclick="filterNews('${ch.id}')">${ch.name}</span>
+      `).join('');
+    }
+
+    let activeChannel = 'all';
+    function filterNews(channelId) {
+      activeChannel = channelId;
+      document.querySelectorAll('.news-channel').forEach(el => {
+        const id = el.dataset.channel;
+        const ch = CHANNELS.find(c => c.id === id);
+        if (id === channelId) {
+          el.classList.add('active');
+          el.style.background = ch.color;
+          el.style.color = 'white';
+        } else {
+          el.classList.remove('active');
+          el.style.background = '';
+          el.style.color = '';
+        }
+      });
+      renderNewsFeed();
+    }
+
+    function renderNewsFeed() {
+      const filtered = activeChannel === 'all' ? NEWS : NEWS.filter(n => n.channel === activeChannel);
+      document.getElementById('newsFeed').innerHTML = filtered.map(n => `
+        <div class="news-item ${n.level}">
+          <div class="news-source">${n.source}</div>
+          <div class="news-title">${n.title}</div>
+          <div class="news-time">${n.time}</div>
+        </div>
+      `).join('');
+      document.getElementById('newsCount').textContent = filtered.length;
+    }
+
+    function renderWebcamFilters() {
+      const countries = ['ALL', 'SA', 'AE', 'QA', 'KW', 'BH', 'OM'];
+      document.getElementById('webcamFilters').innerHTML = countries.map(c => `
+        <span class="webcam-filter ${c === 'ALL' ? 'active' : ''}" data-country="${c}" onclick="filterWebcams('${c}')">${c}</span>
+      `).join('');
+    }
+
+    let activeWebcamFilter = 'ALL';
+    function filterWebcams(country) {
+      activeWebcamFilter = country;
+      document.querySelectorAll('.webcam-filter').forEach(el => {
+        el.classList.toggle('active', el.dataset.country === country);
+      });
+      renderWebcams();
+    }
+
+    function renderWebcams() {
+      const filtered = activeWebcamFilter === 'ALL'
+        ? WEBCAM_CITIES
+        : WEBCAM_CITIES.filter(w => w.country === activeWebcamFilter);
+      document.getElementById('webcamGrid').innerHTML = filtered.slice(0, 6).map(w => `
+        <div class="webcam-card">
+          <div class="webcam-placeholder">${w.emoji}</div>
+          <div class="webcam-label"><span class="webcam-dot"></span> ${w.name}</div>
+        </div>
+      `).join('');
+      document.getElementById('webcamCount').textContent = filtered.length;
+    }
+
+    // ─── Map ─────────────────────────────────────────────────
+    function initMap() {
+      const map = new maplibregl.Map({
+        container: 'map',
+        style: {
+          version: 8,
+          sources: {
+            'osm-tiles': {
+              type: 'raster',
+              tiles: ['https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png'],
+              tileSize: 256,
+              attribution: '© CartoDB © OSM',
+            }
+          },
+          layers: [{
+            id: 'osm-tiles',
+            type: 'raster',
+            source: 'osm-tiles',
+            minzoom: 0,
+            maxzoom: 19,
+          }],
+          glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
+        },
+        center: [49.0, 25.0], // Center on GCC
+        zoom: 4.5,
+        minZoom: 3,
+        maxZoom: 18,
+      });
+
+      map.on('load', () => {
+        // Add GCC country markers
+        const markers = [
+          ...Object.entries(GCC).map(([code, c]) => ({
+            lon: c.lon, lat: c.lat, name: c.name, score: c.score, type: 'country',
+            color: c.score >= 40 ? '#f59e0b' : c.score >= 20 ? '#10b981' : '#3b82f6'
+          })),
+          // Oil & Gas
+          { lon: 49.40, lat: 25.38, name: 'Ghawar Field', type: 'oil', color: '#333' },
+          { lon: 50.16, lat: 26.64, name: 'Ras Tanura', type: 'oil', color: '#333' },
+          { lon: 49.68, lat: 25.94, name: 'Abqaiq', type: 'oil', color: '#ff6600' },
+          { lon: 52.73, lat: 24.11, name: 'Ruwais', type: 'oil', color: '#333' },
+          { lon: 52.00, lat: 26.00, name: 'North Field', type: 'oil', color: '#333' },
+          { lon: 47.97, lat: 29.07, name: 'Burgan Field', type: 'oil', color: '#333' },
+          // Ports
+          { lon: 55.03, lat: 25.00, name: 'Jebel Ali', type: 'port', color: '#0088cc' },
+          { lon: 39.17, lat: 21.48, name: 'Jeddah Port', type: 'port', color: '#0088cc' },
+          { lon: 51.58, lat: 25.01, name: 'Hamad Port', type: 'port', color: '#0088cc' },
+          // Risk zones
+          { lon: 56.25, lat: 26.57, name: 'Strait of Hormuz', type: 'risk', color: '#ff3366' },
+          { lon: 43.30, lat: 14.80, name: 'Bab el-Mandeb', type: 'risk', color: '#ff0000' },
+          // Mega projects
+          { lon: 35.30, lat: 27.95, name: 'NEOM', type: 'mega', color: '#ff6600' },
+          { lon: 39.83, lat: 21.42, name: 'Makkah', type: 'city', color: '#d4a843' },
+        ];
+
+        markers.forEach(m => {
+          const el = document.createElement('div');
+          el.style.cssText = `
+            width: ${m.type === 'country' ? '28px' : '14px'};
+            height: ${m.type === 'country' ? '28px' : '14px'};
+            background: ${m.color};
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: ${m.type === 'country' ? '10px' : '7px'};
+            font-weight: 800;
+            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            box-shadow: 0 0 ${m.type === 'risk' ? '12px' : '6px'} ${m.color}88;
+          `;
+          if (m.type === 'country') el.textContent = m.score;
+
+          const popup = new maplibregl.Popup({ offset: 15, closeButton: false })
+            .setHTML(`<div style="font-family: Inter, sans-serif; font-size: 12px; font-weight: 600; color: #1e293b;">${m.name}${m.type === 'country' ? ` — Risk: ${m.score}` : ''}</div>`);
+
+          new maplibregl.Marker({ element: el })
+            .setLngLat([m.lon, m.lat])
+            .setPopup(popup)
+            .addTo(map);
+        });
+
+        // Shipping lanes (simplified)
+        map.addSource('shipping-lanes', {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: [
+              { type: 'Feature', geometry: { type: 'LineString', coordinates: [[56.25, 26.57], [54.0, 25.5], [51.5, 25.0], [50.5, 26.2], [49.0, 28.0]] }, properties: { name: 'Gulf Shipping Lane' }},
+              { type: 'Feature', geometry: { type: 'LineString', coordinates: [[56.25, 26.57], [58.0, 24.0], [60.0, 22.0], [56.0, 17.0], [43.3, 14.8]] }, properties: { name: 'Arabian Sea → Red Sea' }},
+              { type: 'Feature', geometry: { type: 'LineString', coordinates: [[43.3, 14.8], [42.0, 15.5], [39.0, 20.0], [39.17, 21.48]] }, properties: { name: 'Red Sea North' }},
+            ],
+          },
+        });
+        map.addLayer({
+          id: 'shipping-lanes-line',
+          type: 'line',
+          source: 'shipping-lanes',
+          paint: {
+            'line-color': '#06b6d4',
+            'line-width': 1.5,
+            'line-opacity': 0.5,
+            'line-dasharray': [4, 4],
+          },
+        });
+      });
+
+      // Controls
+      document.getElementById('zoomIn').onclick = () => map.zoomIn();
+      document.getElementById('zoomOut').onclick = () => map.zoomOut();
+      document.getElementById('resetView').onclick = () => map.flyTo({ center: [49.0, 25.0], zoom: 4.5 });
+
+      return map;
+    }
+
+    // ─── Risk Chart ──────────────────────────────────────────
+    function initRiskChart() {
+      const ctx = document.getElementById('riskChart').getContext('2d');
+      const labels = Array.from({ length: 24 }, (_, i) => `${23 - i}h`).reverse();
+      const data = [30, 31, 30, 29, 30, 31, 32, 33, 34, 33, 32, 31, 30, 31, 32, 33, 34, 35, 34, 33, 32, 32, 31, 32];
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            data,
+            borderColor: '#f59e0b',
+            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 0,
+            borderWidth: 2,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: {
+              display: true,
+              ticks: { font: { size: 8, family: 'JetBrains Mono' }, color: '#64748b', maxTicksLimit: 6 },
+              grid: { color: 'rgba(42, 58, 80, 0.5)' },
+            },
+            y: {
+              display: true,
+              min: 0, max: 100,
+              ticks: { font: { size: 8, family: 'JetBrains Mono' }, color: '#64748b', stepSize: 25 },
+              grid: { color: 'rgba(42, 58, 80, 0.5)' },
+            },
+          },
+        },
+      });
+    }
+
+    // ─── Layer Search ────────────────────────────────────────
+    document.getElementById('layerSearch').addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      document.querySelectorAll('.layer-item').forEach(el => {
+        const name = el.querySelector('.layer-name').textContent.toLowerCase();
+        el.style.display = name.includes(q) ? '' : 'none';
+      });
+    });
+
+    // ─── Init ────────────────────────────────────────────────
+    function init() {
+      updateTime();
+      setInterval(updateTime, 1000);
+      renderLayers();
+      renderAIInsights();
+      renderPosture();
+      renderCountryRisk();
+      renderForecasts();
+      renderIntelFeed();
+      renderNewsChannels();
+      renderNewsFeed();
+      renderWebcamFilters();
+      renderWebcams();
+      initMap();
+      initRiskChart();
+    }
+
+    init();
+  </script>
+</body>
+</html>

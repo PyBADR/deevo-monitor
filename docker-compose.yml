@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+  # ── Frontend ──
+  deevo-monitor:
+    build: .
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_VARIANT=world
+      - VITE_OLLAMA_URL=http://ollama:11434
+    depends_on:
+      - redis
+      - ollama
+    restart: unless-stopped
+
+  # ── Cache ──
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+  # ── Local AI ──
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+
+volumes:
+  redis-data:
+  ollama-data:
