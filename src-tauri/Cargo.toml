@@ -1,0 +1,28 @@
+[package]
+name = "deevo-monitor"
+version = "1.0.0"
+description = "Deevo Monitor — GCC Intelligence Dashboard Desktop App"
+authors = ["BDRAI <bader.marketing.39@gmail.com>"]
+edition = "2021"
+license = "AGPL-3.0"
+
+[lib]
+name = "deevo_monitor_lib"
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon", "protocol-asset"] }
+tauri-plugin-shell = "2"
+tauri-plugin-process = "2"
+tauri-plugin-os = "2"
+tauri-plugin-notification = "2"
+tauri-plugin-http = "2"
+tauri-plugin-clipboard-manager = "2"
+tauri-plugin-window-state = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.12", features = ["json"] }
