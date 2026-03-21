@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Base Resets ──────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-surface-3;
+  }
+
+  body {
+    @apply bg-surface-0 text-gray-100;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Scrollbar styling for dark theme */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-surface-0;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-surface-3 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500;
+  }
+}
+
+/* ── Component Utilities ─────────────────────────────── */
+@layer components {
+  .glass-panel {
+    @apply bg-surface-1/80 backdrop-blur-md border border-surface-3/50 rounded-xl;
+  }
+
+  .dri-badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider;
+  }
+
+  .stat-card {
+    @apply glass-panel p-4 flex flex-col gap-1;
+  }
+
+  .feed-item {
+    @apply px-3 py-2 border-l-2 border-surface-3 hover:border-accent-cyan transition-colors;
+  }
+}
+
+/* ── RTL Support ─────────────────────────────────────── */
+[dir="rtl"] .feed-item {
+  @apply border-l-0 border-r-2;
+}
+
+/* ── MapLibre overrides ──────────────────────────────── */
+.maplibregl-ctrl-bottom-left,
+.maplibregl-ctrl-bottom-right {
+  display: none;
+}
+
+/* ── Animations ──────────────────────────────────────── */
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in-right 0.3s ease-out;
+}

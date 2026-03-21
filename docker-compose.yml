@@ -1,44 +1,47 @@
-version: '3.9'
+version: "3.9"
 
 services:
-  # ── Frontend ──
-  deevo-monitor:
-    build: .
+  # ── Deevo Monitor Dashboard ─────────────────────────
+  monitor:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "5173:5173"
+      - "3001:3001"
     environment:
-      - VITE_VARIANT=world
-      - VITE_OLLAMA_URL=http://ollama:11434
+      - NODE_ENV=production
+      - PORT=3001
+      - CORS_ORIGIN=http://localhost:3001
+      - OLLAMA_URL=http://host.docker.internal:11434
+      - OLLAMA_MODEL=llama3.2:3b
+      - CORTEX_URL=http://cortex:8010/api/v1/cortex
+      - CORTEX_TOKEN=${CORTEX_TOKEN:-dev-token}
+      - CORTEX_TENANT=${CORTEX_TENANT:-default}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - deevo-net
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # ── Nginx Reverse Proxy (optional) ──────────────────
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
-      - redis
-      - ollama
+      monitor:
+        condition: service_healthy
     restart: unless-stopped
+    networks:
+      - deevo-net
 
-  # ── Cache ──
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis-data:/data
-    restart: unless-stopped
-
-  # ── Local AI ──
-  ollama:
-    image: ollama/ollama:latest
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama-data:/root/.ollama
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-    restart: unless-stopped
-
-volumes:
-  redis-data:
-  ollama-data:
+networks:
+  deevo-net:
+    driver: bridge
