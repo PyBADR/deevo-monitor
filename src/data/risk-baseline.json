@@ -1,0 +1,62 @@
+[
+  {
+    "regionId": "gcc-kw",
+    "countryCode": "KW",
+    "countryName": "Kuwait",
+    "countryNameAr": "الكويت",
+    "dri": 3,
+    "driTrend": "rising",
+    "scores": { "fraud": 58, "claims": 62, "weather": 35, "geopolitical": 40, "motor": 72, "medical": 55 },
+    "lastUpdated": "2026-03-22T08:00:00Z"
+  },
+  {
+    "regionId": "gcc-sa",
+    "countryCode": "SA",
+    "countryName": "Saudi Arabia",
+    "countryNameAr": "المملكة العربية السعودية",
+    "dri": 3,
+    "driTrend": "stable",
+    "scores": { "fraud": 52, "claims": 58, "weather": 28, "geopolitical": 35, "motor": 65, "medical": 48 },
+    "lastUpdated": "2026-03-22T08:00:00Z"
+  },
+  {
+    "regionId": "gcc-ae",
+    "countryCode": "AE",
+    "countryName": "UAE",
+    "countryNameAr": "الإمارات",
+    "dri": 2,
+    "driTrend": "falling",
+    "scores": { "fraud": 48, "claims": 55, "weather": 22, "geopolitical": 20, "motor": 60, "medical": 52 },
+    "lastUpdated": "2026-03-22T08:00:00Z"
+  },
+  {
+    "regionId": "gcc-qa",
+    "countryCode": "QA",
+    "countryName": "Qatar",
+    "countryNameAr": "قطر",
+    "dri": 2,
+    "driTrend": "stable",
+    "scores": { "fraud": 35, "claims": 42, "weather": 18, "geopolitical": 38, "motor": 45, "medical": 38 },
+    "lastUpdated": "2026-03-22T08:00:00Z"
+  },
+  {
+    "regionId": "gcc-bh",
+    "countryCode": "BH",
+    "countryName": "Bahrain",
+    "countryNameAr": "البحرين",
+    "dri": 2,
+    "driTrend": "falling",
+    "scores": { "fraud": 30, "claims": 38, "weather": 15, "geopolitical": 22, "motor": 42, "medical": 35 },
+    "lastUpdated": "2026-03-22T08:00:00Z"
+  },
+  {
+    "regionId": "gcc-om",
+    "countryCode": "OM",
+    "countryName": "Oman",
+    "countryNameAr": "عمان",
+    "dri": 2,
+    "driTrend": "stable",
+    "scores": { "fraud": 28, "claims": 40, "weather": 42, "geopolitical": 25, "motor": 38, "medical": 32 },
+    "lastUpdated": "2026-03-22T08:00:00Z"
+  }
+]

@@ -1,131 +1,106 @@
 /**
- * AppShell — Main application layout.
- * Grid: [LeftPanel 320px] [Map flex-1] [RightPanel 380px]
- * Top: DRI status bar (48px)
- * Bottom: Live feed ticker (40px)
+ * AppShell — Master layout (worldmonitor-style CSS Grid).
  *
- * Responsive: panels collapse on < 1024px with toggle buttons.
+ * ┌─────────────────────────────────────────────────────┐
+ * │ StatusBar (h:40px fixed top)                        │
+ * ├──────────────────────────────────────────────────────┤
+ * │                                                     │
+ * │     DeevoMap (fills remaining height)               │
+ * │     + LayerPanel overlay (left)                     │
+ * │     + RiskLegend overlay (bottom-left)              │
+ * │                                                     │
+ * ├──────────────┬────────────┬──────────┬──────────────┤
+ * │ LiveFeed     │ AIInsights │ Forecast │ AlertFeed    │
+ * │ (25%)        │ (25%)      │ (25%)    │ (25%)        │
+ * └──────────────┴────────────┴──────────┴──────────────┘
+ * └─ BottomTicker (h:32px)                              ┘
  */
-import { useState } from "react";
 import { GCCMap } from "@/components/map/GCCMap";
+import { LayerPanel } from "@/components/map/LayerPanel";
+import { RiskLegend } from "@/components/map/RiskLegend";
+import { StatusBar } from "@/components/layout/StatusBar";
 import { LiveFeed } from "@/components/panels/LiveFeed";
-import { RiskScore } from "@/components/panels/RiskScore";
 import { AIInsights } from "@/components/panels/AIInsights";
+import { ForecastPanel } from "@/components/panels/ForecastPanel";
+import { AlertFeedPanel } from "@/components/panels/AlertFeedPanel";
+import { RiskScore } from "@/components/panels/RiskScore";
 import { PipelineStats } from "@/components/panels/PipelineStats";
-import { DRIBadge } from "@/components/shared/DRIBadge";
 import { useDataStore } from "@/stores/dataStore";
 import { useSocket } from "@/hooks/useSocket";
 import { useInitialData } from "@/hooks/useApi";
+import { LiveDot } from "@/components/shared/LiveDot";
+import { useState } from "react";
 import { clsx } from "clsx";
 
 export function AppShell() {
-  const driLevel = useDataStore((s) => s.driLevel);
-  const [leftOpen, setLeftOpen] = useState(true);
-  const [rightOpen, setRightOpen] = useState(true);
-  const [rightTab, setRightTab] = useState<"risk" | "ai">("risk");
-
   // Initialize data streams
   useSocket();
   useInitialData();
 
+  const [bottomTab, setBottomTab] = useState<
+    "feed" | "ai" | "risk" | "forecast" | "alerts" | "pipeline"
+  >("feed");
+
   return (
-    <div className="h-screen w-screen flex flex-col bg-surface-0 overflow-hidden">
-      {/* ── Top Bar ─────────────────────────────────────── */}
-      <header className="h-12 flex items-center justify-between px-4 glass-panel rounded-none border-x-0 border-t-0 z-20 shrink-0">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setLeftOpen(!leftOpen)}
-            className="lg:hidden text-gray-400 hover:text-accent-cyan text-sm"
-            title="Toggle feed panel"
-          >
-            ☰
-          </button>
-          <span className="text-accent-cyan font-bold text-lg tracking-tight">
-            DEEVO MONITOR
-          </span>
-          <span className="text-[10px] text-gray-600 font-mono hidden sm:inline">
-            v2.0.0
-          </span>
-        </div>
+    <div className="h-screen w-screen flex flex-col bg-[#0A0E1A] overflow-hidden">
+      {/* ── StatusBar ─────────────────────────────────── */}
+      <StatusBar />
 
-        <div className="flex items-center gap-4">
-          <DRIBadge level={driLevel} size="md" />
-          <span className="text-[10px] text-gray-500 hidden md:inline">
-            GCC Insurance Intelligence
-          </span>
-          <button
-            onClick={() => setRightOpen(!rightOpen)}
-            className="lg:hidden text-gray-400 hover:text-accent-cyan text-sm"
-            title="Toggle analysis panel"
-          >
-            ⚙
-          </button>
-        </div>
-      </header>
+      {/* ── Map Area ──────────────────────────────────── */}
+      <div className="flex-1 relative overflow-hidden">
+        <GCCMap />
+        <LayerPanel />
+        <RiskLegend />
+      </div>
 
-      {/* ── Main Content ────────────────────────────────── */}
-      <main className="flex-1 flex overflow-hidden">
-        {/* Left Panel — Live Feed */}
-        <aside
-          className={clsx(
-            "shrink-0 glass-panel rounded-none border-t-0 border-l-0 border-b-0 z-10 transition-all duration-300 overflow-hidden",
-            leftOpen ? "w-80" : "w-0"
-          )}
-        >
-          <LiveFeed />
-        </aside>
-
-        {/* Center — Map */}
-        <div className="flex-1 relative">
-          <GCCMap />
-        </div>
-
-        {/* Right Panel — Risk + AI */}
-        <aside
-          className={clsx(
-            "shrink-0 glass-panel rounded-none border-t-0 border-r-0 border-b-0 z-10 flex flex-col transition-all duration-300 overflow-hidden",
-            rightOpen ? "w-96" : "w-0"
-          )}
-        >
-          {/* Tab switcher */}
-          <div className="flex border-b border-surface-3 shrink-0">
+      {/* ── Bottom Panel Section ──────────────────────── */}
+      <div className="h-[280px] shrink-0 flex flex-col border-t border-[#1F2937]">
+        {/* Tab bar */}
+        <div className="h-8 flex items-center bg-[#0A0E1A] border-b border-[#1F2937] px-1 shrink-0">
+          {[
+            { id: "feed" as const, label: "LIVE NEWS", color: "#00D4FF" },
+            { id: "ai" as const, label: "AI INSIGHTS", color: "#34C759" },
+            { id: "risk" as const, label: "RISK INDEX", color: "#FFD600" },
+            { id: "forecast" as const, label: "FORECASTS", color: "#FF6B35" },
+            { id: "alerts" as const, label: "ALERTS", color: "#FF2D55" },
+            { id: "pipeline" as const, label: "PIPELINE", color: "#00D4FF" },
+          ].map((tab) => (
             <button
-              onClick={() => setRightTab("risk")}
+              key={tab.id}
+              onClick={() => setBottomTab(tab.id)}
               className={clsx(
-                "flex-1 text-xs py-2 transition-colors",
-                rightTab === "risk"
-                  ? "text-accent-cyan border-b-2 border-accent-cyan"
-                  : "text-gray-500 hover:text-gray-300"
+                "h-full px-3 text-[10px] font-mono uppercase tracking-wider transition-colors relative",
+                bottomTab === tab.id
+                  ? "text-gray-200"
+                  : "text-gray-600 hover:text-gray-400"
               )}
             >
-              Risk Scores
-            </button>
-            <button
-              onClick={() => setRightTab("ai")}
-              className={clsx(
-                "flex-1 text-xs py-2 transition-colors",
-                rightTab === "ai"
-                  ? "text-accent-emerald border-b-2 border-accent-emerald"
-                  : "text-gray-500 hover:text-gray-300"
+              {tab.label}
+              {bottomTab === tab.id && (
+                <span
+                  className="absolute bottom-0 left-0 right-0 h-[2px]"
+                  style={{ backgroundColor: tab.color }}
+                />
               )}
-            >
-              AI Insights
             </button>
+          ))}
+          <div className="ml-auto flex items-center gap-2 pr-2">
+            <LiveDot status="live" size="sm" />
           </div>
+        </div>
 
-          {/* Tab content */}
-          <div className="flex-1 overflow-hidden">
-            {rightTab === "risk" ? <RiskScore /> : <AIInsights />}
-          </div>
+        {/* Panel content */}
+        <div className="flex-1 bg-[#111827] overflow-hidden">
+          {bottomTab === "feed" && <LiveFeed />}
+          {bottomTab === "ai" && <AIInsights />}
+          {bottomTab === "risk" && <RiskScore />}
+          {bottomTab === "forecast" && <ForecastPanel />}
+          {bottomTab === "alerts" && <AlertFeedPanel />}
+          {bottomTab === "pipeline" && <PipelineStats />}
+        </div>
+      </div>
 
-          {/* Pipeline stats — always visible at bottom */}
-          <div className="shrink-0 border-t border-surface-3">
-            <PipelineStats />
-          </div>
-        </aside>
-      </main>
-
-      {/* ── Bottom Ticker ────────────────────────────────── */}
+      {/* ── Bottom Ticker ─────────────────────────────── */}
       <BottomTicker />
     </div>
   );
@@ -136,21 +111,21 @@ function BottomTicker() {
   const latest = feedItems[0];
 
   return (
-    <footer className="h-10 flex items-center px-4 glass-panel rounded-none border-x-0 border-b-0 text-xs font-mono shrink-0 z-20 overflow-hidden">
-      <span className="text-accent-cyan animate-pulse shrink-0">◉</span>
-      <span className="text-gray-500 ml-2 shrink-0">LIVE</span>
-      <span className="mx-2 text-surface-3">│</span>
-      <div className="flex-1 truncate text-gray-400">
+    <footer className="h-8 flex items-center px-3 bg-[#0A0E1A] border-t border-[#1F2937] text-[10px] font-mono shrink-0 z-20 overflow-hidden">
+      <span className="text-[#00D4FF] animate-pulse shrink-0">◉</span>
+      <span className="text-gray-600 ml-2 shrink-0">LIVE</span>
+      <span className="mx-2 text-[#1F2937]">│</span>
+      <div className="flex-1 truncate text-gray-500">
         {latest ? (
           <>
-            <span className="text-gray-500">[{latest.category.toUpperCase()}]</span>{" "}
+            <span className="text-gray-600">[{latest.category.toUpperCase()}]</span>{" "}
             {latest.title}
           </>
         ) : (
           "Connecting to intelligence feeds..."
         )}
       </div>
-      <span className="text-gray-600 ml-2 shrink-0">
+      <span className="text-gray-700 ml-2 shrink-0">
         {new Date().toLocaleTimeString("en-US", { hour12: false })}
       </span>
     </footer>

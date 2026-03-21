@@ -87,43 +87,6 @@ export function GCCMap() {
         <Map mapStyle={MAP_STYLE} />
       </DeckGL>
 
-      {/* Layer toggle overlay */}
-      <LayerToggle />
-    </div>
-  );
-}
-
-function LayerToggle() {
-  const activeLayers = useMapStore((s) => s.activeLayers);
-  const toggleLayer = useMapStore((s) => s.toggleLayer);
-
-  const layerDefs = [
-    { id: "hexagon" as const, label: "Risk Density", icon: "⬡" },
-    { id: "scatterplot" as const, label: "Claim Clusters", icon: "◉" },
-    { id: "arc" as const, label: "Fraud Links", icon: "⌒" },
-    { id: "heatmap" as const, label: "Heat Map", icon: "🔥" },
-    { id: "icon" as const, label: "Alerts", icon: "⚠" },
-  ] as const;
-
-  return (
-    <div className="absolute top-3 right-3 glass-panel p-2 space-y-1 z-10">
-      <div className="text-[10px] text-gray-500 uppercase tracking-widest px-2 pb-1">
-        Layers
-      </div>
-      {layerDefs.map((l) => (
-        <button
-          key={l.id}
-          onClick={() => toggleLayer(l.id)}
-          className={`flex items-center gap-2 px-2 py-1 rounded text-xs w-full transition-colors ${
-            activeLayers.has(l.id)
-              ? "bg-accent-cyan/20 text-accent-cyan"
-              : "text-gray-500 hover:text-gray-300"
-          }`}
-        >
-          <span>{l.icon}</span>
-          <span>{l.label}</span>
-        </button>
-      ))}
     </div>
   );
 }

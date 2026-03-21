@@ -27,13 +27,49 @@ interface FeedSource {
   active: boolean;
 }
 
-// ── RSS Sources ──────────────────────────────────────────
+// ── RSS Sources (20+ GCC insurance / regulatory / news feeds) ──
 const RSS_SOURCES: FeedSource[] = [
+  // ── Pan-GCC & Regional ────────────────────────────────
   { name: "Reuters Middle East", url: "https://www.reuters.com/rssFeed/middleeastNews", category: "geopolitical", country: "GCC", active: true },
   { name: "Arabian Business", url: "https://www.arabianbusiness.com/rss", category: "market", country: "GCC", active: true },
+  { name: "Middle East Insurance Review", url: "https://www.meinsurancereview.com/rss", category: "insurance", country: "GCC", active: true },
+  { name: "MENA Insurance CEO Club", url: "https://www.menaceoclub.com/feed", category: "reinsurance", country: "GCC", active: true },
+  { name: "Artemis Reinsurance", url: "https://www.artemis.bm/feed/", category: "reinsurance", country: "GCC", active: true },
+  { name: "Insurance Journal", url: "https://www.insurancejournal.com/rss/international/", category: "insurance", country: "GCC", active: true },
+  { name: "Reinsurance News", url: "https://www.reinsurancene.ws/feed/", category: "reinsurance", country: "GCC", active: true },
+
+  // ── UAE ────────────────────────────────────────────────
   { name: "Gulf News", url: "https://gulfnews.com/rss", category: "geopolitical", country: "AE", active: true },
+  { name: "Khaleej Times", url: "https://www.khaleejtimes.com/rss", category: "market", country: "AE", active: true },
+  { name: "The National UAE", url: "https://www.thenationalnews.com/rss", category: "geopolitical", country: "AE", active: true },
+
+  // ── Saudi Arabia ──────────────────────────────────────
   { name: "Saudi Gazette", url: "https://saudigazette.com.sa/rss", category: "regulatory", country: "SA", active: true },
+  { name: "Arab News", url: "https://www.arabnews.com/rss.xml", category: "geopolitical", country: "SA", active: true },
+  { name: "Argaam Business", url: "https://www.argaam.com/en/rss/articles", category: "market", country: "SA", active: true },
+
+  // ── Kuwait ─────────────────────────────────────────────
+  { name: "Kuwait Times", url: "https://www.kuwaittimes.com/feed/", category: "geopolitical", country: "KW", active: true },
+  { name: "Arab Times Kuwait", url: "https://www.arabtimesonline.com/feed/", category: "market", country: "KW", active: true },
+
+  // ── Qatar ──────────────────────────────────────────────
   { name: "Qatar Tribune", url: "https://www.qatar-tribune.com/rss", category: "geopolitical", country: "QA", active: true },
+  { name: "The Peninsula Qatar", url: "https://thepeninsulaqatar.com/rss", category: "market", country: "QA", active: true },
+  { name: "Gulf Times Qatar", url: "https://www.gulf-times.com/rss", category: "geopolitical", country: "QA", active: true },
+
+  // ── Bahrain ────────────────────────────────────────────
+  { name: "Gulf Daily News", url: "https://www.gdnonline.com/rss", category: "market", country: "BH", active: true },
+  { name: "Daily Tribune Bahrain", url: "https://www.newsofbahrain.com/rss", category: "geopolitical", country: "BH", active: true },
+
+  // ── Oman ───────────────────────────────────────────────
+  { name: "Times of Oman", url: "https://timesofoman.com/rss", category: "geopolitical", country: "OM", active: true },
+  { name: "Muscat Daily", url: "https://www.muscatdaily.com/feed/", category: "market", country: "OM", active: true },
+
+  // ── Weather / CAT ─────────────────────────────────────
+  { name: "ReliefWeb MENA", url: "https://reliefweb.int/updates/rss.xml?primary_country=8657", category: "weather", country: "GCC", active: true },
+
+  // ── Cyber Risk ─────────────────────────────────────────
+  { name: "Dark Reading", url: "https://www.darkreading.com/rss.xml", category: "cyber", country: "GCC", active: true },
 ];
 
 // ── In-memory store ──────────────────────────────────────
