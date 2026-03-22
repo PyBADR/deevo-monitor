@@ -1,0 +1,12 @@
+{
+  "nav": { "dashboard": "仪表盘", "map": "地图", "news": "新闻", "webcams": "摄像头", "finance": "金融", "intelligence": "情报", "settings": "设置", "search": "搜索", "layers": "图层", "alerts": "警报", "reports": "报告" },
+  "status": { "live": "直播", "connected": "已连接", "disconnected": "已断开", "syncing": "同步中", "lastUpdated": "最后更新", "feedsActive": "活跃订阅源", "sourcesConnected": "已连接源" },
+  "panel": { "intelFeed": "情报信息流", "liveNews": "实时新闻", "aiInsights": "AI洞察", "riskIndex": "风险指数", "forecasts": "预测", "financeRadar": "金融雷达", "commodities": "大宗商品", "stockMarkets": "股票市场" },
+  "country": { "SA": "沙特阿拉伯", "AE": "阿联酋", "KW": "科威特", "QA": "卡塔尔", "BH": "巴林", "OM": "阿曼" },
+  "risk": { "low": "低", "moderate": "中等", "elevated": "偏高", "high": "高", "critical": "危急", "score": "风险评分", "trend": "趋势", "rising": "上升", "falling": "下降", "stable": "稳定" },
+  "general": { "loading": "加载中...", "error": "错误", "retry": "重试", "noData": "暂无数据", "save": "保存", "cancel": "取消", "close": "关闭", "apply": "应用", "reset": "重置", "export": "导出", "refresh": "刷新", "filter": "筛选", "all": "全部", "yes": "是", "no": "否", "more": "更多", "less": "更少" },
+  "settings": { "title": "设置", "appearance": "外观", "theme": "主题", "dark": "深色", "light": "浅色", "language": "语言", "about": "关于" },
+  "finance": { "title": "金融", "stocks": "股票", "crypto": "加密货币", "commodities": "大宗商品", "volume": "成交量", "change": "涨跌幅", "price": "价格" },
+  "variant": { "global": "DEEVO Monitor", "tech": "DEEVO Tech", "finance": "DEEVO Finance", "fraud": "DEEVO Fraud", "commodity": "DEEVO Commodity", "happy": "DEEVO Happy" },
+  "footer": { "poweredBy": "由DEEVO Analytics提供技术支持", "copyright": "© {{year}} DEEVO Analytics — 海湾保险情报" }
+}

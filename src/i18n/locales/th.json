@@ -1,0 +1,11 @@
+{
+  "nav": { "dashboard": "แดชบอร์ด", "map": "แผนที่", "news": "ข่าว", "webcams": "เว็บแคม", "finance": "การเงิน", "intelligence": "ข่าวกรอง", "settings": "ตั้งค่า", "search": "ค้นหา", "layers": "เลเยอร์", "alerts": "การแจ้งเตือน", "reports": "รายงาน" },
+  "status": { "live": "สด", "connected": "เชื่อมต่อแล้ว", "disconnected": "ตัดการเชื่อมต่อ", "syncing": "กำลังซิงค์", "lastUpdated": "อัปเดตล่าสุด" },
+  "country": { "SA": "ซาอุดีอาระเบีย", "AE": "สหรัฐอาหรับเอมิเรตส์", "KW": "คูเวต", "QA": "กาตาร์", "BH": "บาห์เรน", "OM": "โอมาน" },
+  "risk": { "low": "ต่ำ", "moderate": "ปานกลาง", "elevated": "สูงขึ้น", "high": "สูง", "critical": "วิกฤต", "score": "คะแนนความเสี่ยง", "trend": "แนวโน้ม", "rising": "ขาขึ้น", "falling": "ขาลง", "stable": "คงที่" },
+  "general": { "loading": "กำลังโหลด...", "error": "ข้อผิดพลาด", "retry": "ลองอีกครั้ง", "noData": "ไม่มีข้อมูล", "save": "บันทึก", "cancel": "ยกเลิก", "close": "ปิด", "apply": "ใช้งาน", "reset": "รีเซ็ต", "export": "ส่งออก", "refresh": "รีเฟรช", "filter": "กรอง", "all": "ทั้งหมด", "yes": "ใช่", "no": "ไม่", "more": "เพิ่มเติม", "less": "น้อยลง" },
+  "settings": { "title": "ตั้งค่า", "appearance": "รูปลักษณ์", "theme": "ธีม", "dark": "มืด", "light": "สว่าง", "language": "ภาษา", "about": "เกี่ยวกับ" },
+  "finance": { "title": "การเงิน", "stocks": "หุ้น", "crypto": "คริปโต", "commodities": "สินค้าโภคภัณฑ์", "volume": "ปริมาณ", "change": "เปลี่ยนแปลง", "price": "ราคา" },
+  "variant": { "global": "DEEVO Monitor", "tech": "DEEVO Tech", "finance": "DEEVO Finance", "fraud": "DEEVO Fraud", "commodity": "DEEVO Commodity", "happy": "DEEVO Happy" },
+  "footer": { "poweredBy": "ขับเคลื่อนโดย DEEVO Analytics", "copyright": "© {{year}} DEEVO Analytics — ข่าวกรองประกันภัย GCC" }
+}

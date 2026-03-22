@@ -1,0 +1,11 @@
+{
+  "nav": { "dashboard": "ڈیش بورڈ", "map": "نقشہ", "news": "خبریں", "webcams": "ویب کیمز", "finance": "مالیات", "intelligence": "انٹیلی جنس", "settings": "ترتیبات", "search": "تلاش", "layers": "تہیں", "alerts": "انتباہات", "reports": "رپورٹیں" },
+  "status": { "live": "براہ راست", "connected": "منسلک", "disconnected": "منقطع", "syncing": "مطابقت پذیری", "lastUpdated": "آخری تازہ کاری", "feedsActive": "فعال فیڈز", "sourcesConnected": "منسلک ذرائع" },
+  "country": { "SA": "سعودی عرب", "AE": "متحدہ عرب امارات", "KW": "کویت", "QA": "قطر", "BH": "بحرین", "OM": "عمان" },
+  "risk": { "low": "کم", "moderate": "معتدل", "elevated": "بلند", "high": "زیادہ", "critical": "نازک", "score": "خطرے کا اسکور", "trend": "رجحان", "rising": "بڑھ رہا ہے", "falling": "گر رہا ہے", "stable": "مستحکم" },
+  "general": { "loading": "لوڈ ہو رہا ہے...", "error": "خرابی", "retry": "دوبارہ کوشش", "noData": "کوئی ڈیٹا دستیاب نہیں", "save": "محفوظ کریں", "cancel": "منسوخ", "close": "بند کریں", "apply": "لاگو کریں", "reset": "ری سیٹ", "export": "برآمد", "refresh": "تازہ کریں", "filter": "فلٹر", "all": "تمام", "yes": "ہاں", "no": "نہیں", "more": "مزید", "less": "کم" },
+  "settings": { "title": "ترتیبات", "appearance": "ظاہری شکل", "theme": "تھیم", "dark": "تاریک", "light": "روشن", "language": "زبان", "about": "کے بارے میں" },
+  "finance": { "title": "مالیات", "stocks": "حصص", "crypto": "کرپٹو کرنسی", "commodities": "اجناس", "volume": "حجم", "change": "تبدیلی", "price": "قیمت" },
+  "variant": { "global": "DEEVO Monitor", "tech": "DEEVO Tech", "finance": "DEEVO Finance", "fraud": "DEEVO Fraud", "commodity": "DEEVO Commodity", "happy": "DEEVO Happy" },
+  "footer": { "poweredBy": "DEEVO Analytics کی طرف سے", "copyright": "© {{year}} DEEVO Analytics — GCC انشورنس انٹیلی جنس" }
+}

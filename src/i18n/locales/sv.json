@@ -1,0 +1,11 @@
+{
+  "nav": { "dashboard": "Instrumentpanel", "map": "Karta", "news": "Nyheter", "webcams": "Webbkameror", "finance": "Finans", "intelligence": "Underrättelser", "settings": "Inställningar", "search": "Sök", "layers": "Lager", "alerts": "Varningar", "reports": "Rapporter" },
+  "status": { "live": "LIVE", "connected": "Ansluten", "disconnected": "Frånkopplad", "syncing": "Synkroniserar", "lastUpdated": "Senast uppdaterad" },
+  "country": { "SA": "Saudiarabien", "AE": "Förenade Arabemiraten", "KW": "Kuwait", "QA": "Qatar", "BH": "Bahrain", "OM": "Oman" },
+  "risk": { "low": "Låg", "moderate": "Måttlig", "elevated": "Förhöjd", "high": "Hög", "critical": "Kritisk", "score": "Riskpoäng", "trend": "Trend", "rising": "Stigande", "falling": "Fallande", "stable": "Stabil" },
+  "general": { "loading": "Laddar...", "error": "Fel", "retry": "Försök igen", "noData": "Ingen data tillgänglig", "save": "Spara", "cancel": "Avbryt", "close": "Stäng", "apply": "Tillämpa", "reset": "Återställ", "export": "Exportera", "refresh": "Uppdatera", "filter": "Filtrera", "all": "Alla", "yes": "Ja", "no": "Nej", "more": "Mer", "less": "Mindre" },
+  "settings": { "title": "Inställningar", "appearance": "Utseende", "theme": "Tema", "dark": "Mörkt", "light": "Ljust", "language": "Språk", "about": "Om" },
+  "finance": { "title": "Finans", "stocks": "Aktier", "crypto": "Kryptovaluta", "commodities": "Råvaror", "volume": "Volym", "change": "Förändring", "price": "Pris" },
+  "variant": { "global": "DEEVO Monitor", "tech": "DEEVO Tech", "finance": "DEEVO Finance", "fraud": "DEEVO Fraud", "commodity": "DEEVO Commodity", "happy": "DEEVO Happy" },
+  "footer": { "poweredBy": "Drivs av DEEVO Analytics", "copyright": "© {{year}} DEEVO Analytics — GCC försäkringsunderrättelser" }
+}

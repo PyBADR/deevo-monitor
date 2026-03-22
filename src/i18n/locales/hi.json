@@ -1,0 +1,11 @@
+{
+  "nav": { "dashboard": "डैशबोर्ड", "map": "नक्शा", "news": "समाचार", "webcams": "वेबकैम", "finance": "वित्त", "intelligence": "खुफिया जानकारी", "settings": "सेटिंग्स", "search": "खोजें", "layers": "परतें", "alerts": "अलर्ट", "reports": "रिपोर्ट" },
+  "status": { "live": "लाइव", "connected": "कनेक्टेड", "disconnected": "डिस्कनेक्टेड", "syncing": "सिंक हो रहा है", "lastUpdated": "अंतिम अपडेट", "feedsActive": "सक्रिय फ़ीड", "sourcesConnected": "कनेक्टेड स्रोत" },
+  "country": { "SA": "सऊदी अरब", "AE": "संयुक्त अरब अमीरात", "KW": "कुवैत", "QA": "कतर", "BH": "बहरीन", "OM": "ओमान" },
+  "risk": { "low": "कम", "moderate": "मध्यम", "elevated": "उन्नत", "high": "उच्च", "critical": "गंभीर", "score": "जोखिम स्कोर", "trend": "रुझान", "rising": "बढ़ रहा है", "falling": "गिर रहा है", "stable": "स्थिर" },
+  "general": { "loading": "लोड हो रहा है...", "error": "त्रुटि", "retry": "पुनः प्रयास करें", "noData": "कोई डेटा उपलब्ध नहीं", "save": "सहेजें", "cancel": "रद्द करें", "close": "बंद करें", "apply": "लागू करें", "reset": "रीसेट", "export": "निर्यात", "refresh": "रिफ्रेश", "filter": "फ़िल्टर", "all": "सभी", "yes": "हां", "no": "नहीं", "more": "अधिक", "less": "कम" },
+  "settings": { "title": "सेटिंग्स", "appearance": "दिखावट", "theme": "थीम", "dark": "डार्क", "light": "लाइट", "language": "भाषा", "about": "के बारे में" },
+  "finance": { "title": "वित्त", "stocks": "शेयर", "crypto": "क्रिप्टोकरेंसी", "commodities": "कमोडिटीज", "volume": "वॉल्यूम", "change": "परिवर्तन", "price": "कीमत" },
+  "variant": { "global": "DEEVO Monitor", "tech": "DEEVO Tech", "finance": "DEEVO Finance", "fraud": "DEEVO Fraud", "commodity": "DEEVO Commodity", "happy": "DEEVO Happy" },
+  "footer": { "poweredBy": "DEEVO Analytics द्वारा संचालित", "copyright": "© {{year}} DEEVO Analytics — GCC बीमा खुफिया" }
+}

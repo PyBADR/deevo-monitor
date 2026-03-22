@@ -1,0 +1,11 @@
+{
+  "nav": { "dashboard": "Panel", "map": "Mapa", "news": "Wiadomości", "webcams": "Kamery", "finance": "Finanse", "intelligence": "Wywiad", "settings": "Ustawienia", "search": "Szukaj", "layers": "Warstwy", "alerts": "Alerty", "reports": "Raporty" },
+  "status": { "live": "NA ŻYWO", "connected": "Połączono", "disconnected": "Rozłączono", "syncing": "Synchronizacja", "lastUpdated": "Ostatnia aktualizacja" },
+  "country": { "SA": "Arabia Saudyjska", "AE": "Zjednoczone Emiraty Arabskie", "KW": "Kuwejt", "QA": "Katar", "BH": "Bahrajn", "OM": "Oman" },
+  "risk": { "low": "Niski", "moderate": "Umiarkowany", "elevated": "Podwyższony", "high": "Wysoki", "critical": "Krytyczny", "score": "Ocena ryzyka", "trend": "Trend", "rising": "Rosnący", "falling": "Spadający", "stable": "Stabilny" },
+  "general": { "loading": "Ładowanie...", "error": "Błąd", "retry": "Ponów", "noData": "Brak danych", "save": "Zapisz", "cancel": "Anuluj", "close": "Zamknij", "apply": "Zastosuj", "reset": "Resetuj", "export": "Eksportuj", "refresh": "Odśwież", "filter": "Filtruj", "all": "Wszystko", "yes": "Tak", "no": "Nie", "more": "Więcej", "less": "Mniej" },
+  "settings": { "title": "Ustawienia", "appearance": "Wygląd", "theme": "Motyw", "dark": "Ciemny", "light": "Jasny", "language": "Język", "about": "O programie" },
+  "finance": { "title": "Finanse", "stocks": "Akcje", "crypto": "Kryptowaluta", "commodities": "Surowce", "volume": "Wolumen", "change": "Zmiana", "price": "Cena" },
+  "variant": { "global": "DEEVO Monitor", "tech": "DEEVO Tech", "finance": "DEEVO Finance", "fraud": "DEEVO Fraud", "commodity": "DEEVO Commodity", "happy": "DEEVO Happy" },
+  "footer": { "poweredBy": "Napędzane przez DEEVO Analytics", "copyright": "© {{year}} DEEVO Analytics — Wywiad ubezpieczeniowy GCC" }
+}

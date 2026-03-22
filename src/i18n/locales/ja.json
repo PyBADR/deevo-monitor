@@ -1,0 +1,12 @@
+{
+  "nav": { "dashboard": "ダッシュボード", "map": "地図", "news": "ニュース", "webcams": "ウェブカメラ", "finance": "金融", "intelligence": "インテリジェンス", "settings": "設定", "search": "検索", "layers": "レイヤー", "alerts": "アラート", "reports": "レポート" },
+  "status": { "live": "ライブ", "connected": "接続済み", "disconnected": "切断", "syncing": "同期中", "lastUpdated": "最終更新", "feedsActive": "アクティブフィード", "sourcesConnected": "接続ソース" },
+  "panel": { "intelFeed": "インテリジェンスフィード", "liveNews": "ライブニュース", "aiInsights": "AI分析", "riskIndex": "リスク指数", "forecasts": "予測", "financeRadar": "金融レーダー", "commodities": "コモディティ", "stockMarkets": "株式市場" },
+  "country": { "SA": "サウジアラビア", "AE": "アラブ首長国連邦", "KW": "クウェート", "QA": "カタール", "BH": "バーレーン", "OM": "オマーン" },
+  "risk": { "low": "低", "moderate": "中程度", "elevated": "やや高", "high": "高", "critical": "危機的", "score": "リスクスコア", "trend": "トレンド", "rising": "上昇", "falling": "下降", "stable": "安定" },
+  "general": { "loading": "読み込み中...", "error": "エラー", "retry": "再試行", "noData": "データなし", "save": "保存", "cancel": "キャンセル", "close": "閉じる", "apply": "適用", "reset": "リセット", "export": "エクスポート", "refresh": "更新", "filter": "フィルター", "all": "すべて", "yes": "はい", "no": "いいえ", "more": "もっと", "less": "少なく" },
+  "settings": { "title": "設定", "appearance": "外観", "theme": "テーマ", "dark": "ダーク", "light": "ライト", "language": "言語", "about": "概要" },
+  "finance": { "title": "金融", "stocks": "株式", "crypto": "暗号資産", "commodities": "コモディティ", "volume": "出来高", "change": "変動", "price": "価格" },
+  "variant": { "global": "DEEVO Monitor", "tech": "DEEVO Tech", "finance": "DEEVO Finance", "fraud": "DEEVO Fraud", "commodity": "DEEVO Commodity", "happy": "DEEVO Happy" },
+  "footer": { "poweredBy": "DEEVO Analyticsが提供", "copyright": "© {{year}} DEEVO Analytics — GCC保険インテリジェンス" }
+}

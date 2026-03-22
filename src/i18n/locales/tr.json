@@ -1,0 +1,11 @@
+{
+  "nav": { "dashboard": "Gösterge Paneli", "map": "Harita", "news": "Haberler", "webcams": "Web Kameraları", "finance": "Finans", "intelligence": "İstihbarat", "settings": "Ayarlar", "search": "Ara", "layers": "Katmanlar", "alerts": "Uyarılar", "reports": "Raporlar" },
+  "status": { "live": "CANLI", "connected": "Bağlı", "disconnected": "Bağlantı kesildi", "syncing": "Senkronize ediliyor", "lastUpdated": "Son güncelleme", "feedsActive": "aktif kaynak", "sourcesConnected": "bağlı kaynak" },
+  "country": { "SA": "Suudi Arabistan", "AE": "Birleşik Arap Emirlikleri", "KW": "Kuveyt", "QA": "Katar", "BH": "Bahreyn", "OM": "Umman" },
+  "risk": { "low": "Düşük", "moderate": "Orta", "elevated": "Yükselen", "high": "Yüksek", "critical": "Kritik", "score": "Risk Puanı", "trend": "Eğilim", "rising": "Yükseliyor", "falling": "Düşüyor", "stable": "Sabit" },
+  "general": { "loading": "Yükleniyor...", "error": "Hata", "retry": "Tekrar Dene", "noData": "Veri yok", "save": "Kaydet", "cancel": "İptal", "close": "Kapat", "apply": "Uygula", "reset": "Sıfırla", "export": "Dışa Aktar", "refresh": "Yenile", "filter": "Filtrele", "all": "Tümü", "yes": "Evet", "no": "Hayır", "more": "Daha Fazla", "less": "Daha Az" },
+  "settings": { "title": "Ayarlar", "appearance": "Görünüm", "theme": "Tema", "dark": "Karanlık", "light": "Aydınlık", "language": "Dil", "about": "Hakkında" },
+  "finance": { "title": "Finans", "stocks": "Hisseler", "crypto": "Kripto Para", "commodities": "Emtialar", "volume": "Hacim", "change": "Değişim", "price": "Fiyat" },
+  "variant": { "global": "DEEVO Monitor", "tech": "DEEVO Tech", "finance": "DEEVO Finance", "fraud": "DEEVO Fraud", "commodity": "DEEVO Commodity", "happy": "DEEVO Happy" },
+  "footer": { "poweredBy": "DEEVO Analytics tarafından desteklenmektedir", "copyright": "© {{year}} DEEVO Analytics — KİK Sigorta İstihbaratı" }
+}

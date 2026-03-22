@@ -1,19 +1,29 @@
 {
   "name": "deevo-monitor",
-  "version": "4.3.0",
+  "version": "5.0.0",
   "private": true,
   "type": "module",
   "description": "GCC Insurance Intelligence Dashboard — Real-time risk monitoring with DeckGL, AI-powered insights, and geopolitical tracking for Gulf Cooperation Council markets",
   "scripts": {
     "dev": "vite --port 5174",
+    "dev:tech": "VITE_VARIANT=tech vite --port 5175",
+    "dev:finance": "VITE_VARIANT=finance vite --port 5176",
+    "dev:commodity": "VITE_VARIANT=commodity vite --port 5177",
+    "dev:happy": "VITE_VARIANT=happy vite --port 5178",
+    "dev:fraud": "VITE_VARIANT=fraud vite --port 5179",
     "dev:server": "tsx watch server/index.ts",
-    "dev:all": "concurrently \"npm run dev\" \"npm run dev:server\"",
+    "dev:all": "concurrently \"npm run dev\" \"npm run dev:tech\" \"npm run dev:finance\"",
+    "dev:full": "concurrently \"npm run dev\" \"npm run dev:server\"",
+    "server": "tsx watch server/index.ts",
     "build": "vite build",
+    "build:full": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/ --ext .ts,.tsx",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
   },
   "dependencies": {
     "@deck.gl/aggregation-layers": "^9.1.0",

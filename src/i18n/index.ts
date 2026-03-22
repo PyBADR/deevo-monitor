@@ -1,10 +1,37 @@
 /**
  * i18n System — 21 languages with RTL support (worldmonitor parity).
  * Uses i18next + react-i18next for runtime translation.
- * Fallback: loads from static JSON when i18next is not installed.
+ * Locale JSON files in ./locales/ directory.
  *
  * RTL languages: Arabic (ar), Farsi (fa), Hebrew (he), Urdu (ur)
  */
+import i18next from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
+// ── Locale imports ──────────────────────────────────────
+import en from './locales/en.json';
+import ar from './locales/ar.json';
+import fr from './locales/fr.json';
+import de from './locales/de.json';
+import es from './locales/es.json';
+import pt from './locales/pt.json';
+import ru from './locales/ru.json';
+import zh from './locales/zh.json';
+import ja from './locales/ja.json';
+import ko from './locales/ko.json';
+import hi from './locales/hi.json';
+import ur from './locales/ur.json';
+import fa from './locales/fa.json';
+import tr from './locales/tr.json';
+import he from './locales/he.json';
+import it from './locales/it.json';
+import nl from './locales/nl.json';
+import pl from './locales/pl.json';
+import sv from './locales/sv.json';
+import th from './locales/th.json';
+import id from './locales/id.json';
+
+// ── Types ───────────────────────────────────────────────
 
 export type LanguageCode =
   | 'en' | 'ar' | 'fr' | 'de' | 'es' | 'pt' | 'ru' | 'zh' | 'ja'
@@ -18,6 +45,8 @@ export interface LanguageDef {
   rtl: boolean;
   region: string;
 }
+
+// ── Language Definitions ────────────────────────────────
 
 export const LANGUAGES: LanguageDef[] = [
   { code: 'en', name: 'English', nativeName: 'English', rtl: false, region: 'global' },
@@ -45,228 +74,114 @@ export const LANGUAGES: LanguageDef[] = [
 
 export const RTL_LANGUAGES: LanguageCode[] = LANGUAGES.filter((l) => l.rtl).map((l) => l.code);
 
+// ── Helper Functions ────────────────────────────────────
+
 export function isRTL(code: LanguageCode): boolean {
   return RTL_LANGUAGES.includes(code);
 }
 
-/**
- * Get the dir attribute for an HTML element.
- */
 export function getDirection(code: LanguageCode): 'rtl' | 'ltr' {
   return isRTL(code) ? 'rtl' : 'ltr';
 }
 
-/**
- * Apply language direction to the document.
- */
 export function applyLanguageDirection(code: LanguageCode): void {
   document.documentElement.dir = getDirection(code);
   document.documentElement.lang = code;
-}
-
-// ── Translation Keys ────────────────────────────────────
-
-export interface TranslationKeys {
-  // Navigation
-  'nav.dashboard': string;
-  'nav.map': string;
-  'nav.news': string;
-  'nav.webcams': string;
-  'nav.finance': string;
-  'nav.intelligence': string;
-  'nav.settings': string;
-
-  // Status bar
-  'status.live': string;
-  'status.connected': string;
-  'status.disconnected': string;
-  'status.search': string;
-
-  // Panels
-  'panel.intelFeed': string;
-  'panel.liveNews': string;
-  'panel.webcams': string;
-  'panel.aiInsights': string;
-  'panel.strategicPosture': string;
-  'panel.countryIntel': string;
-  'panel.riskIndex': string;
-  'panel.forecasts': string;
-  'panel.alerts': string;
-  'panel.pipeline': string;
-  'panel.financeRadar': string;
-  'panel.correlation': string;
-
-  // Countries
-  'country.SA': string;
-  'country.AE': string;
-  'country.KW': string;
-  'country.QA': string;
-  'country.BH': string;
-  'country.OM': string;
-
-  // Risk levels
-  'risk.low': string;
-  'risk.moderate': string;
-  'risk.elevated': string;
-  'risk.high': string;
-  'risk.critical': string;
-
-  // General
-  'general.loading': string;
-  'general.error': string;
-  'general.retry': string;
-  'general.noData': string;
-}
-
-// ── English (default) translations ──────────────────────
-
-export const EN_TRANSLATIONS: TranslationKeys = {
-  'nav.dashboard': 'Dashboard',
-  'nav.map': 'Map',
-  'nav.news': 'News',
-  'nav.webcams': 'Webcams',
-  'nav.finance': 'Finance',
-  'nav.intelligence': 'Intelligence',
-  'nav.settings': 'Settings',
-
-  'status.live': 'LIVE',
-  'status.connected': 'Connected',
-  'status.disconnected': 'Disconnected',
-  'status.search': 'Search',
-
-  'panel.intelFeed': 'Intel Feed',
-  'panel.liveNews': 'Live News',
-  'panel.webcams': 'Webcams',
-  'panel.aiInsights': 'AI Insights',
-  'panel.strategicPosture': 'Strategic Posture',
-  'panel.countryIntel': 'Country Intelligence',
-  'panel.riskIndex': 'Risk Index',
-  'panel.forecasts': 'Forecasts',
-  'panel.alerts': 'Alerts',
-  'panel.pipeline': 'Pipeline',
-  'panel.financeRadar': 'Finance Radar',
-  'panel.correlation': 'Correlation',
-
-  'country.SA': 'Saudi Arabia',
-  'country.AE': 'United Arab Emirates',
-  'country.KW': 'Kuwait',
-  'country.QA': 'Qatar',
-  'country.BH': 'Bahrain',
-  'country.OM': 'Oman',
-
-  'risk.low': 'Low',
-  'risk.moderate': 'Moderate',
-  'risk.elevated': 'Elevated',
-  'risk.high': 'High',
-  'risk.critical': 'Critical',
-
-  'general.loading': 'Loading...',
-  'general.error': 'Error',
-  'general.retry': 'Retry',
-  'general.noData': 'No data available',
-};
-
-// ── Arabic translations ─────────────────────────────────
-
-export const AR_TRANSLATIONS: TranslationKeys = {
-  'nav.dashboard': 'لوحة القيادة',
-  'nav.map': 'الخريطة',
-  'nav.news': 'الأخبار',
-  'nav.webcams': 'كاميرات مباشرة',
-  'nav.finance': 'المالية',
-  'nav.intelligence': 'الاستخبارات',
-  'nav.settings': 'الإعدادات',
-
-  'status.live': 'مباشر',
-  'status.connected': 'متصل',
-  'status.disconnected': 'غير متصل',
-  'status.search': 'بحث',
-
-  'panel.intelFeed': 'تغذية الاستخبارات',
-  'panel.liveNews': 'أخبار مباشرة',
-  'panel.webcams': 'كاميرات مباشرة',
-  'panel.aiInsights': 'رؤى الذكاء الاصطناعي',
-  'panel.strategicPosture': 'الوضع الاستراتيجي',
-  'panel.countryIntel': 'استخبارات الدول',
-  'panel.riskIndex': 'مؤشر المخاطر',
-  'panel.forecasts': 'التوقعات',
-  'panel.alerts': 'التنبيهات',
-  'panel.pipeline': 'خط الأنابيب',
-  'panel.financeRadar': 'رادار المالية',
-  'panel.correlation': 'الارتباط',
-
-  'country.SA': 'المملكة العربية السعودية',
-  'country.AE': 'الإمارات العربية المتحدة',
-  'country.KW': 'الكويت',
-  'country.QA': 'قطر',
-  'country.BH': 'البحرين',
-  'country.OM': 'عمان',
-
-  'risk.low': 'منخفض',
-  'risk.moderate': 'معتدل',
-  'risk.elevated': 'مرتفع',
-  'risk.high': 'عالي',
-  'risk.critical': 'حرج',
-
-  'general.loading': 'جاري التحميل...',
-  'general.error': 'خطأ',
-  'general.retry': 'إعادة المحاولة',
-  'general.noData': 'لا توجد بيانات',
-};
-
-// ── Translation store (lightweight, no i18next dependency required) ──
-
-type TranslationMap = Record<LanguageCode, Partial<TranslationKeys>>;
-
-const translations: TranslationMap = {
-  en: EN_TRANSLATIONS,
-  ar: AR_TRANSLATIONS,
-  fr: {}, de: {}, es: {}, pt: {}, ru: {}, zh: {}, ja: {},
-  ko: {}, hi: {}, ur: {}, fa: {}, tr: {}, he: {}, it: {},
-  nl: {}, pl: {}, sv: {}, th: {}, id: {},
-};
-
-let currentLanguage: LanguageCode = 'en';
-
-export function setLanguage(code: LanguageCode): void {
-  currentLanguage = code;
-  applyLanguageDirection(code);
-  try {
-    localStorage.setItem('deevo_lang', code);
-  } catch {
-    // localStorage unavailable
+  // Add/remove RTL class for CSS hooks
+  if (isRTL(code)) {
+    document.documentElement.classList.add('rtl');
+  } else {
+    document.documentElement.classList.remove('rtl');
   }
 }
 
-export function getLanguage(): LanguageCode {
-  return currentLanguage;
-}
+// ── i18next Initialization ──────────────────────────────
 
-export function t(key: keyof TranslationKeys): string {
-  const langTranslations = translations[currentLanguage];
-  return (langTranslations as any)?.[key] ?? (EN_TRANSLATIONS as any)[key] ?? key;
-}
+const resources = {
+  en: { translation: en },
+  ar: { translation: ar },
+  fr: { translation: fr },
+  de: { translation: de },
+  es: { translation: es },
+  pt: { translation: pt },
+  ru: { translation: ru },
+  zh: { translation: zh },
+  ja: { translation: ja },
+  ko: { translation: ko },
+  hi: { translation: hi },
+  ur: { translation: ur },
+  fa: { translation: fa },
+  tr: { translation: tr },
+  he: { translation: he },
+  it: { translation: it },
+  nl: { translation: nl },
+  pl: { translation: pl },
+  sv: { translation: sv },
+  th: { translation: th },
+  id: { translation: id },
+};
 
-/**
- * Initialize language from stored preference or browser locale.
- */
-export function initLanguage(): LanguageCode {
+// Detect stored or browser language
+function detectLanguage(): LanguageCode {
   try {
     const stored = localStorage.getItem('deevo_lang') as LanguageCode | null;
-    if (stored && LANGUAGES.some((l) => l.code === stored)) {
-      setLanguage(stored);
-      return stored;
-    }
+    if (stored && LANGUAGES.some((l) => l.code === stored)) return stored;
   } catch {
     // localStorage unavailable
   }
-
-  // Detect from browser
   const browserLang = navigator.language.split('-')[0] as LanguageCode;
-  if (LANGUAGES.some((l) => l.code === browserLang)) {
-    setLanguage(browserLang);
-    return browserLang;
-  }
-
+  if (LANGUAGES.some((l) => l.code === browserLang)) return browserLang;
   return 'en';
+}
+
+i18next
+  .use(initReactI18next)
+  .init({
+    resources,
+    lng: detectLanguage(),
+    fallbackLng: 'en',
+    interpolation: { escapeValue: false },
+    react: { useSuspense: false },
+  });
+
+// Apply direction on init
+applyLanguageDirection(i18next.language as LanguageCode);
+
+// Listen for language changes
+i18next.on('languageChanged', (lng: string) => {
+  applyLanguageDirection(lng as LanguageCode);
+  try {
+    localStorage.setItem('deevo_lang', lng);
+  } catch {
+    // localStorage unavailable
+  }
+});
+
+// ── Convenience Exports ─────────────────────────────────
+
+export { i18next };
+export default i18next;
+
+/** Change language — updates i18next, direction, and persists to localStorage */
+export function setLanguage(code: LanguageCode): void {
+  i18next.changeLanguage(code);
+}
+
+/** Get current language code */
+export function getLanguage(): LanguageCode {
+  return i18next.language as LanguageCode;
+}
+
+/** Shorthand translation function (for non-React contexts) */
+export function t(key: string, options?: Record<string, unknown>): string {
+  return i18next.t(key, options);
+}
+
+/** Initialize language — call once on app startup */
+export function initLanguage(): LanguageCode {
+  const lang = detectLanguage();
+  if (i18next.language !== lang) {
+    i18next.changeLanguage(lang);
+  }
+  return lang;
 }

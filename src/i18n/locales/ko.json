@@ -1,0 +1,11 @@
+{
+  "nav": { "dashboard": "대시보드", "map": "지도", "news": "뉴스", "webcams": "웹캠", "finance": "금융", "intelligence": "인텔리전스", "settings": "설정", "search": "검색", "layers": "레이어", "alerts": "알림", "reports": "보고서" },
+  "status": { "live": "실시간", "connected": "연결됨", "disconnected": "연결 끊김", "syncing": "동기화 중", "lastUpdated": "마지막 업데이트", "feedsActive": "활성 피드", "sourcesConnected": "연결된 소스" },
+  "country": { "SA": "사우디아라비아", "AE": "아랍에미리트", "KW": "쿠웨이트", "QA": "카타르", "BH": "바레인", "OM": "오만" },
+  "risk": { "low": "낮음", "moderate": "보통", "elevated": "상승", "high": "높음", "critical": "위험", "score": "위험 점수", "trend": "추세", "rising": "상승", "falling": "하락", "stable": "안정" },
+  "general": { "loading": "로딩 중...", "error": "오류", "retry": "재시도", "noData": "데이터 없음", "save": "저장", "cancel": "취소", "close": "닫기", "apply": "적용", "reset": "초기화", "export": "내보내기", "refresh": "새로고침", "filter": "필터", "all": "전체", "yes": "예", "no": "아니오", "more": "더보기", "less": "줄이기" },
+  "settings": { "title": "설정", "appearance": "외관", "theme": "테마", "dark": "다크", "light": "라이트", "language": "언어", "about": "정보" },
+  "finance": { "title": "금융", "stocks": "주식", "crypto": "암호화폐", "commodities": "원자재", "volume": "거래량", "change": "변동", "price": "가격" },
+  "variant": { "global": "DEEVO Monitor", "tech": "DEEVO Tech", "finance": "DEEVO Finance", "fraud": "DEEVO Fraud", "commodity": "DEEVO Commodity", "happy": "DEEVO Happy" },
+  "footer": { "poweredBy": "DEEVO Analytics 제공", "copyright": "© {{year}} DEEVO Analytics — GCC 보험 인텔리전스" }
+}

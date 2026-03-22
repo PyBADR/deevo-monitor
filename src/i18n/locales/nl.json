@@ -1,0 +1,11 @@
+{
+  "nav": { "dashboard": "Dashboard", "map": "Kaart", "news": "Nieuws", "webcams": "Webcams", "finance": "Financiën", "intelligence": "Inlichtingen", "settings": "Instellingen", "search": "Zoeken", "layers": "Lagen", "alerts": "Waarschuwingen", "reports": "Rapporten" },
+  "status": { "live": "LIVE", "connected": "Verbonden", "disconnected": "Verbroken", "syncing": "Synchroniseren", "lastUpdated": "Laatst bijgewerkt", "feedsActive": "actieve feeds", "sourcesConnected": "verbonden bronnen" },
+  "country": { "SA": "Saoedi-Arabië", "AE": "Verenigde Arabische Emiraten", "KW": "Koeweit", "QA": "Qatar", "BH": "Bahrein", "OM": "Oman" },
+  "risk": { "low": "Laag", "moderate": "Matig", "elevated": "Verhoogd", "high": "Hoog", "critical": "Kritiek", "score": "Risicoscore", "trend": "Trend", "rising": "Stijgend", "falling": "Dalend", "stable": "Stabiel" },
+  "general": { "loading": "Laden...", "error": "Fout", "retry": "Opnieuw proberen", "noData": "Geen gegevens beschikbaar", "save": "Opslaan", "cancel": "Annuleren", "close": "Sluiten", "apply": "Toepassen", "reset": "Herstellen", "export": "Exporteren", "refresh": "Vernieuwen", "filter": "Filteren", "all": "Alles", "yes": "Ja", "no": "Nee", "more": "Meer", "less": "Minder" },
+  "settings": { "title": "Instellingen", "appearance": "Uiterlijk", "theme": "Thema", "dark": "Donker", "light": "Licht", "language": "Taal", "about": "Over" },
+  "finance": { "title": "Financiën", "stocks": "Aandelen", "crypto": "Cryptovaluta", "commodities": "Grondstoffen", "volume": "Volume", "change": "Verandering", "price": "Prijs" },
+  "variant": { "global": "DEEVO Monitor", "tech": "DEEVO Tech", "finance": "DEEVO Finance", "fraud": "DEEVO Fraud", "commodity": "DEEVO Commodity", "happy": "DEEVO Happy" },
+  "footer": { "poweredBy": "Aangedreven door DEEVO Analytics", "copyright": "© {{year}} DEEVO Analytics — GCC Verzekeringsintelligentie" }
+}

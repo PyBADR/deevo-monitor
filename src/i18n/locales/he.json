@@ -1,0 +1,11 @@
+{
+  "nav": { "dashboard": "לוח בקרה", "map": "מפה", "news": "חדשות", "webcams": "מצלמות", "finance": "פיננסים", "intelligence": "מודיעין", "settings": "הגדרות", "search": "חיפוש", "layers": "שכבות", "alerts": "התראות", "reports": "דוחות" },
+  "status": { "live": "שידור חי", "connected": "מחובר", "disconnected": "מנותק", "syncing": "מסנכרן", "lastUpdated": "עדכון אחרון", "feedsActive": "פידים פעילים", "sourcesConnected": "מקורות מחוברים" },
+  "country": { "SA": "ערב הסעודית", "AE": "איחוד האמירויות", "KW": "כווית", "QA": "קטאר", "BH": "בחריין", "OM": "עומאן" },
+  "risk": { "low": "נמוך", "moderate": "בינוני", "elevated": "מוגבר", "high": "גבוה", "critical": "קריטי", "score": "ציון סיכון", "trend": "מגמה", "rising": "עולה", "falling": "יורד", "stable": "יציב" },
+  "general": { "loading": "טוען...", "error": "שגיאה", "retry": "נסה שוב", "noData": "אין נתונים", "save": "שמור", "cancel": "ביטול", "close": "סגור", "apply": "החל", "reset": "איפוס", "export": "ייצוא", "refresh": "רענן", "filter": "סינון", "all": "הכל", "yes": "כן", "no": "לא", "more": "עוד", "less": "פחות" },
+  "settings": { "title": "הגדרות", "appearance": "מראה", "theme": "ערכת נושא", "dark": "כהה", "light": "בהיר", "language": "שפה", "about": "אודות" },
+  "finance": { "title": "פיננסים", "stocks": "מניות", "crypto": "מטבעות דיגיטליים", "commodities": "סחורות", "volume": "מחזור", "change": "שינוי", "price": "מחיר" },
+  "variant": { "global": "DEEVO Monitor", "tech": "DEEVO Tech", "finance": "DEEVO Finance", "fraud": "DEEVO Fraud", "commodity": "DEEVO Commodity", "happy": "DEEVO Happy" },
+  "footer": { "poweredBy": "מופעל על ידי DEEVO Analytics", "copyright": "© {{year}} DEEVO Analytics — מודיעין ביטוחי GCC" }
+}

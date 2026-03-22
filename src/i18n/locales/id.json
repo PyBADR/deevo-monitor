@@ -1,0 +1,11 @@
+{
+  "nav": { "dashboard": "Dasbor", "map": "Peta", "news": "Berita", "webcams": "Webcam", "finance": "Keuangan", "intelligence": "Intelijen", "settings": "Pengaturan", "search": "Cari", "layers": "Lapisan", "alerts": "Peringatan", "reports": "Laporan" },
+  "status": { "live": "LANGSUNG", "connected": "Terhubung", "disconnected": "Terputus", "syncing": "Menyinkronkan", "lastUpdated": "Terakhir diperbarui" },
+  "country": { "SA": "Arab Saudi", "AE": "Uni Emirat Arab", "KW": "Kuwait", "QA": "Qatar", "BH": "Bahrain", "OM": "Oman" },
+  "risk": { "low": "Rendah", "moderate": "Sedang", "elevated": "Meningkat", "high": "Tinggi", "critical": "Kritis", "score": "Skor Risiko", "trend": "Tren", "rising": "Naik", "falling": "Turun", "stable": "Stabil" },
+  "general": { "loading": "Memuat...", "error": "Kesalahan", "retry": "Coba Lagi", "noData": "Tidak ada data", "save": "Simpan", "cancel": "Batal", "close": "Tutup", "apply": "Terapkan", "reset": "Atur Ulang", "export": "Ekspor", "refresh": "Segarkan", "filter": "Filter", "all": "Semua", "yes": "Ya", "no": "Tidak", "more": "Lebih", "less": "Kurang" },
+  "settings": { "title": "Pengaturan", "appearance": "Tampilan", "theme": "Tema", "dark": "Gelap", "light": "Terang", "language": "Bahasa", "about": "Tentang" },
+  "finance": { "title": "Keuangan", "stocks": "Saham", "crypto": "Mata Uang Kripto", "commodities": "Komoditas", "volume": "Volume", "change": "Perubahan", "price": "Harga" },
+  "variant": { "global": "DEEVO Monitor", "tech": "DEEVO Tech", "finance": "DEEVO Finance", "fraud": "DEEVO Fraud", "commodity": "DEEVO Commodity", "happy": "DEEVO Happy" },
+  "footer": { "poweredBy": "Didukung oleh DEEVO Analytics", "copyright": "© {{year}} DEEVO Analytics — Intelijen Asuransi GCC" }
+}

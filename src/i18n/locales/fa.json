@@ -1,0 +1,11 @@
+{
+  "nav": { "dashboard": "داشبورد", "map": "نقشه", "news": "اخبار", "webcams": "وبکم‌ها", "finance": "مالی", "intelligence": "اطلاعات", "settings": "تنظیمات", "search": "جستجو", "layers": "لایه‌ها", "alerts": "هشدارها", "reports": "گزارش‌ها" },
+  "status": { "live": "زنده", "connected": "متصل", "disconnected": "قطع شده", "syncing": "در حال همگام‌سازی", "lastUpdated": "آخرین بروزرسانی", "feedsActive": "فید فعال", "sourcesConnected": "منابع متصل" },
+  "country": { "SA": "عربستان سعودی", "AE": "امارات متحده عربی", "KW": "کویت", "QA": "قطر", "BH": "بحرین", "OM": "عمان" },
+  "risk": { "low": "کم", "moderate": "متوسط", "elevated": "بالا", "high": "زیاد", "critical": "بحرانی", "score": "امتیاز ریسک", "trend": "روند", "rising": "صعودی", "falling": "نزولی", "stable": "باثبات" },
+  "general": { "loading": "در حال بارگذاری...", "error": "خطا", "retry": "تلاش مجدد", "noData": "داده‌ای موجود نیست", "save": "ذخیره", "cancel": "لغو", "close": "بستن", "apply": "اعمال", "reset": "بازنشانی", "export": "خروجی", "refresh": "بروزرسانی", "filter": "فیلتر", "all": "همه", "yes": "بله", "no": "خیر", "more": "بیشتر", "less": "کمتر" },
+  "settings": { "title": "تنظیمات", "appearance": "ظاهر", "theme": "پوسته", "dark": "تاریک", "light": "روشن", "language": "زبان", "about": "درباره" },
+  "finance": { "title": "مالی", "stocks": "سهام", "crypto": "ارز دیجیتال", "commodities": "کالاها", "volume": "حجم", "change": "تغییر", "price": "قیمت" },
+  "variant": { "global": "DEEVO Monitor", "tech": "DEEVO Tech", "finance": "DEEVO Finance", "fraud": "DEEVO Fraud", "commodity": "DEEVO Commodity", "happy": "DEEVO Happy" },
+  "footer": { "poweredBy": "ارائه شده توسط DEEVO Analytics", "copyright": "© {{year}} DEEVO Analytics — هوش بیمه‌ای خلیج فارس" }
+}
