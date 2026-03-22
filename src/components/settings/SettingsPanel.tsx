@@ -9,6 +9,7 @@
 import { useState } from 'react';
 import { useSettings } from '@/settings/useSettings';
 import { useVariant } from '@/variants';
+import { useMapStore } from '@/stores/mapStore';
 import { clsx } from 'clsx';
 import type { SettingsSection } from '@/settings/settings.types';
 
@@ -335,8 +336,51 @@ function AppearanceSection() {
 
 function MapSection() {
   const { map, updateMap } = useSettings();
+  // Smart Map Engine controls from mapStore
+  const mapStoreMode = useMapStore((s) => s.mode);
+  const mapStoreStyle = useMapStore((s) => s.style);
+  const pulseEnabled = useMapStore((s) => s.pulseAnimationsEnabled);
+  const extrusionEnabled = useMapStore((s) => s.riskExtrusionEnabled);
+  const setMapMode = useMapStore((s) => s.setMode);
+  const setMapStyle = useMapStore((s) => s.setStyle);
+  const togglePulse = useMapStore((s) => s.togglePulseAnimations);
+  const toggleExtrusion = useMapStore((s) => s.toggleRiskExtrusion);
+  const enableAll = useMapStore((s) => s.enableAllLayers);
+  const disableAll = useMapStore((s) => s.disableAllLayers);
+  const activeLayers = useMapStore((s) => s.activeLayers);
+
   return (
     <div>
+      {/* ── Smart Map Engine ── */}
+      <div className="text-[9px] uppercase tracking-widest font-mono text-gray-500 px-3 pt-2 pb-1">Smart Map Engine</div>
+      <SettingRow label="Map Mode" description="2D flat map or 3D globe">
+        <Select value={mapStoreMode} options={[
+          { value: '2d', label: '2D Flat Map' },
+          { value: '3d', label: '3D Globe' },
+        ]} onChange={(v) => setMapMode(v as '2d' | '3d')} />
+      </SettingRow>
+      <SettingRow label="Visual Style" description="Cyberpunk, Satellite, or Minimal">
+        <Select value={mapStoreStyle} options={[
+          { value: 'cyberpunk', label: 'Cyberpunk Dark' },
+          { value: 'satellite', label: 'Satellite' },
+          { value: 'minimal', label: 'Clean Minimal' },
+        ]} onChange={(v) => setMapStyle(v as 'cyberpunk' | 'satellite' | 'minimal')} />
+      </SettingRow>
+      <SettingRow label="Pulse Animations" description="Animated hotspot pulses on map">
+        <Toggle checked={pulseEnabled} onChange={() => togglePulse()} />
+      </SettingRow>
+      <SettingRow label="Risk Extrusion" description="3D vertical bars showing risk intensity">
+        <Toggle checked={extrusionEnabled} onChange={() => toggleExtrusion()} />
+      </SettingRow>
+      <SettingRow label="Active Layers" description={`${activeLayers.size}/45 layers active`}>
+        <div className="flex gap-1">
+          <button onClick={enableAll} className="text-[9px] font-mono px-2 py-0.5 rounded bg-green-500/20 text-green-400 hover:bg-green-500/30">All ON</button>
+          <button onClick={disableAll} className="text-[9px] font-mono px-2 py-0.5 rounded bg-red-500/20 text-red-400 hover:bg-red-500/30">All OFF</button>
+        </div>
+      </SettingRow>
+
+      {/* ── Legacy Map Settings ── */}
+      <div className="text-[9px] uppercase tracking-widest font-mono text-gray-500 px-3 pt-3 pb-1">Base Map</div>
       <SettingRow label="Map Style">
         <Select value={map.mapStyle} options={[
           { value: 'dark', label: 'Dark' },

@@ -14,7 +14,6 @@
  * Architecture Layer: UI (L6)
  */
 import { GCCMap } from "@/components/map/GCCMap";
-import { GlobeView } from "@/components/map/GlobeView";
 import { LayerPanel } from "@/components/map/LayerPanel";
 import { RiskLegend } from "@/components/map/RiskLegend";
 import { StatusBar } from "@/components/layout/StatusBar";
@@ -88,7 +87,6 @@ export function AppShell() {
 
   const { variant } = useVariant();
   const [bottomViewMode, setBottomViewMode] = useState<BottomViewMode>('split');
-  const [mapMode, setMapMode] = useState<'2d' | '3d'>('2d');
   const [bottomTab, setBottomTab] = useState<BottomTabId>('feed');
 
   // Build tab list based on variant's showPanels config — full worldmonitor parity
@@ -153,16 +151,11 @@ export function AppShell() {
       {/* ── StatusBar ─────────────────────────────────── */}
       <StatusBar />
 
-      {/* ── Map Area ──────────────────────────────────── */}
+      {/* ── Map Area — SmartMapEngine handles 2D/3D, styles, intel cards ── */}
       <div className="flex-1 relative overflow-hidden">
-        {mapMode === '2d' ? <GCCMap /> : <GlobeView />}
+        <GCCMap />
         <LayerPanel />
         <RiskLegend />
-
-        {/* 2D/3D Toggle overlay (top-right, worldmonitor-style) */}
-        <div className="absolute top-3 right-3 z-20">
-          <Map2D3DOverlay mode={mapMode} setMode={setMapMode} />
-        </div>
       </div>
 
       {/* ── Bottom Panel Section ──────────────────────── */}
@@ -313,41 +306,6 @@ export function AppShell() {
 
       {/* ── Bottom Ticker ─────────────────────────────── */}
       <BottomTicker />
-    </div>
-  );
-}
-
-function Map2D3DOverlay({ mode, setMode }: { mode: '2d' | '3d'; setMode: (m: '2d' | '3d') => void }) {
-  const { variant } = useVariant();
-  return (
-    <div
-      className="flex rounded-lg overflow-hidden border shadow-lg"
-      style={{
-        borderColor: variant.colors.border,
-        backgroundColor: `${variant.colors.bg}E0`,
-        backdropFilter: 'blur(8px)',
-      }}
-    >
-      <button
-        onClick={() => setMode('2d')}
-        className={clsx(
-          'text-[11px] font-mono font-bold px-3 py-1.5 transition-colors',
-          mode === '2d' ? 'text-white' : 'text-gray-500 hover:text-gray-300'
-        )}
-        style={mode === '2d' ? { backgroundColor: `${variant.colors.primary}30`, color: variant.colors.primary } : undefined}
-      >
-        2D
-      </button>
-      <button
-        onClick={() => setMode('3d')}
-        className={clsx(
-          'text-[11px] font-mono font-bold px-3 py-1.5 transition-colors',
-          mode === '3d' ? 'text-white' : 'text-gray-500 hover:text-gray-300'
-        )}
-        style={mode === '3d' ? { backgroundColor: `${variant.colors.primary}30`, color: variant.colors.primary } : undefined}
-      >
-        3D
-      </button>
     </div>
   );
 }
