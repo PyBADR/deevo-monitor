@@ -1,0 +1,33 @@
+feat: full worldmonitor parity — 60+ layers, Tauri 2, CI, GCC variant, README
+
+BREAKING: Major version bump to v4.1.0 with full worldmonitor feature parity.
+
+Map Layers (60+):
+- Added 20 new layers: satellites, GPS jamming, day/night, fires,
+  climate anomalies, startup hubs, tech HQs, cloud regions, internet
+  disruptions, stock exchanges, financial centers, central banks,
+  GCC investments, commodity hubs, mining sites, commodity ports,
+  critical minerals, military activity, UCDP events, strategic waterways
+- New categories: SPACE, TECH, FINANCE, COMMODITY (12 total)
+
+Desktop App:
+- Updated Tauri 2 config to v4.1.0 with expanded CSP
+- Supports macOS, Windows, Linux
+
+CI/CD:
+- GitHub Actions workflow: typecheck + build for all 5 variants
+- ESLint job with zero-warning target
+
+Package:
+- Added dev:gcc, build:world, build:gcc, build:finance, build:desktop scripts
+- Updated metadata: keywords, description
+- 6 variant system: global, gcc, tech, finance, commodity, happy
+
+README:
+- Complete rewrite with full feature documentation
+- Tech stack table, variant guide, layer catalog
+- GCC variant documentation, Quick Start, Architecture overview
+
+TypeScript: 0 errors across entire codebase.
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
