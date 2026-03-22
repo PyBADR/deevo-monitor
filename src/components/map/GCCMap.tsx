@@ -31,6 +31,19 @@ import {
   PIPELINE_POINTS,
   AI_DATA_CENTER_POINTS,
   IRAN_ATTACK_POINTS,
+  SPACEPORT_POINTS,
+  STOCK_EXCHANGE_POINTS,
+  FINANCIAL_CENTER_POINTS,
+  CENTRAL_BANK_POINTS,
+  GULF_INVESTMENT_POINTS,
+  STARTUP_HUB_POINTS,
+  TECH_HQ_POINTS,
+  CLOUD_REGION_POINTS,
+  COMMODITY_HUB_POINTS,
+  STRATEGIC_WATERWAY_POINTS,
+  DESALINATION_POINTS,
+  SOLAR_FARM_POINTS,
+  OIL_FACILITY_POINTS,
   type LayerPoint,
 } from '@/data/global-layers';
 import type { MapViewState } from '@/types';
@@ -488,13 +501,33 @@ export function GCCMap() {
 
     // ── Geospatial Point Layers (all from global-layers.ts) ──
     const pointLayerConfigs = [
+      // Geopolitical & Intelligence
       { layerId: 'conflict_zones', data: CONFLICT_ZONE_POINTS, radiusBase: 18000 },
-      { layerId: 'military_bases', data: MILITARY_BASE_POINTS, radiusBase: 12000 },
-      { layerId: 'nuclear_sites', data: NUCLEAR_SITE_POINTS, radiusBase: 15000 },
+      { layerId: 'iran_attacks', data: IRAN_ATTACK_POINTS, radiusBase: 16000 },
       { layerId: 'intel_hotspots', data: INTEL_HOTSPOT_POINTS, radiusBase: 14000 },
+      // Military
+      { layerId: 'military_bases', data: MILITARY_BASE_POINTS, radiusBase: 12000 },
+      { layerId: 'strategic_waterways', data: STRATEGIC_WATERWAY_POINTS, radiusBase: 16000 },
+      // Nuclear
+      { layerId: 'nuclear_sites', data: NUCLEAR_SITE_POINTS, radiusBase: 15000 },
+      // Infrastructure
       { layerId: 'pipelines', data: PIPELINE_POINTS, radiusBase: 10000 },
       { layerId: 'ai_data_centers', data: AI_DATA_CENTER_POINTS, radiusBase: 10000 },
-      { layerId: 'iran_attacks', data: IRAN_ATTACK_POINTS, radiusBase: 16000 },
+      { layerId: 'spaceports', data: SPACEPORT_POINTS, radiusBase: 12000 },
+      { layerId: 'desalination', data: DESALINATION_POINTS, radiusBase: 10000 },
+      { layerId: 'solar_farms', data: SOLAR_FARM_POINTS, radiusBase: 11000 },
+      { layerId: 'oil_facilities', data: OIL_FACILITY_POINTS, radiusBase: 13000 },
+      // Finance
+      { layerId: 'stock_exchanges', data: STOCK_EXCHANGE_POINTS, radiusBase: 11000 },
+      { layerId: 'financial_centers', data: FINANCIAL_CENTER_POINTS, radiusBase: 12000 },
+      { layerId: 'central_banks', data: CENTRAL_BANK_POINTS, radiusBase: 10000 },
+      { layerId: 'gulf_investments', data: GULF_INVESTMENT_POINTS, radiusBase: 10000 },
+      // Tech
+      { layerId: 'startup_hubs', data: STARTUP_HUB_POINTS, radiusBase: 10000 },
+      { layerId: 'tech_hqs', data: TECH_HQ_POINTS, radiusBase: 10000 },
+      { layerId: 'cloud_regions', data: CLOUD_REGION_POINTS, radiusBase: 10000 },
+      // Commodity
+      { layerId: 'commodity_hubs', data: COMMODITY_HUB_POINTS, radiusBase: 12000 },
     ];
 
     for (const config of pointLayerConfigs) {
@@ -674,7 +707,7 @@ export function GCCMap() {
         }}
       >
         <span className="text-[9px] font-mono" style={{ color: variant.colors.textMuted }}>
-          LAYERS {activeLayers.size}/45 · {mode.toUpperCase()} · {mapStyle.toUpperCase()}
+          LAYERS {activeLayers.size}/{GLOBAL_LAYER_DEFS.length} · {mode.toUpperCase()} · {mapStyle.toUpperCase()}
         </span>
       </div>
     </div>

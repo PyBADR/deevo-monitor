@@ -1,10 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 /**
- * RSS Feed Proxy — Fetches and parses real RSS feeds server-side.
- * Solves CORS restrictions by proxying RSS XML → JSON on Vercel edge.
+ * RSS Feed Proxy — Server-side RSS fetch and parse for Vercel deployment.
+ * Solves CORS by proxying RSS XML → JSON on Vercel edge.
  *
- * GET /api/feeds/rss?sources=bloomberg,bbc,cnn&limit=30
+ * GET /api/feeds/rss?sources=bbc,aljazeera,cnn&limit=30
  *
  * Architecture Layer: API (L5)
  */
@@ -20,19 +20,18 @@ interface RSSItem {
   category: string;
 }
 
+// Verified working feeds (tested 2025-12)
 const RSS_FEEDS: Record<string, { url: string; name: string }> = {
-  bloomberg: { url: 'https://feeds.bloomberg.com/markets/news.rss', name: 'Bloomberg' },
-  skynews: { url: 'https://feeds.skynews.com/feeds/rss/world.xml', name: 'Sky News' },
-  euronews: { url: 'https://www.euronews.com/rss?format=mrss&level=theme&name=news', name: 'Euronews' },
-  dw: { url: 'https://rss.dw.com/rdf/rss-en-all', name: 'Deutsche Welle' },
-  cnbc: { url: 'https://www.cnbc.com/id/100727362/device/rss/rss.html', name: 'CNBC' },
-  cnn: { url: 'http://rss.cnn.com/rss/edition_world.rss', name: 'CNN' },
-  france24: { url: 'https://www.france24.com/en/rss', name: 'France 24' },
-  alarabiya: { url: 'https://english.alarabiya.net/rss.xml', name: 'Al Arabiya' },
+  bbc:       { url: 'https://feeds.bbci.co.uk/news/world/rss.xml', name: 'BBC World' },
   aljazeera: { url: 'https://www.aljazeera.com/xml/rss/all.xml', name: 'Al Jazeera' },
-  reuters: { url: 'https://feeds.reuters.com/reuters/worldNews', name: 'Reuters' },
-  bbc: { url: 'https://feeds.bbci.co.uk/news/world/rss.xml', name: 'BBC World' },
-  ft: { url: 'https://www.ft.com/rss/home', name: 'Financial Times' },
+  dw:        { url: 'https://rss.dw.com/rdf/rss-en-all', name: 'Deutsche Welle' },
+  france24:  { url: 'https://www.france24.com/en/rss', name: 'France 24' },
+  cnbc:      { url: 'https://www.cnbc.com/id/100727362/device/rss/rss.html', name: 'CNBC' },
+  cnn:       { url: 'http://rss.cnn.com/rss/edition_world.rss', name: 'CNN' },
+  skynews:   { url: 'https://feeds.skynews.com/feeds/rss/world.xml', name: 'Sky News' },
+  alarabiya: { url: 'https://english.alarabiya.net/rss.xml', name: 'Al Arabiya' },
+  euronews:  { url: 'https://www.euronews.com/rss', name: 'Euronews' },
+  arabnews:  { url: 'https://www.arabnews.com/rss.xml', name: 'Arab News' },
 };
 
 function extractText(xml: string, tag: string): string {
@@ -53,7 +52,7 @@ function parseRSSItems(xml: string, sourceId: string, sourceName: string): RSSIt
     const description = extractText(block, 'description');
     const pubDate = extractText(block, 'pubDate');
 
-    if (title) {
+    if (title && title.length > 5) {
       items.push({
         id: `${sourceId}-${Date.now()}-${items.length}`,
         title,
@@ -101,7 +100,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     })
   );
 
-  // Sort by timestamp descending
   results.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
   return res.status(200).json({

@@ -234,6 +234,168 @@ export const IRAN_ATTACK_POINTS: LayerPoint[] = [
   { id: 'ia-7', lat: 33.88, lon: 35.51, name: 'Hezbollah (Lebanon)', severity: 'critical', layerId: 'iran_attacks' },
 ];
 
+// ═══════════════════════════════════════════════════════
+// EXPANDED LAYER DATA — Space, Tech, Finance, Commodity,
+// Environmental, Infrastructure, Military (additional)
+// ═══════════════════════════════════════════════════════
+
+/** Spaceport / launch site locations */
+export const SPACEPORT_POINTS: LayerPoint[] = [
+  { id: 'sp-1', lat: 28.57, lon: -80.65, name: 'Cape Canaveral (US)', layerId: 'spaceports' },
+  { id: 'sp-2', lat: 34.63, lon: -120.63, name: 'Vandenberg SFB (US)', layerId: 'spaceports' },
+  { id: 'sp-3', lat: 5.24, lon: -52.77, name: 'Kourou (ESA/France)', layerId: 'spaceports' },
+  { id: 'sp-4', lat: 45.96, lon: 63.56, name: 'Baikonur (Russia/KZ)', layerId: 'spaceports' },
+  { id: 'sp-5', lat: 19.61, lon: 110.95, name: 'Wenchang (China)', layerId: 'spaceports' },
+  { id: 'sp-6', lat: 13.72, lon: 80.23, name: 'Sriharikota (India)', layerId: 'spaceports' },
+  { id: 'sp-7', lat: 31.25, lon: 131.08, name: 'Tanegashima (Japan)', layerId: 'spaceports' },
+  { id: 'sp-8', lat: 25.97, lon: -97.16, name: 'Starbase Boca Chica (SpaceX)', layerId: 'spaceports' },
+];
+
+/** Stock exchange locations */
+export const STOCK_EXCHANGE_POINTS: LayerPoint[] = [
+  { id: 'se-1', lat: 40.71, lon: -74.01, name: 'NYSE (New York)', layerId: 'stock_exchanges' },
+  { id: 'se-2', lat: 51.51, lon: -0.09, name: 'LSE (London)', layerId: 'stock_exchanges' },
+  { id: 'se-3', lat: 35.68, lon: 139.77, name: 'TSE (Tokyo)', layerId: 'stock_exchanges' },
+  { id: 'se-4', lat: 22.28, lon: 114.16, name: 'HKEX (Hong Kong)', layerId: 'stock_exchanges' },
+  { id: 'se-5', lat: 31.23, lon: 121.47, name: 'SSE (Shanghai)', layerId: 'stock_exchanges' },
+  { id: 'se-6', lat: 24.77, lon: 46.74, name: 'Tadawul (Riyadh)', severity: 'low', layerId: 'stock_exchanges' },
+  { id: 'se-7', lat: 25.20, lon: 55.27, name: 'DFM (Dubai)', severity: 'low', layerId: 'stock_exchanges' },
+  { id: 'se-8', lat: 24.45, lon: 54.65, name: 'ADX (Abu Dhabi)', severity: 'low', layerId: 'stock_exchanges' },
+  { id: 'se-9', lat: 25.29, lon: 51.53, name: 'QSE (Doha)', severity: 'low', layerId: 'stock_exchanges' },
+  { id: 'se-10', lat: 29.38, lon: 47.99, name: 'Boursa Kuwait', severity: 'low', layerId: 'stock_exchanges' },
+  { id: 'se-11', lat: 26.23, lon: 50.59, name: 'BHB (Bahrain)', severity: 'low', layerId: 'stock_exchanges' },
+  { id: 'se-12', lat: 23.59, lon: 58.38, name: 'MSM (Muscat)', severity: 'low', layerId: 'stock_exchanges' },
+  { id: 'se-13', lat: 50.11, lon: 8.68, name: 'Deutsche Börse (Frankfurt)', layerId: 'stock_exchanges' },
+  { id: 'se-14', lat: 19.08, lon: 72.88, name: 'BSE/NSE (Mumbai)', layerId: 'stock_exchanges' },
+  { id: 'se-15', lat: 43.65, lon: -79.38, name: 'TSX (Toronto)', layerId: 'stock_exchanges' },
+];
+
+/** Financial center locations */
+export const FINANCIAL_CENTER_POINTS: LayerPoint[] = [
+  { id: 'fc-1', lat: 40.71, lon: -74.01, name: 'New York (GFCI #1)', layerId: 'financial_centers' },
+  { id: 'fc-2', lat: 51.51, lon: -0.13, name: 'London (GFCI #2)', layerId: 'financial_centers' },
+  { id: 'fc-3', lat: 1.35, lon: 103.82, name: 'Singapore (GFCI #3)', layerId: 'financial_centers' },
+  { id: 'fc-4', lat: 22.32, lon: 114.17, name: 'Hong Kong (GFCI #4)', layerId: 'financial_centers' },
+  { id: 'fc-5', lat: 25.20, lon: 55.27, name: 'Dubai (DIFC)', severity: 'low', layerId: 'financial_centers' },
+  { id: 'fc-6', lat: 24.77, lon: 46.74, name: 'Riyadh (Financial District)', severity: 'low', layerId: 'financial_centers' },
+  { id: 'fc-7', lat: 26.23, lon: 50.59, name: 'Bahrain (BFH)', severity: 'low', layerId: 'financial_centers' },
+  { id: 'fc-8', lat: 47.37, lon: 8.54, name: 'Zurich', layerId: 'financial_centers' },
+  { id: 'fc-9', lat: 35.68, lon: 139.69, name: 'Tokyo', layerId: 'financial_centers' },
+];
+
+/** Central bank locations */
+export const CENTRAL_BANK_POINTS: LayerPoint[] = [
+  { id: 'cb-1', lat: 24.69, lon: 46.69, name: 'SAMA (Saudi Central Bank)', severity: 'low', layerId: 'central_banks' },
+  { id: 'cb-2', lat: 24.45, lon: 54.38, name: 'CBUAE (Central Bank UAE)', severity: 'low', layerId: 'central_banks' },
+  { id: 'cb-3', lat: 25.29, lon: 51.53, name: 'QCB (Qatar Central Bank)', severity: 'low', layerId: 'central_banks' },
+  { id: 'cb-4', lat: 29.37, lon: 47.98, name: 'CBK (Central Bank Kuwait)', severity: 'low', layerId: 'central_banks' },
+  { id: 'cb-5', lat: 26.22, lon: 50.58, name: 'CBB (Central Bank Bahrain)', severity: 'low', layerId: 'central_banks' },
+  { id: 'cb-6', lat: 23.61, lon: 58.59, name: 'CBO (Central Bank Oman)', severity: 'low', layerId: 'central_banks' },
+  { id: 'cb-7', lat: 38.89, lon: -77.05, name: 'US Federal Reserve', layerId: 'central_banks' },
+  { id: 'cb-8', lat: 50.11, lon: 8.68, name: 'ECB (Frankfurt)', layerId: 'central_banks' },
+  { id: 'cb-9', lat: 51.51, lon: -0.09, name: 'Bank of England', layerId: 'central_banks' },
+];
+
+/** GCC Sovereign Fund investment destinations */
+export const GULF_INVESTMENT_POINTS: LayerPoint[] = [
+  { id: 'gi-1', lat: 37.77, lon: -122.42, name: 'PIF/ADIA — Silicon Valley Tech', severity: 'low', layerId: 'gulf_investments' },
+  { id: 'gi-2', lat: 51.51, lon: -0.13, name: 'PIF/QIA — London Real Estate', severity: 'low', layerId: 'gulf_investments' },
+  { id: 'gi-3', lat: 40.71, lon: -74.01, name: 'ADIA/KIA — NY Finance', severity: 'low', layerId: 'gulf_investments' },
+  { id: 'gi-4', lat: 41.39, lon: 2.17, name: 'QSI — FC Barcelona', severity: 'low', layerId: 'gulf_investments' },
+  { id: 'gi-5', lat: 48.86, lon: 2.35, name: 'QSI — Paris (PSG)', severity: 'low', layerId: 'gulf_investments' },
+  { id: 'gi-6', lat: 53.48, lon: -2.24, name: 'ADUG — Manchester City', severity: 'low', layerId: 'gulf_investments' },
+  { id: 'gi-7', lat: 34.05, lon: -118.24, name: 'PIF — Lucid Motors', severity: 'low', layerId: 'gulf_investments' },
+  { id: 'gi-8', lat: 26.07, lon: 50.56, name: 'Mumtalakat — Bahrain Sovereign', severity: 'low', layerId: 'gulf_investments' },
+];
+
+/** Startup hub locations */
+export const STARTUP_HUB_POINTS: LayerPoint[] = [
+  { id: 'sh-1', lat: 37.39, lon: -122.08, name: 'Silicon Valley', layerId: 'startup_hubs' },
+  { id: 'sh-2', lat: 51.52, lon: -0.08, name: 'London Tech City', layerId: 'startup_hubs' },
+  { id: 'sh-3', lat: 32.07, lon: 34.78, name: 'Tel Aviv', layerId: 'startup_hubs' },
+  { id: 'sh-4', lat: 12.97, lon: 77.59, name: 'Bangalore', layerId: 'startup_hubs' },
+  { id: 'sh-5', lat: 1.30, lon: 103.85, name: 'Singapore', layerId: 'startup_hubs' },
+  { id: 'sh-6', lat: 25.20, lon: 55.27, name: 'Dubai (DIFC Innovation)', severity: 'low', layerId: 'startup_hubs' },
+  { id: 'sh-7', lat: 24.77, lon: 46.74, name: 'Riyadh (NEOM/Oxagon)', severity: 'low', layerId: 'startup_hubs' },
+  { id: 'sh-8', lat: 52.52, lon: 13.41, name: 'Berlin', layerId: 'startup_hubs' },
+];
+
+/** Tech company HQ locations */
+export const TECH_HQ_POINTS: LayerPoint[] = [
+  { id: 'th-1', lat: 37.48, lon: -122.14, name: 'Meta (Menlo Park)', layerId: 'tech_hqs' },
+  { id: 'th-2', lat: 37.33, lon: -122.01, name: 'Apple (Cupertino)', layerId: 'tech_hqs' },
+  { id: 'th-3', lat: 37.42, lon: -122.08, name: 'Google (Mountain View)', layerId: 'tech_hqs' },
+  { id: 'th-4', lat: 47.64, lon: -122.13, name: 'Microsoft (Redmond)', layerId: 'tech_hqs' },
+  { id: 'th-5', lat: 47.62, lon: -122.35, name: 'Amazon (Seattle)', layerId: 'tech_hqs' },
+  { id: 'th-6', lat: 37.77, lon: -122.39, name: 'OpenAI (SF)', layerId: 'tech_hqs' },
+  { id: 'th-7', lat: 39.95, lon: 116.33, name: 'ByteDance (Beijing)', layerId: 'tech_hqs' },
+  { id: 'th-8', lat: 22.54, lon: 113.94, name: 'Tencent (Shenzhen)', layerId: 'tech_hqs' },
+  { id: 'th-9', lat: 37.57, lon: 127.00, name: 'Samsung (Seoul)', layerId: 'tech_hqs' },
+];
+
+/** Cloud region locations */
+export const CLOUD_REGION_POINTS: LayerPoint[] = [
+  { id: 'cr-1', lat: 26.07, lon: 50.56, name: 'AWS me-south-1 (Bahrain)', severity: 'low', layerId: 'cloud_regions' },
+  { id: 'cr-2', lat: 25.29, lon: 51.53, name: 'Azure Qatar', severity: 'low', layerId: 'cloud_regions' },
+  { id: 'cr-3', lat: 25.28, lon: 55.31, name: 'GCP me-central2 (Dammam)', severity: 'low', layerId: 'cloud_regions' },
+  { id: 'cr-4', lat: 39.96, lon: -83.00, name: 'AWS us-east-2 (Ohio)', layerId: 'cloud_regions' },
+  { id: 'cr-5', lat: 50.11, lon: 8.68, name: 'AWS eu-central-1 (Frankfurt)', layerId: 'cloud_regions' },
+  { id: 'cr-6', lat: 35.68, lon: 139.69, name: 'AWS ap-northeast-1 (Tokyo)', layerId: 'cloud_regions' },
+  { id: 'cr-7', lat: 1.35, lon: 103.82, name: 'AWS ap-southeast-1 (Singapore)', layerId: 'cloud_regions' },
+];
+
+/** Commodity hub locations */
+export const COMMODITY_HUB_POINTS: LayerPoint[] = [
+  { id: 'ch-1', lat: 1.26, lon: 103.85, name: 'Singapore (LNG Hub)', layerId: 'commodity_hubs' },
+  { id: 'ch-2', lat: 51.51, lon: -0.13, name: 'London (LME Metals)', layerId: 'commodity_hubs' },
+  { id: 'ch-3', lat: 41.88, lon: -87.63, name: 'Chicago (CME Grains)', layerId: 'commodity_hubs' },
+  { id: 'ch-4', lat: 25.20, lon: 55.27, name: 'Dubai (DMCC Gold)', severity: 'low', layerId: 'commodity_hubs' },
+  { id: 'ch-5', lat: 29.76, lon: -95.37, name: 'Houston (Oil & Gas)', layerId: 'commodity_hubs' },
+  { id: 'ch-6', lat: 26.43, lon: 50.10, name: 'Ras Tanura (Saudi Oil Terminal)', severity: 'high', layerId: 'commodity_hubs' },
+  { id: 'ch-7', lat: 51.95, lon: 4.48, name: 'Rotterdam (European Hub)', layerId: 'commodity_hubs' },
+];
+
+/** Strategic waterway chokepoints */
+export const STRATEGIC_WATERWAY_POINTS: LayerPoint[] = [
+  { id: 'sw-1', lat: 26.56, lon: 56.25, name: 'Strait of Hormuz', severity: 'critical', layerId: 'strategic_waterways' },
+  { id: 'sw-2', lat: 30.46, lon: 32.34, name: 'Suez Canal', severity: 'high', layerId: 'strategic_waterways' },
+  { id: 'sw-3', lat: 12.64, lon: 43.26, name: 'Bab el-Mandeb', severity: 'critical', layerId: 'strategic_waterways' },
+  { id: 'sw-4', lat: 1.26, lon: 103.55, name: 'Strait of Malacca', severity: 'medium', layerId: 'strategic_waterways' },
+  { id: 'sw-5', lat: 41.12, lon: 29.05, name: 'Turkish Straits (Bosphorus)', severity: 'medium', layerId: 'strategic_waterways' },
+  { id: 'sw-6', lat: 9.00, lon: 79.60, name: 'Palk Strait', severity: 'low', layerId: 'strategic_waterways' },
+];
+
+/** Desalination plant locations (GCC) */
+export const DESALINATION_POINTS: LayerPoint[] = [
+  { id: 'ds-1', lat: 26.14, lon: 50.22, name: 'Ras Al Khair (SA) — world\'s largest', severity: 'low', layerId: 'desalination' },
+  { id: 'ds-2', lat: 25.08, lon: 55.14, name: 'Jebel Ali (UAE)', severity: 'low', layerId: 'desalination' },
+  { id: 'ds-3', lat: 29.33, lon: 47.95, name: 'Doha West (Kuwait)', severity: 'low', layerId: 'desalination' },
+  { id: 'ds-4', lat: 25.35, lon: 51.44, name: 'Ras Abu Fontas (Qatar)', severity: 'low', layerId: 'desalination' },
+  { id: 'ds-5', lat: 23.64, lon: 57.63, name: 'Barka (Oman)', severity: 'low', layerId: 'desalination' },
+  { id: 'ds-6', lat: 26.20, lon: 50.48, name: 'Al Hidd (Bahrain)', severity: 'low', layerId: 'desalination' },
+];
+
+/** Solar farm locations */
+export const SOLAR_FARM_POINTS: LayerPoint[] = [
+  { id: 'sf-1', lat: 24.45, lon: 54.61, name: 'Al Dhafra Solar (UAE) — 2GW', severity: 'low', layerId: 'solar_farms' },
+  { id: 'sf-2', lat: 23.76, lon: 45.56, name: 'Sudair Solar (SA) — 1.5GW', severity: 'low', layerId: 'solar_farms' },
+  { id: 'sf-3', lat: 25.02, lon: 55.37, name: 'Mohammed bin Rashid Solar Park (UAE)', severity: 'low', layerId: 'solar_farms' },
+  { id: 'sf-4', lat: 25.25, lon: 51.55, name: 'Al Kharsaah Solar (Qatar)', severity: 'low', layerId: 'solar_farms' },
+  { id: 'sf-5', lat: 23.15, lon: 57.10, name: 'Ibri Solar (Oman)', severity: 'low', layerId: 'solar_farms' },
+];
+
+/** Oil facility locations */
+export const OIL_FACILITY_POINTS: LayerPoint[] = [
+  { id: 'of-1', lat: 25.38, lon: 49.62, name: 'Ghawar Field (SA)', severity: 'low', layerId: 'oil_facilities' },
+  { id: 'of-2', lat: 26.43, lon: 50.10, name: 'Ras Tanura Refinery (SA)', severity: 'medium', layerId: 'oil_facilities' },
+  { id: 'of-3', lat: 24.83, lon: 54.90, name: 'Ruwais Refinery (UAE)', severity: 'low', layerId: 'oil_facilities' },
+  { id: 'of-4', lat: 25.77, lon: 55.94, name: 'Fujairah Oil Terminal (UAE)', severity: 'low', layerId: 'oil_facilities' },
+  { id: 'of-5', lat: 29.08, lon: 48.08, name: 'Kuwait Refineries', severity: 'low', layerId: 'oil_facilities' },
+  { id: 'of-6', lat: 25.90, lon: 51.55, name: 'Ras Laffan (Qatar LNG)', severity: 'low', layerId: 'oil_facilities' },
+  { id: 'of-7', lat: 23.20, lon: 57.07, name: 'Sohar Refinery (Oman)', severity: 'low', layerId: 'oil_facilities' },
+  { id: 'of-8', lat: 26.30, lon: 50.21, name: 'Abqaiq Processing (SA)', severity: 'critical', layerId: 'oil_facilities' },
+];
+
 /** Get all points for a given layer */
 export function getLayerPoints(layerId: string): LayerPoint[] {
   switch (layerId) {
@@ -244,6 +406,19 @@ export function getLayerPoints(layerId: string): LayerPoint[] {
     case 'pipelines': return PIPELINE_POINTS;
     case 'ai_data_centers': return AI_DATA_CENTER_POINTS;
     case 'iran_attacks': return IRAN_ATTACK_POINTS;
+    case 'spaceports': return SPACEPORT_POINTS;
+    case 'stock_exchanges': return STOCK_EXCHANGE_POINTS;
+    case 'financial_centers': return FINANCIAL_CENTER_POINTS;
+    case 'central_banks': return CENTRAL_BANK_POINTS;
+    case 'gulf_investments': return GULF_INVESTMENT_POINTS;
+    case 'startup_hubs': return STARTUP_HUB_POINTS;
+    case 'tech_hqs': return TECH_HQ_POINTS;
+    case 'cloud_regions': return CLOUD_REGION_POINTS;
+    case 'commodity_hubs': return COMMODITY_HUB_POINTS;
+    case 'strategic_waterways': return STRATEGIC_WATERWAY_POINTS;
+    case 'desalination': return DESALINATION_POINTS;
+    case 'solar_farms': return SOLAR_FARM_POINTS;
+    case 'oil_facilities': return OIL_FACILITY_POINTS;
     default: return [];
   }
 }
