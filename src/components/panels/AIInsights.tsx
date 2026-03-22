@@ -49,8 +49,10 @@ export function AIInsights() {
         <h2 className="text-sm font-semibold text-gray-200 flex items-center gap-2">
           <span className="text-accent-emerald">⬡</span>
           AI Insights
-          <span className="text-[10px] text-gray-500 font-mono ml-auto">
-            Ollama
+          <span className="text-[10px] font-mono ml-auto flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+            <span className="text-green-400">Ollama</span>
+            <span className="text-gray-600">Local AI</span>
           </span>
         </h2>
       </div>

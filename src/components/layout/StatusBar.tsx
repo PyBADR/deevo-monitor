@@ -109,6 +109,18 @@ export function StatusBar() {
 
         {/* Right section */}
         <div className="flex items-center gap-2">
+          {/* WORLD badge */}
+          <span
+            className="text-[8px] font-mono font-bold px-2 py-0.5 rounded border"
+            style={{
+              borderColor: `${variant.colors.primary}40`,
+              backgroundColor: `${variant.colors.primary}10`,
+              color: variant.colors.primary,
+            }}
+          >
+            WORLD
+          </span>
+
           {/* Webcam count */}
           {variant.showPanels.webcams && (
             <span
@@ -126,6 +138,28 @@ export function StatusBar() {
             </span>
           )}
 
+          {/* Mail / Notifications */}
+          <button
+            className="text-[10px] px-1 py-0.5 rounded hover:bg-white/10 transition-colors relative"
+            style={{ color: variant.colors.textMuted }}
+            title="Notifications"
+          >
+            ✉
+            <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-red-500" />
+          </button>
+
+          {/* Discord icon */}
+          <a
+            href="https://discord.gg/deevo"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[10px] px-1 py-0.5 rounded hover:bg-white/10 transition-colors"
+            style={{ color: '#5865F2' }}
+            title="Join Discord"
+          >
+            ⬡
+          </a>
+
           {/* Language switcher */}
           <LanguageSwitcher />
 
@@ -134,9 +168,9 @@ export function StatusBar() {
             onClick={() => setSearchOpen(!searchOpen)}
             className="text-[10px] px-1.5 py-0.5 rounded hover:bg-white/10 transition-colors"
             style={{ color: variant.colors.textMuted }}
-            title="Search"
+            title="Search (Ctrl+K)"
           >
-            ⌕ Search
+            ⌕
           </button>
 
           {/* Settings */}

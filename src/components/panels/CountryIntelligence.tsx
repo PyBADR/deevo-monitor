@@ -94,6 +94,16 @@ export function CountryIntelligence() {
         <div className="text-[9px] font-mono mt-0.5" style={{ color: variant.colors.textMuted }}>
           Composite risk scoring across 12 signal categories
         </div>
+        <div className="flex items-center gap-2 mt-1">
+          <span className="text-[8px] font-mono px-1.5 py-0.5 rounded" style={{ backgroundColor: '#34C75920', color: '#34C759' }}>LOW 0-14</span>
+          <span className="text-[8px] font-mono px-1.5 py-0.5 rounded" style={{ backgroundColor: '#00D4FF20', color: '#00D4FF' }}>MOD 15-29</span>
+          <span className="text-[8px] font-mono px-1.5 py-0.5 rounded" style={{ backgroundColor: '#FFD60020', color: '#FFD600' }}>ELEV 30-49</span>
+          <span className="text-[8px] font-mono px-1.5 py-0.5 rounded" style={{ backgroundColor: '#FF6B0020', color: '#FF6B00' }}>HIGH 50-69</span>
+          <span className="text-[8px] font-mono px-1.5 py-0.5 rounded" style={{ backgroundColor: '#FF3B3020', color: '#FF3B30' }}>CRIT 70+</span>
+          <span className="text-[8px] font-mono ml-auto" style={{ color: variant.colors.textMuted }}>
+            GCC AVG: {Math.round(INTEL_SCORES.reduce((s, i) => s + i.overall, 0) / INTEL_SCORES.length)}
+          </span>
+        </div>
       </div>
 
       {/* Country cards */}

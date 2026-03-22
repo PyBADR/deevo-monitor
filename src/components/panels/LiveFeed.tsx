@@ -112,6 +112,22 @@ export function LiveFeed() {
                 <span className="text-[10px] text-gray-500">
                   {CATEGORY_LABELS[item.category]?.icon} {item.source}
                 </span>
+                {/* Cross-stream correlation badges */}
+                {item.severity === 'critical' && (
+                  <span className="text-[7px] font-mono px-1 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/30">
+                    MULTI-SIGNAL
+                  </span>
+                )}
+                {item.severity === 'high' && item.category === 'geopolitical' && (
+                  <span className="text-[7px] font-mono px-1 py-0.5 rounded bg-orange-500/20 text-orange-400 border border-orange-500/30">
+                    ESCALATION
+                  </span>
+                )}
+                {item.category === 'market' && item.severity !== 'info' && (
+                  <span className="text-[7px] font-mono px-1 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                    CORRELATED
+                  </span>
+                )}
                 <span className="text-[10px] text-gray-600 ml-auto">
                   {formatDistanceToNow(new Date(item.timestamp), { addSuffix: true })}
                 </span>
