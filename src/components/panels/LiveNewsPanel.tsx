@@ -29,6 +29,8 @@ export function LiveNewsPanel() {
   const { items, loading, error, lastUpdated, refetch } = useRSSFeeds();
   const [activeSource, setActiveSource] = useState<string>('all');
   const [isPaused, setIsPaused] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const filteredItems = useMemo(() => {
     if (activeSource === 'all') return items.slice(0, 50);
@@ -70,14 +72,26 @@ export function LiveNewsPanel() {
         </div>
         <div className="flex items-center gap-1">
           <button
+            onClick={() => setIsMuted(!isMuted)}
+            className="text-[9px] font-mono text-gray-500 hover:text-gray-300 px-1.5 py-0.5 rounded hover:bg-white/10 transition-colors"
+            title={isMuted ? 'Unmute alerts' : 'Mute alerts'}
+          >
+            {isMuted ? '🔇' : '🔊'}
+          </button>
+          <button
             onClick={refetch}
             className="text-[9px] font-mono text-gray-500 hover:text-gray-300 px-1.5 py-0.5 rounded hover:bg-white/10 transition-colors"
             title="Refresh feeds"
           >
             ↻
           </button>
-          <button className="text-[10px] text-gray-500 hover:text-gray-300 px-1">◀</button>
-          <button className="text-[10px] text-gray-500 hover:text-gray-300 px-1">▶</button>
+          <button
+            onClick={() => setIsFullscreen(!isFullscreen)}
+            className="text-[9px] font-mono text-gray-500 hover:text-gray-300 px-1.5 py-0.5 rounded hover:bg-white/10 transition-colors"
+            title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+          >
+            {isFullscreen ? '⊟' : '⊞'}
+          </button>
         </div>
       </div>
 

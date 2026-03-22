@@ -55,6 +55,38 @@ export function AIInsights() {
         </h2>
       </div>
 
+      {/* Step progress indicator */}
+      {loading && (
+        <div className="px-3 py-2 border-b border-surface-3/50">
+          <div className="flex items-center gap-2">
+            <div className="flex gap-1">
+              {[1, 2, 3, 4].map((step) => (
+                <span
+                  key={step}
+                  className="w-5 h-5 rounded-full text-[8px] font-mono flex items-center justify-center border"
+                  style={{
+                    borderColor: step <= 2 ? '#10B981' : '#374151',
+                    backgroundColor: step <= 2 ? '#10B98120' : 'transparent',
+                    color: step <= 2 ? '#10B981' : '#6B7280',
+                  }}
+                >
+                  {step}
+                </span>
+              ))}
+            </div>
+            <span className="text-[10px] font-mono text-gray-400 animate-pulse">
+              Step 2/4 · Analyzing sentiment...
+            </span>
+          </div>
+          <div className="mt-1.5 h-1 bg-surface-3 rounded-full overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all duration-1000"
+              style={{ width: '50%', backgroundColor: '#10B981' }}
+            />
+          </div>
+        </div>
+      )}
+
       {/* Prompt input */}
       <form onSubmit={handleSubmit} className="px-3 py-2 border-b border-surface-3/50">
         <div className="flex gap-2">

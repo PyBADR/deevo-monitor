@@ -22,6 +22,7 @@ import { LayerPanel } from "@/components/map/LayerPanel";
 import { RiskLegend } from "@/components/map/RiskLegend";
 import { MapControls } from "@/components/map/MapControls";
 import { StatusBar } from "@/components/layout/StatusBar";
+import { ProBanner } from "@/components/layout/ProBanner";
 import { GlobalSituation } from "@/components/layout/GlobalSituation";
 import { Footer } from "@/components/layout/Footer";
 import { DiscordButton } from "@/components/layout/DiscordButton";
@@ -196,6 +197,9 @@ export function AppShell() {
   return (
     <div className="h-screen w-screen flex flex-col overflow-hidden" style={{ backgroundColor: variant.colors.bg }}>
       <ThemeInjector />
+
+      {/* ── PRO Banner ──────────────────────────────── */}
+      <ProBanner />
 
       {/* ── StatusBar ─────────────────────────────────── */}
       <StatusBar />

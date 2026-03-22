@@ -291,7 +291,7 @@ export function LayerPanel() {
         style={{ borderColor: variant.colors.border }}
       >
         <span className="text-[8px] font-mono uppercase" style={{ color: variant.colors.textMuted }}>
-          {mode.toUpperCase()} · {style.toUpperCase()} · {activeLayers.size} layers
+          BDRAI · Deevo™ · {activeLayers.size} layers
         </span>
         <Map2D3DToggle mode={mode} setMode={setMode} />
       </div>
