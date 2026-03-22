@@ -111,7 +111,7 @@ app.get("/api/health", (_req, res) => {
 
 // ── SPA fallback (serve index.html for non-API routes) ─
 if (existsSync(distPath)) {
-  app.get("*", (req, res, next) => {
+  app.get("/{*path}", (req, res, next) => {
     if (req.path.startsWith("/api") || req.path.startsWith("/socket.io")) {
       return next();
     }

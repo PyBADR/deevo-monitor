@@ -3,7 +3,7 @@
  * Returns variant configurations and metadata.
  */
 import { Router } from 'express';
-import { getFeedsForVariant, getFeedStats } from '../feeds/all-feeds.config';
+import { getFeedsForVariant, FEED_STATS } from '../feeds/all-feeds.config';
 import { getKPISetForVariant } from '../kpi/index';
 
 const router = Router();
@@ -47,7 +47,7 @@ router.get('/:id', (req, res) => {
     feedCount: feeds.length,
     kpiSections: kpiSet.sections.length,
     kpiMetrics: kpiSet.sections.reduce((sum, s) => sum + s.metrics.length, 0),
-    feedStats: getFeedStats(),
+    feedStats: FEED_STATS,
     timestamp: Date.now(),
   });
 });
