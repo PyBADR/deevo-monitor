@@ -15,7 +15,7 @@ import DeckGL from '@deck.gl/react';
 import { Map } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-import { ScatterplotLayer, ArcLayer, IconLayer, TextLayer, LineLayer } from '@deck.gl/layers';
+import { ScatterplotLayer, ArcLayer, TextLayer } from '@deck.gl/layers';
 import { HeatmapLayer, HexagonLayer } from '@deck.gl/aggregation-layers';
 
 import { useMapStore, type MapStyleId, type IntelCardData } from '@/stores/mapStore';
@@ -61,7 +61,7 @@ const SEVERITY_COLORS: Record<string, [number, number, number, number]> = {
 };
 
 function severityToColor(severity?: string): [number, number, number, number] {
-  return SEVERITY_COLORS[severity || 'medium'] || SEVERITY_COLORS.medium;
+  return SEVERITY_COLORS[severity || 'medium'] ?? [234, 179, 8, 200];
 }
 
 // ── Pulse Animation ─────────────────────────────────────
@@ -400,7 +400,7 @@ export function GCCMap() {
     // ── Claims & Risk Layers ────────────────────────────
     if (activeLayers.has('claims_heatmap')) {
       result.push(
-        // @ts-expect-error DeckGL v9 typing
+
         new HeatmapLayer({
           id: 'claims-heatmap',
           data: hotspots,
@@ -419,7 +419,7 @@ export function GCCMap() {
 
     if (activeLayers.has('risk_density')) {
       result.push(
-        // @ts-expect-error DeckGL v9 typing
+
         new HexagonLayer({
           id: 'risk-hexagon',
           data: hotspots,
@@ -468,7 +468,7 @@ export function GCCMap() {
     // ── Fraud Layers ────────────────────────────────────
     if (activeLayers.has('fraud_links')) {
       result.push(
-        // @ts-expect-error DeckGL v9 typing
+
         new ArcLayer({
           id: 'fraud-arcs',
           data: arcs,

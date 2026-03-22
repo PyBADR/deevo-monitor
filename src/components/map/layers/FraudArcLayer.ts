@@ -5,7 +5,6 @@ import { ArcLayer } from "@deck.gl/layers";
 import type { FraudArc } from "@/types";
 
 export function createFraudArcLayer(data: FraudArc[]) {
-  // @ts-expect-error DeckGL v9 constructor typing mismatch
   return new ArcLayer({
     id: "fraud-arc-layer",
     data,

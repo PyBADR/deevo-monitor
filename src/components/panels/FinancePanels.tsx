@@ -480,10 +480,10 @@ function getMarketStatus(session: MarketSession): { status: string; color: strin
     return { status: 'OPEN', color: '#10B981' };
   }
 
-  const [openH, openM] = session.openLocal.split(':').map(Number);
-  const [closeH, closeM] = session.closeLocal.split(':').map(Number);
-  const openTime = openH + (openM || 0) / 60;
-  const closeTime = closeH + (closeM || 0) / 60;
+  const openParts = session.openLocal.split(':').map(Number);
+  const closeParts = session.closeLocal.split(':').map(Number);
+  const openTime = (openParts[0] ?? 0) + (openParts[1] ?? 0) / 60;
+  const closeTime = (closeParts[0] ?? 0) + (closeParts[1] ?? 0) / 60;
 
   if (localHours >= openTime && localHours < closeTime) return { status: 'OPEN', color: '#10B981' };
   if (localHours >= openTime - 0.5 && localHours < openTime) return { status: 'PRE-MKT', color: '#F59E0B' };

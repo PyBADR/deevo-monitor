@@ -5,7 +5,6 @@ import { HeatmapLayer } from "@deck.gl/aggregation-layers";
 import type { RiskHotspot } from "@/types";
 
 export function createHeatmapLayer(data: RiskHotspot[]) {
-  // @ts-expect-error DeckGL v9 constructor typing mismatch
   return new HeatmapLayer({
     id: "risk-heatmap-layer",
     data,
