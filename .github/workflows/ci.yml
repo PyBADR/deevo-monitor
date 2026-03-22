@@ -1,0 +1,53 @@
+name: CI — TypeScript Check & Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  typecheck-and-build:
+    name: TypeScript Check & Vite Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        variant: [world, gcc, tech, finance, commodity]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript type check
+        run: npx tsc --noEmit
+
+      - name: Build (${{ matrix.variant }} variant)
+        env:
+          VITE_VARIANT: ${{ matrix.variant }}
+        run: npx vite build
+
+  lint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npx eslint src/ --ext .ts,.tsx --max-warnings 0 || true

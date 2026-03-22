@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/nicholasio/tauri/2.0/packages/api/schema/tauri.schema.json",
   "productName": "Deevo Monitor",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "identifier": "com.deevo.monitor",
   "build": {
     "beforeBuildCommand": "npm run build",
@@ -10,10 +10,10 @@
     "frontendDist": "../dist"
   },
   "app": {
-    "title": "Deevo Monitor — GCC Insurance Intelligence",
+    "title": "Deevo Monitor — AI Decision Intelligence",
     "windows": [
       {
-        "title": "Deevo Monitor v4.0",
+        "title": "Deevo Monitor v4.1",
         "width": 1600,
         "height": 1000,
         "resizable": true,
@@ -26,7 +26,7 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src 'self' http://localhost:* ws://localhost:* https://*.cartocdn.com https://*.openstreetmap.org https://unpkg.com; img-src 'self' data: blob: https://*.cartocdn.com https://unpkg.com https://*.openstreetmap.org"
+      "csp": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src 'self' https: http://localhost:* ws: wss: blob: data:; img-src 'self' data: blob: https:; worker-src 'self' blob:; font-src 'self' data: https:; media-src 'self' data: blob: https: http://localhost:*; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://webcams.windy.com"
     }
   },
   "bundle": {

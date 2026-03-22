@@ -1,6 +1,6 @@
 /**
  * Global Intelligence Layers — worldmonitor-style layer definitions.
- * 45 data layers across 8 categories for the global situation map.
+ * 60+ data layers across 12 categories for the global situation map.
  * Each layer includes GeoJSON point data for rendering on DeckGL/MapLibre.
  */
 
@@ -12,7 +12,11 @@ export type LayerCategory =
   | 'INTELLIGENCE'
   | 'CLAIMS'
   | 'FRAUD'
-  | 'ENVIRONMENTAL';
+  | 'ENVIRONMENTAL'
+  | 'SPACE'
+  | 'TECH'
+  | 'FINANCE'
+  | 'COMMODITY';
 
 export interface GlobalLayerDef {
   id: string;
@@ -98,6 +102,36 @@ export const GLOBAL_LAYER_DEFS: GlobalLayerDef[] = [
   { id: 'air_quality', label: 'Air Quality', labelAr: 'جودة الهواء', icon: '💨', color: '#A3E635', category: 'ENVIRONMENTAL', defaultEnabled: false, description: 'Real-time air quality index monitoring' },
   { id: 'seismic_activity', label: 'Seismic Activity', labelAr: 'نشاط زلزالي', icon: '🌋', color: '#EF4444', category: 'ENVIRONMENTAL', defaultEnabled: false, description: 'Earthquake and volcanic activity monitoring' },
   { id: 'dust_storms', label: 'Dust Storms', labelAr: 'عواصف ترابية', icon: '🌪', color: '#D97706', category: 'ENVIRONMENTAL', defaultEnabled: false, description: 'GCC dust and sandstorm tracking' },
+  { id: 'fires', label: 'Fires', labelAr: 'حرائق', icon: '🔥', color: '#EF4444', category: 'ENVIRONMENTAL', defaultEnabled: false, description: 'Active wildfire and satellite fire detection (FIRMS)' },
+  { id: 'climate_anomalies', label: 'Climate Anomalies', labelAr: 'شذوذ مناخي', icon: '🌡', color: '#F97316', category: 'ENVIRONMENTAL', defaultEnabled: false, description: 'Temperature and precipitation anomaly monitoring' },
+
+  // ── SPACE ──
+  { id: 'satellites', label: 'Orbital Surveillance', labelAr: 'مراقبة مدارية', icon: '🛰', color: '#818CF8', category: 'SPACE', defaultEnabled: false, description: 'Active reconnaissance and surveillance satellites' },
+  { id: 'gps_jamming', label: 'GPS Jamming', labelAr: 'تشويش GPS', icon: '📡', color: '#F43F5E', category: 'SPACE', defaultEnabled: false, description: 'GPS spoofing and jamming detection zones' },
+  { id: 'day_night', label: 'Day/Night', labelAr: 'نهار/ليل', icon: '🌓', color: '#64748B', category: 'SPACE', defaultEnabled: false, description: 'Day/night terminator line overlay' },
+
+  // ── TECH ──
+  { id: 'startup_hubs', label: 'Startup Hubs', labelAr: 'مراكز الشركات الناشئة', icon: '🚀', color: '#10B981', category: 'TECH', defaultEnabled: false, description: 'Global startup ecosystem centers' },
+  { id: 'tech_hqs', label: 'Tech HQs', labelAr: 'مقرات تقنية', icon: '🏢', color: '#6366F1', category: 'TECH', defaultEnabled: false, description: 'Major technology company headquarters' },
+  { id: 'cloud_regions', label: 'Cloud Regions', labelAr: 'مناطق سحابية', icon: '☁', color: '#0EA5E9', category: 'TECH', defaultEnabled: false, description: 'AWS, Azure, GCP cloud infrastructure regions' },
+  { id: 'internet_outages', label: 'Internet Disruptions', labelAr: 'انقطاعات إنترنت', icon: '🔌', color: '#EF4444', category: 'TECH', defaultEnabled: false, description: 'Active internet shutdowns and disruptions' },
+
+  // ── FINANCE ──
+  { id: 'stock_exchanges', label: 'Stock Exchanges', labelAr: 'بورصات', icon: '📈', color: '#10B981', category: 'FINANCE', defaultEnabled: false, description: '92 global stock exchanges with status' },
+  { id: 'financial_centers', label: 'Financial Centers', labelAr: 'مراكز مالية', icon: '🏛', color: '#3B82F6', category: 'FINANCE', defaultEnabled: false, description: 'Global financial centers (GFCI ranking)' },
+  { id: 'central_banks', label: 'Central Banks', labelAr: 'بنوك مركزية', icon: '🏦', color: '#8B5CF6', category: 'FINANCE', defaultEnabled: false, description: 'Central bank locations and rate decisions' },
+  { id: 'gulf_investments', label: 'GCC Investments', labelAr: 'استثمارات خليجية', icon: '🌍', color: '#059669', category: 'FINANCE', defaultEnabled: false, description: 'GCC sovereign fund investment destinations' },
+
+  // ── COMMODITY ──
+  { id: 'commodity_hubs', label: 'Commodity Hubs', labelAr: 'مراكز السلع', icon: '📦', color: '#F59E0B', category: 'COMMODITY', defaultEnabled: false, description: 'Major commodity trading and storage hubs' },
+  { id: 'mining_sites', label: 'Mining Sites', labelAr: 'مواقع تعدين', icon: '⛏', color: '#92400E', category: 'COMMODITY', defaultEnabled: false, description: 'Critical mineral extraction sites' },
+  { id: 'commodity_ports', label: 'Commodity Ports', labelAr: 'موانئ سلع', icon: '⚓', color: '#0D9488', category: 'COMMODITY', defaultEnabled: false, description: 'Major bulk commodity shipping ports' },
+  { id: 'critical_minerals', label: 'Critical Minerals', labelAr: 'معادن حرجة', icon: '💎', color: '#7C3AED', category: 'COMMODITY', defaultEnabled: false, description: 'Rare earth and critical mineral deposits' },
+
+  // ── MILITARY (additional worldmonitor parity) ──
+  { id: 'military_activity', label: 'Military Activity', labelAr: 'نشاط عسكري', icon: '⚔', color: '#DC2626', category: 'MILITARY', defaultEnabled: false, description: 'Real-time military movement and exercise detection' },
+  { id: 'armed_conflict_events', label: 'Armed Conflict (UCDP)', labelAr: 'نزاعات مسلحة', icon: '⚔', color: '#B91C1C', category: 'MILITARY', defaultEnabled: false, description: 'Uppsala Conflict Data Program armed events' },
+  { id: 'strategic_waterways', label: 'Strategic Waterways', labelAr: 'ممرات مائية', icon: '🌊', color: '#0284C7', category: 'MILITARY', defaultEnabled: false, description: 'Choke points: Hormuz, Suez, Bab el-Mandeb, Malacca' },
 ];
 
 // ═══════════════════════════════════════════════════════
