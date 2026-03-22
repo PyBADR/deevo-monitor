@@ -56,14 +56,14 @@ import { fileURLToPath } from "url";
 const __dirname2 = dirname(fileURLToPath(import.meta.url));
 const distPath = join(__dirname2, "..", "dist");
 
-// Auto-build if dist/ is missing (handles Render build command = "npm install" only)
-if (!existsSync(distPath) && process.env.NODE_ENV === "production") {
+// Auto-build if dist/ is missing (handles Render where build command = "npm install" only)
+if (!existsSync(distPath)) {
   console.log("[BUILD] dist/ not found — running vite build...");
   try {
-    execSync("npx vite build", { cwd: join(__dirname2, ".."), stdio: "inherit" });
+    execSync("npx vite build", { cwd: join(__dirname2, ".."), stdio: "inherit", timeout: 120_000 });
     console.log("[BUILD] ✓ vite build completed");
-  } catch (e) {
-    console.error("[BUILD] ✗ vite build failed:", e);
+  } catch (e: any) {
+    console.error("[BUILD] ✗ vite build failed:", e.message || e);
   }
 }
 
