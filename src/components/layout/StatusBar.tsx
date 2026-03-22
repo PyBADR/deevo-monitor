@@ -15,6 +15,7 @@ import { SettingsPanel } from "@/components/settings/SettingsPanel";
 import { useVariant } from "@/variants";
 import { GCC_COUNTRIES, DRI_LEVELS, type GCCCountryCode, type DRILevel } from "@/types";
 import { clsx } from "clsx";
+import { setLanguage, getLanguage, type LanguageCode } from "@/i18n";
 
 export function StatusBar() {
   const { variant, variantId } = useVariant();
@@ -56,7 +57,7 @@ export function StatusBar() {
           <div className="w-px h-4" style={{ backgroundColor: variant.colors.border }} />
           <LiveDot status="live" size="sm" label="LIVE" />
           <span style={{ color: variant.colors.textMuted }} className="text-[10px]">
-            v4.0.0
+            v5.1.0
           </span>
         </div>
 
@@ -124,6 +125,9 @@ export function StatusBar() {
               ⬡ Silicon
             </span>
           )}
+
+          {/* Language switcher */}
+          <LanguageSwitcher />
 
           {/* Search */}
           <button
@@ -205,6 +209,44 @@ function VariantBadge() {
     >
       {labels[variantId]}
     </span>
+  );
+}
+
+/** Language switcher — AR/EN toggle in StatusBar */
+function LanguageSwitcher() {
+  const { variant } = useVariant();
+  const [lang, setLang] = useState<LanguageCode>(getLanguage());
+
+  const toggle = () => {
+    const next: LanguageCode = lang === 'ar' ? 'en' : 'ar';
+    setLanguage(next);
+    setLang(next);
+  };
+
+  return (
+    <button
+      onClick={toggle}
+      className="flex items-center gap-1 text-[9px] font-mono px-1.5 py-0.5 rounded border transition-colors hover:bg-white/10"
+      style={{
+        borderColor: `${variant.colors.primary}40`,
+        color: variant.colors.textMuted,
+      }}
+      title={lang === 'ar' ? 'Switch to English' : 'التبديل إلى العربية'}
+    >
+      <span
+        className="font-bold"
+        style={{ color: lang === 'en' ? variant.colors.primary : variant.colors.textMuted }}
+      >
+        EN
+      </span>
+      <span style={{ color: variant.colors.border }}>|</span>
+      <span
+        className="font-bold"
+        style={{ color: lang === 'ar' ? variant.colors.primary : variant.colors.textMuted }}
+      >
+        عربي
+      </span>
+    </button>
   );
 }
 
