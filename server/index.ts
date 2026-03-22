@@ -50,25 +50,16 @@ app.use(express.json());
 
 // Serve static frontend in production (when dist/ exists)
 import { existsSync } from "fs";
-import { execSync } from "child_process";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 const __dirname2 = dirname(fileURLToPath(import.meta.url));
 const distPath = join(__dirname2, "..", "dist");
 
-// Auto-build if dist/ is missing (handles Render where build command = "npm install" only)
-if (!existsSync(distPath)) {
-  console.log("[BUILD] dist/ not found — running vite build...");
-  try {
-    execSync("npx vite build", { cwd: join(__dirname2, ".."), stdio: "inherit", timeout: 120_000 });
-    console.log("[BUILD] ✓ vite build completed");
-  } catch (e: any) {
-    console.error("[BUILD] ✗ vite build failed:", e.message || e);
-  }
-}
-
 if (existsSync(distPath)) {
+  console.log("[STATIC] Serving frontend from dist/");
   app.use(express.static(distPath));
+} else {
+  console.warn("[STATIC] dist/ not found — frontend will not be served. Run 'npm run build' first.");
 }
 
 // ── V3 Route imports ─────────────────────────────────
