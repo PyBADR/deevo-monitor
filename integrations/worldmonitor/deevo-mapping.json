@@ -1,0 +1,33 @@
+{
+  "worldmonitor_version": "2.6.5",
+  "worldmonitor_repo": "koala73/worldmonitor",
+  "total_prs_analyzed": 2088,
+  "feat_commits": 67,
+  "geo_features": 73,
+  "gcc_features": 53,
+  "generated_at": "2026-03-23T00:00:00Z",
+  "mappings": [
+    {"wm": "feat(cii): displacement signal + ACLED window", "pr": "#1818", "deevo": "FRIN — Fraud & Risk Intelligence Network", "layer": "Models"},
+    {"wm": "feat(forecast): simulation state + market transmission", "pr": "#1847,#1850,#1976", "deevo": "DEEVO Sentinel — Risk Scoring Pipeline", "layer": "Agents"},
+    {"wm": "feat(map): country hover + weather radar layer", "pr": "#1830", "deevo": "GeoSpatial Risk Module — CesiumJS", "layer": "Features"},
+    {"wm": "feat(aviation): Wingbits fallback + OpenSky", "pr": "#1839,#1816", "deevo": "Field Inspector — Location Context", "layer": "Features"},
+    {"wm": "feat(military): Wingbits live flight details", "pr": "#1816", "deevo": "Field Inspector — Aviation Intelligence", "layer": "Features"},
+    {"wm": "feat(cyber): MITRE ATT&CK APT groups", "pr": "#1869", "deevo": "DeevoSentinel — Cyber Threat Feeds", "layer": "Data"},
+    {"wm": "feat(infra): Cloudflare Radar DDoS + traffic anomaly", "pr": "#2067", "deevo": "DeevoSentinel — Infrastructure Monitoring", "layer": "Data"},
+    {"wm": "feat(economic): National Debt Clock + Gulf Economies", "pr": "#1923,#1927", "deevo": "DEEVO Intel Dashboard — GCC Indices", "layer": "APIs"},
+    {"wm": "feat(economic): ME grocery basket + BigMac WoW", "pr": "#1904,#1974", "deevo": "DEEVO Intel Dashboard — Consumer Intelligence", "layer": "APIs"},
+    {"wm": "feat(consumer-prices): SearchAdapter global pipeline", "pr": "#2063,#1932", "deevo": "Signal Intake Layer — Price Monitoring", "layer": "Data"},
+    {"wm": "feat(finance): crypto sectors heatmap + DeFi panels", "pr": "#1900", "deevo": "DEEVO Intel Dashboard — Crypto & DeFi", "layer": "APIs"},
+    {"wm": "feat(markets): NSE/BSE India market support", "pr": "#1863", "deevo": "DEEVO Intel Dashboard — Emerging Markets", "layer": "APIs"},
+    {"wm": "feat(mcp): MCP data panel + auto-visualization", "pr": "#2076,#2081,#1835", "deevo": "DAIV — Deevo AI Intelligence Vault", "layer": "Models"},
+    {"wm": "feat(search): CMD+K flight callsign locate", "pr": "#2004,#2005", "deevo": "Intelligence Lab — Search & Discovery", "layer": "UI"},
+    {"wm": "feat(panels): unified panel registry", "pr": "#1911", "deevo": "Intelligence Lab — Variant Panel System", "layer": "UI"},
+    {"wm": "feat(forecast): critical news signals + energy transmission", "pr": "#2064,#2021", "deevo": "DEEVO Sentinel — Forecast Engine", "layer": "Agents"},
+    {"wm": "feat(export): non-AI data export + LLM threat sanitization", "pr": "#2058", "deevo": "Governance — Data Export & Compliance", "layer": "Governance"},
+    {"wm": "feat(thermal): panel cards + country brief wiring", "pr": "#1952", "deevo": "GeoSpatial Risk Module — Thermal Escalation", "layer": "Features"},
+    {"wm": "feat(community): Discord link + analytics", "pr": "#1882,#1921", "deevo": "DEEVO Platform — Community & Analytics", "layer": "UI"},
+    {"wm": "feat(sanctions): tariff rate source + panel redesign", "pr": "#1790", "deevo": "FRIN — Sanctions & Compliance Intelligence", "layer": "Models"},
+    {"wm": "feat(seed): orchestrator + auto-seeding", "pr": "#1940", "deevo": "Signal Intake Layer — Data Orchestration", "layer": "Data"},
+    {"wm": "feat(ci): Brin contributor trust screening", "pr": "#1859", "deevo": "Governance — Supply Chain Security", "layer": "Governance"}
+  ]
+}
