@@ -17,7 +17,7 @@
     "osint"
   ],
   "scripts": {
-    "postinstall": "vite build || true",
+    "postinstall": "node --max-old-space-size=1024 ./node_modules/.bin/vite build",
     "render-build": "npm install && vite build",
     "dev": "vite --port 5174",
     "dev:gcc": "VITE_VARIANT=gcc vite --port 5174",
