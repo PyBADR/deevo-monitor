@@ -91,7 +91,7 @@ const GCC_REGIONS: readonly string[] = [
   'dubai', 'muscat', 'manama', 'kuwait city',
 ] as const;
 
-const TRANSIENT_SIGNAL_TYPES: ReadonlySet<WMSignalType> = new Set([
+const TRANSIENT_SIGNAL_TYPES: ReadonlySet<WMSignalType> = new Set<WMSignalType>([
   'conflict', 'alert', 'military', 'thermal',
 ]);
 
@@ -209,7 +209,7 @@ export class WorldMonitorAdapter {
     if (lower.includes('gcc') || lower.includes('gulf')) {
       ['KW', 'SA', 'AE', 'QA', 'BH', 'OM'].forEach((c) => found.add(c));
     }
-    return [...found].sort();
+    return Array.from(found).sort();
   }
 
   /**

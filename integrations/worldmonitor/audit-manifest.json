@@ -1,0 +1,45 @@
+{
+  "manifest_version": "1.0.0",
+  "generated_at": "2026-03-23T00:00:00Z",
+  "git_commit": "674460a1d0dfe840322be3ce05442655b66fc302",
+  "git_tag": "v5.2.0-wm-integration",
+  "github_release": "https://github.com/PyBADR/deevo-monitor/releases/tag/v5.2.0-wm-integration",
+  "upstream": {
+    "repository": "koala73/worldmonitor",
+    "version": "2.6.5",
+    "license": "AGPL-3.0",
+    "prs_analyzed": 2088
+  },
+  "adapter": {
+    "file": "src/integrations/worldmonitor/WorldMonitorAdapter.ts",
+    "sha256": "ddcf1a9299c8f167b0f5a57b786cf90537605978f56e51de8b524a5ce8e1e235",
+    "version": "1.0.0",
+    "tsc_noEmit": "PASS",
+    "vitest_tests": 20,
+    "vitest_status": "PASS"
+  },
+  "mapping": {
+    "file": "integrations/worldmonitor/deevo-mapping.json",
+    "sha256": "d54e582dc56c9b5be03305b8074e18173e0da9ef62ecb136f54379b05f497727",
+    "total_mappings": 22
+  },
+  "integration_summary": {
+    "upstream_modules_extracted": 28,
+    "categories": ["geo", "risk", "alerts", "feeds", "rag", "economic", "cyber", "military"],
+    "signal_types": 12,
+    "deevo_layers_covered": ["Data", "Features", "Models", "Agents", "APIs", "UI", "Governance"],
+    "gcc_countries": ["AE", "BH", "KW", "OM", "QA", "SA"],
+    "pdpl_compliant": true,
+    "human_review_threshold": 60,
+    "transient_signal_types": ["conflict", "alert", "military", "thermal"]
+  },
+  "contracts_completed": [
+    {"id": 0, "name": "Clone & Inventory", "status": "DONE"},
+    {"id": 1, "name": "Extract & Map Source Modules", "status": "DONE"},
+    {"id": 2, "name": "Build WorldMonitorAdapter", "status": "DONE"},
+    {"id": 3, "name": "Test Suite (20 tests)", "status": "DONE"},
+    {"id": 4, "name": "Git Commit & Push", "status": "DONE"},
+    {"id": 5, "name": "Release Tag & GitHub Release", "status": "DONE"},
+    {"id": 6, "name": "Verification & Audit Manifest", "status": "DONE"}
+  ]
+}
