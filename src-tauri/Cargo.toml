@@ -1,0 +1,22 @@
+[package]
+name = "deevo-monitor"
+version = "4.0.0"
+description = "Deevo Monitor — GCC Insurance Intelligence Dashboard"
+authors = ["BDRAI"]
+license = "AGPL-3.0"
+repository = "https://github.com/PyBADR/deevo-monitor"
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["shell-open-api", "shell-sidecar"] }
+tauri-plugin-shell = "2"
+tauri-plugin-updater = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]

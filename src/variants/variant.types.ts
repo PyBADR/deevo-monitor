@@ -1,9 +1,10 @@
 /**
  * Variant System — Type Definitions
- * Deevo Monitor v3.0 runs 4 distinct variants from a single codebase.
+ * Deevo Monitor v4.0 runs 6 distinct variants from a single codebase.
+ * Matches worldmonitor's 5 variants + fraud (Deevo-specific).
  */
 
-export type VariantId = 'global' | 'tech' | 'finance' | 'fraud';
+export type VariantId = 'global' | 'tech' | 'finance' | 'fraud' | 'commodity' | 'happy';
 
 export interface VariantColors {
   primary: string;
@@ -44,7 +45,11 @@ export interface VariantConfig {
     kpiDashboard: boolean;
     webcast: boolean;
     marketTicker: boolean;
+    liveNews: boolean;
+    webcams: boolean;
+    strategicPosture: boolean;
+    countryIntel: boolean;
   };
 }
 
-export type KPISetId = 'insurance' | 'insurtech' | 'financial_markets' | 'fraud_intel';
+export type KPISetId = 'insurance' | 'insurtech' | 'financial_markets' | 'fraud_intel' | 'commodity' | 'wellness';

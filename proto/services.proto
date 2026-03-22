@@ -1,0 +1,357 @@
+// Deevo Monitor v4.0 — Protocol Buffer Service Definitions
+// 22 services across the intelligence stack.
+// Used for type-safe API contracts and potential gRPC migration.
+
+syntax = "proto3";
+package deevo.monitor.v4;
+
+option go_package = "deevo/monitor/v4;monitorv4";
+
+// ═══════════════════════════════════════════════════════
+// COMMON TYPES
+// ═══════════════════════════════════════════════════════
+
+message Timestamp {
+  int64 seconds = 1;
+  int32 nanos = 2;
+}
+
+message Pagination {
+  int32 page = 1;
+  int32 page_size = 2;
+  int32 total = 3;
+  bool has_more = 4;
+}
+
+message GeoPoint {
+  double latitude = 1;
+  double longitude = 2;
+  double altitude = 3;
+}
+
+enum Severity {
+  SEVERITY_UNSPECIFIED = 0;
+  SEVERITY_INFO = 1;
+  SEVERITY_LOW = 2;
+  SEVERITY_MEDIUM = 3;
+  SEVERITY_HIGH = 4;
+  SEVERITY_CRITICAL = 5;
+}
+
+enum Region {
+  REGION_UNSPECIFIED = 0;
+  REGION_SA = 1;   // Saudi Arabia
+  REGION_AE = 2;   // UAE
+  REGION_KW = 3;   // Kuwait
+  REGION_QA = 4;   // Qatar
+  REGION_BH = 5;   // Bahrain
+  REGION_OM = 6;   // Oman
+  REGION_GCC = 7;  // All GCC
+  REGION_MENA = 8; // Middle East & North Africa
+  REGION_GLOBAL = 9;
+}
+
+// ═══════════════════════════════════════════════════════
+// SERVICE 1: FEED SERVICE
+// ═══════════════════════════════════════════════════════
+
+message FeedItem {
+  string id = 1;
+  string title = 2;
+  string summary = 3;
+  string source = 4;
+  string url = 5;
+  Timestamp published_at = 6;
+  string category = 7;
+  Region region = 8;
+  Severity severity = 9;
+  repeated string tags = 10;
+  string language = 11;
+}
+
+message FeedRequest {
+  repeated string categories = 1;
+  Region region = 2;
+  string variant_id = 3;
+  int32 limit = 4;
+  string cursor = 5;
+}
+
+message FeedResponse {
+  repeated FeedItem items = 1;
+  Pagination pagination = 2;
+  Timestamp server_time = 3;
+}
+
+// ═══════════════════════════════════════════════════════
+// SERVICE 2: RISK ENGINE
+// ═══════════════════════════════════════════════════════
+
+message RiskHotspot {
+  string id = 1;
+  GeoPoint location = 2;
+  double weight = 3;
+  string label = 4;
+  string category = 5;
+}
+
+message DRILevel {
+  int32 level = 1;          // 1-5
+  string label = 2;
+  string color = 3;
+  double composite_score = 4;
+}
+
+message RiskRequest {
+  Region region = 1;
+  string variant_id = 2;
+}
+
+message RiskResponse {
+  DRILevel dri = 1;
+  repeated RiskHotspot hotspots = 2;
+  Timestamp computed_at = 3;
+}
+
+// ═══════════════════════════════════════════════════════
+// SERVICE 3: KPI ENGINE
+// ═══════════════════════════════════════════════════════
+
+message KPIMetric {
+  string id = 1;
+  string label = 2;
+  double value = 3;
+  string unit = 4;
+  string trend = 5;
+  string trend_value = 6;
+  Severity severity = 7;
+  repeated double sparkline = 8;
+}
+
+message KPISection {
+  string id = 1;
+  string title = 2;
+  string icon = 3;
+  repeated KPIMetric metrics = 4;
+}
+
+message KPIRequest {
+  string variant_id = 1;
+  string kpi_set_id = 2;
+}
+
+message KPIResponse {
+  string set_id = 1;
+  string set_name = 2;
+  repeated KPISection sections = 3;
+  Timestamp last_updated = 4;
+}
+
+// ═══════════════════════════════════════════════════════
+// SERVICE 4: NEWS AGGREGATION
+// ═══════════════════════════════════════════════════════
+
+message NewsItem {
+  string id = 1;
+  string title = 2;
+  string summary = 3;
+  string source = 4;
+  string source_id = 5;
+  string url = 6;
+  Timestamp timestamp = 7;
+  string category = 8;
+  Region region = 9;
+  Severity severity = 10;
+  string image_url = 11;
+}
+
+message NewsRequest {
+  string source = 1;
+  Region region = 2;
+  int32 limit = 3;
+}
+
+message NewsResponse {
+  repeated NewsItem items = 1;
+  int32 total_sources = 2;
+  Timestamp server_time = 3;
+}
+
+// ═══════════════════════════════════════════════════════
+// SERVICE 5: WEBCAM FEEDS
+// ═══════════════════════════════════════════════════════
+
+message WebcamFeed {
+  string id = 1;
+  string label = 2;
+  string location = 3;
+  string region = 4;
+  GeoPoint geo = 5;
+  string status = 6;
+  int32 viewers = 7;
+  string thumbnail_url = 8;
+  string stream_url = 9;
+  repeated string tags = 10;
+}
+
+message WebcamRequest {
+  string region = 1;
+  string status = 2;
+  int32 limit = 3;
+}
+
+message WebcamResponse {
+  repeated WebcamFeed feeds = 1;
+  int32 total_feeds = 2;
+  int32 live_count = 3;
+}
+
+// ═══════════════════════════════════════════════════════
+// SERVICE 6: INTELLIGENCE / POSTURE
+// ═══════════════════════════════════════════════════════
+
+message TheaterAssessment {
+  string id = 1;
+  string theater = 2;
+  string region = 3;
+  string posture_level = 4;
+  string trend = 5;
+  string summary = 6;
+  repeated string key_factors = 7;
+  Timestamp last_updated = 8;
+}
+
+message ForecastItem {
+  string id = 1;
+  string title = 2;
+  double probability = 3;
+  Severity impact = 4;
+  string timeframe = 5;
+  string category = 6;
+  string description = 7;
+}
+
+message CountrySignal {
+  string category = 1;
+  double score = 2;
+  string trend = 3;
+  Severity severity = 4;
+}
+
+message CountryIntel {
+  string code = 1;
+  string name = 2;
+  string name_ar = 3;
+  double overall_score = 4;
+  string risk_level = 5;
+  repeated CountrySignal signals = 6;
+}
+
+// ═══════════════════════════════════════════════════════
+// SERVICE 7: FINANCE RADAR
+// ═══════════════════════════════════════════════════════
+
+message MarketIndex {
+  string id = 1;
+  string name = 2;
+  string ticker = 3;
+  string region = 4;
+  double value = 5;
+  double change = 6;
+  double change_pct = 7;
+  string volume = 8;
+  string status = 9;
+}
+
+message CompositeSignal {
+  string id = 1;
+  string name = 2;
+  double value = 3;
+  double weight = 4;
+  string direction = 5;
+  string description = 6;
+}
+
+message FinanceRequest {
+  string tab = 1;
+  string filter = 2;
+}
+
+message FinanceResponse {
+  repeated MarketIndex exchanges = 1;
+  repeated CompositeSignal signals = 2;
+  double composite_score = 3;
+}
+
+// ═══════════════════════════════════════════════════════
+// SERVICE 8: CORRELATION ENGINE
+// ═══════════════════════════════════════════════════════
+
+message StreamSignal {
+  string id = 1;
+  string stream = 2;
+  Timestamp timestamp = 3;
+  GeoPoint location = 4;
+  double severity = 5;
+  double confidence = 6;
+  string title = 7;
+  string source = 8;
+  string region = 9;
+}
+
+message Correlation {
+  string id = 1;
+  repeated StreamSignal signals = 2;
+  double convergence_score = 3;
+  int64 temporal_window_ms = 4;
+  double spatial_radius_km = 5;
+  string category = 6;
+  string title = 7;
+  double escalation_probability = 8;
+  repeated string regions = 9;
+}
+
+message CorrelationRequest {
+  int64 temporal_window_ms = 1;
+  double spatial_radius_km = 2;
+  int32 min_streams = 3;
+}
+
+message CorrelationResponse {
+  repeated Correlation correlations = 1;
+  int32 active_count = 2;
+}
+
+// ═══════════════════════════════════════════════════════
+// SERVICE 9-22: ADDITIONAL SERVICES (STUBS)
+// ═══════════════════════════════════════════════════════
+
+// 9: AI Insights / Ollama proxy
+// 10: Stock market data
+// 11: Variant configuration
+// 12: Map layer management
+// 13: Alert management
+// 14: User preferences
+// 15: Cache management
+// 16: Authentication (future)
+// 17: Audit trail (SHA-256)
+// 18: Notification push
+// 19: Export (PDF/CSV/XLSX)
+// 20: Geofencing rules
+// 21: Regulatory compliance
+// 22: Health check / telemetry
+
+message HealthRequest {}
+
+message HealthResponse {
+  string status = 1;
+  string version = 2;
+  double uptime_seconds = 3;
+  Timestamp timestamp = 4;
+  repeated string variants = 5;
+  repeated string endpoints = 6;
+  int32 feed_count = 7;
+  int32 layer_count = 8;
+  bool redis_connected = 9;
+  bool ollama_connected = 10;
+}

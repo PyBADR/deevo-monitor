@@ -33,7 +33,7 @@ export interface KPISection {
   collapsed?: boolean;
 }
 
-export type KPISetId = 'insurance' | 'insurtech' | 'financial' | 'fraud';
+export type KPISetId = 'insurance' | 'insurtech' | 'financial' | 'fraud' | 'commodity' | 'wellness';
 
 export interface KPISet {
   id: KPISetId;

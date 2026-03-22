@@ -1,0 +1,77 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nicholasio/tauri/2.0/packages/api/schema/tauri.schema.json",
+  "productName": "Deevo Monitor",
+  "version": "4.0.0",
+  "identifier": "com.deevo.monitor",
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:5174",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "title": "Deevo Monitor — GCC Insurance Intelligence",
+    "windows": [
+      {
+        "title": "Deevo Monitor v4.0",
+        "width": 1600,
+        "height": 1000,
+        "resizable": true,
+        "fullscreen": false,
+        "decorations": true,
+        "transparent": false,
+        "center": true,
+        "minWidth": 1200,
+        "minHeight": 800
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src 'self' http://localhost:* ws://localhost:* https://*.cartocdn.com https://*.openstreetmap.org https://unpkg.com; img-src 'self' data: blob: https://*.cartocdn.com https://unpkg.com https://*.openstreetmap.org"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "macOS": {
+      "minimumSystemVersion": "10.15",
+      "frameworks": [],
+      "signingIdentity": null
+    },
+    "windows": {
+      "wix": {
+        "language": "en-US"
+      }
+    },
+    "linux": {
+      "deb": {
+        "depends": ["libwebkit2gtk-4.1-0", "libgtk-3-0"]
+      }
+    }
+  },
+  "plugins": {
+    "shell": {
+      "open": true,
+      "sidecar": [
+        {
+          "cmd": "node",
+          "args": ["server/index.ts"],
+          "env": {
+            "PORT": "3001"
+          }
+        }
+      ]
+    },
+    "updater": {
+      "endpoints": ["https://releases.deevomonitor.app/{{target}}/{{arch}}/{{current_version}}"],
+      "dialog": true,
+      "pubkey": ""
+    }
+  }
+}

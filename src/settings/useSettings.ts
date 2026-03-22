@@ -1,5 +1,7 @@
 /**
  * useSettings — Zustand store for persisted application settings.
+ * v4.0: 16 sections — extended with MapTile, LiveEvents, Media, Pages,
+ *       Integrations, Explorer, Privacy.
  * Settings are saved to localStorage and loaded on startup.
  */
 import { create } from 'zustand';
@@ -8,12 +10,19 @@ import type {
   AllSettings,
   AppearanceSettings,
   MapSettings,
+  MapTileSettings,
+  LiveEventsSettings,
   FeedSettings,
   AISettings,
   NotificationSettings,
   DisplaySettings,
+  MediaSettings,
+  PagesSettings,
   ShortcutSettings,
   DataSourceSettings,
+  IntegrationSettings,
+  ExplorerSettings,
+  PrivacySettings,
   SettingsSection,
 } from './settings.types';
 
@@ -27,6 +36,9 @@ const DEFAULT_APPEARANCE: AppearanceSettings = {
   reducedMotion: false,
   accentColor: 'variant-default',
   compactMode: false,
+  pageAnimation: 'fade',
+  dataInkRatio: 'balanced',
+  uiDensity: 'comfortable',
 };
 
 const DEFAULT_MAP: MapSettings = {
@@ -40,6 +52,32 @@ const DEFAULT_MAP: MapSettings = {
   animateFlights: true,
   showWeatherOverlay: false,
   defaultCenter: { lat: 24.5, lng: 48.0 },
+};
+
+const DEFAULT_MAP_TILE: MapTileSettings = {
+  provider: 'carto',
+  mapboxToken: '',
+  maptilerKey: '',
+  customTileUrl: '',
+  tileResolution: '256',
+  retina: true,
+  cacheEnabled: true,
+  offlineTiles: false,
+};
+
+const DEFAULT_LIVE_EVENTS: LiveEventsSettings = {
+  enabled: true,
+  showMilitaryEvents: true,
+  showDisasterEvents: true,
+  showCyberEvents: true,
+  showEconomicEvents: true,
+  showSocialEvents: true,
+  maxEventAge: 48,
+  eventDensityLimit: 200,
+  flashNewEvents: true,
+  eventSound: false,
+  visualEarth: true,
+  iotStreaming: false,
 };
 
 const DEFAULT_FEEDS: FeedSettings = {
@@ -65,6 +103,16 @@ const DEFAULT_AI: AISettings = {
   language: 'auto',
   humanInTheLoop: true,
   auditTrail: true,
+  ollamaEndpoint: 'http://localhost:11434',
+  ollamaModel: 'llama3.2',
+  downloadOnDemand: true,
+  gpuMemoryLimit: 8192,
+  groqApiKey: '',
+  openrouterApiKey: '',
+  openaiApiKey: '',
+  anthropicApiKey: '',
+  fallbackChain: ['ollama', 'groq', 'openrouter', 'mock'],
+  fullyLocal: false,
 };
 
 const DEFAULT_NOTIFICATIONS: NotificationSettings = {
@@ -94,6 +142,34 @@ const DEFAULT_DISPLAY: DisplaySettings = {
   numberFormat: 'us',
 };
 
+const DEFAULT_MEDIA: MediaSettings = {
+  videoQuality: 'auto',
+  keepLiveStreamRunning: false,
+  autoplayVideos: false,
+  mutedByDefault: true,
+  webcamThumbnailSize: 'md',
+  maxConcurrentStreams: 2,
+  bufferSize: 5,
+};
+
+const DEFAULT_PAGES: PagesSettings = {
+  defaultTab: 'feed',
+  enabledPanels: [
+    'feed', 'ai', 'risk', 'forecast', 'alerts',
+    'pipeline', 'kpi', 'webcams', 'intel', 'finance',
+    'correlation', 'country', 'news',
+  ],
+  panelOrder: [
+    'feed', 'ai', 'risk', 'forecast', 'alerts',
+    'pipeline', 'kpi', 'webcams', 'intel', 'finance',
+    'correlation', 'country', 'news',
+  ],
+  pageTransition: 'fade',
+  rememberLastTab: true,
+  sidebarPosition: 'left',
+  sidebarCollapsed: false,
+};
+
 const DEFAULT_SHORTCUTS: ShortcutSettings = {
   enabled: true,
   shortcuts: [
@@ -103,10 +179,13 @@ const DEFAULT_SHORTCUTS: ShortcutSettings = {
     { id: 'toggle-forecast', label: 'Toggle Forecasts', keys: 'Alt+4', action: 'tab:forecast' },
     { id: 'toggle-alerts', label: 'Toggle Alerts', keys: 'Alt+5', action: 'tab:alerts' },
     { id: 'toggle-pipeline', label: 'Toggle Pipeline', keys: 'Alt+6', action: 'tab:pipeline' },
+    { id: 'toggle-finance', label: 'Toggle Finance', keys: 'Alt+7', action: 'tab:finance' },
+    { id: 'toggle-correlation', label: 'Toggle Correlation', keys: 'Alt+8', action: 'tab:correlation' },
     { id: 'search', label: 'Search', keys: 'Ctrl+K', action: 'search' },
     { id: 'settings', label: 'Open Settings', keys: 'Ctrl+,', action: 'settings' },
     { id: 'reset-map', label: 'Reset Map View', keys: 'Ctrl+0', action: 'map:reset' },
     { id: 'fullscreen', label: 'Toggle Fullscreen', keys: 'F11', action: 'fullscreen' },
+    { id: 'toggle-globe', label: 'Toggle 2D/3D', keys: 'Ctrl+G', action: 'map:toggle3d' },
   ],
 };
 
@@ -117,18 +196,54 @@ const DEFAULT_DATASOURCES: DataSourceSettings = {
   retryDelay: 3000,
 };
 
+const DEFAULT_INTEGRATIONS: IntegrationSettings = {
+  discordWebhook: '',
+  discordEnabled: false,
+  browserNotifications: false,
+  browserHomepage: '',
+  icloudSync: false,
+  exportFormat: 'json',
+  shareFormat: 'png',
+};
+
+const DEFAULT_EXPLORER: ExplorerSettings = {
+  defaultView: 'grid',
+  groupBy: 'category',
+  sortBy: 'timestamp',
+  showPreview: true,
+  previewSize: 'md',
+  maxResults: 100,
+  includeArchived: false,
+};
+
+const DEFAULT_PRIVACY: PrivacySettings = {
+  telemetryEnabled: false,
+  shareAnalytics: false,
+  clearCacheOnExit: false,
+  dataRetentionDays: 90,
+  auditLogEnabled: true,
+  pdplCompliance: true,
+};
+
 // ── Store ───────────────────────────────────────────────────────────
 
 interface SettingsStore extends AllSettings {
   // Actions
   updateAppearance: (partial: Partial<AppearanceSettings>) => void;
   updateMap: (partial: Partial<MapSettings>) => void;
+  updateMapTile: (partial: Partial<MapTileSettings>) => void;
+  updateLiveEvents: (partial: Partial<LiveEventsSettings>) => void;
   updateFeeds: (partial: Partial<FeedSettings>) => void;
   updateAI: (partial: Partial<AISettings>) => void;
   updateNotifications: (partial: Partial<NotificationSettings>) => void;
   updateDisplay: (partial: Partial<DisplaySettings>) => void;
+  updateMedia: (partial: Partial<MediaSettings>) => void;
+  updatePages: (partial: Partial<PagesSettings>) => void;
   updateShortcuts: (partial: Partial<ShortcutSettings>) => void;
   updateDataSources: (partial: Partial<DataSourceSettings>) => void;
+  updateIntegrations: (partial: Partial<IntegrationSettings>) => void;
+  updateExplorer: (partial: Partial<ExplorerSettings>) => void;
+  updatePrivacy: (partial: Partial<PrivacySettings>) => void;
   resetSection: (section: SettingsSection) => void;
   resetAll: () => void;
 }
@@ -136,12 +251,19 @@ interface SettingsStore extends AllSettings {
 const DEFAULTS: AllSettings = {
   appearance: DEFAULT_APPEARANCE,
   map: DEFAULT_MAP,
+  mapTile: DEFAULT_MAP_TILE,
+  liveEvents: DEFAULT_LIVE_EVENTS,
   feeds: DEFAULT_FEEDS,
   ai: DEFAULT_AI,
   notifications: DEFAULT_NOTIFICATIONS,
   display: DEFAULT_DISPLAY,
+  media: DEFAULT_MEDIA,
+  pages: DEFAULT_PAGES,
   shortcuts: DEFAULT_SHORTCUTS,
   dataSources: DEFAULT_DATASOURCES,
+  integrations: DEFAULT_INTEGRATIONS,
+  explorer: DEFAULT_EXPLORER,
+  privacy: DEFAULT_PRIVACY,
 };
 
 export const useSettings = create<SettingsStore>()(
@@ -153,6 +275,10 @@ export const useSettings = create<SettingsStore>()(
         set((s) => ({ appearance: { ...s.appearance, ...partial } })),
       updateMap: (partial) =>
         set((s) => ({ map: { ...s.map, ...partial } })),
+      updateMapTile: (partial) =>
+        set((s) => ({ mapTile: { ...s.mapTile, ...partial } })),
+      updateLiveEvents: (partial) =>
+        set((s) => ({ liveEvents: { ...s.liveEvents, ...partial } })),
       updateFeeds: (partial) =>
         set((s) => ({ feeds: { ...s.feeds, ...partial } })),
       updateAI: (partial) =>
@@ -161,10 +287,20 @@ export const useSettings = create<SettingsStore>()(
         set((s) => ({ notifications: { ...s.notifications, ...partial } })),
       updateDisplay: (partial) =>
         set((s) => ({ display: { ...s.display, ...partial } })),
+      updateMedia: (partial) =>
+        set((s) => ({ media: { ...s.media, ...partial } })),
+      updatePages: (partial) =>
+        set((s) => ({ pages: { ...s.pages, ...partial } })),
       updateShortcuts: (partial) =>
         set((s) => ({ shortcuts: { ...s.shortcuts, ...partial } })),
       updateDataSources: (partial) =>
         set((s) => ({ dataSources: { ...s.dataSources, ...partial } })),
+      updateIntegrations: (partial) =>
+        set((s) => ({ integrations: { ...s.integrations, ...partial } })),
+      updateExplorer: (partial) =>
+        set((s) => ({ explorer: { ...s.explorer, ...partial } })),
+      updatePrivacy: (partial) =>
+        set((s) => ({ privacy: { ...s.privacy, ...partial } })),
 
       resetSection: (section) =>
         set(() => ({ [section]: DEFAULTS[section] })),
@@ -173,7 +309,7 @@ export const useSettings = create<SettingsStore>()(
     }),
     {
       name: 'deevo-settings',
-      version: 1,
+      version: 2,
     }
   )
 );

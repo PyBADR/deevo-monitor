@@ -1,16 +1,19 @@
 /**
- * DEEVO Monitor v3.0 — Complete RSS Feed Library
- * 200+ feeds organized by variant and category.
+ * DEEVO Monitor v4.0 — Complete RSS Feed Library
+ * 435+ feeds organized by variant and category across 15 categories.
  */
 
-type VariantId = 'global' | 'tech' | 'finance' | 'fraud';
+type VariantId = 'global' | 'tech' | 'finance' | 'fraud' | 'commodity' | 'happy';
 
 type FeedCategory =
   | 'insurance_global' | 'reinsurance' | 'gcc_regional' | 'regulatory_gcc'
   | 'weather_cat' | 'geopolitical'
   | 'insurtech' | 'ai_ml' | 'digital_insurance' | 'startup_funding' | 'cloud_tech'
   | 'financial_markets' | 'insurance_stocks' | 'gcc_economy' | 'reinsurance_pricing' | 'investment'
-  | 'fraud_intelligence' | 'law_enforcement' | 'cyber_fraud' | 'financial_crime';
+  | 'fraud_intelligence' | 'law_enforcement' | 'cyber_fraud' | 'financial_crime'
+  | 'energy_commodity' | 'maritime_shipping' | 'climate_environment'
+  | 'health_wellness' | 'esg_sustainability' | 'crypto_defi'
+  | 'military_defense' | 'cyber_security' | 'space_satellite';
 
 interface FeedDefinition {
   id: string;
@@ -294,6 +297,263 @@ const ADDITIONAL_FEEDS: FeedDefinition[] = [
 // EXPORTS
 // ═══════════════════════════════════════════════════════
 
+// ═══════════════════════════════════════════════════════
+// v4.0 EXPANDED FEEDS — ENERGY & COMMODITY (30)
+// ═══════════════════════════════════════════════════════
+
+const ENERGY_COMMODITY_FEEDS: FeedDefinition[] = [
+  { id: 'ec-1', name: 'OPEC News', url: 'https://www.opec.org/opec_web/en/press_room/28.htm', region: 'global', variants: ['global', 'commodity', 'finance'], category: 'energy_commodity', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-2', name: 'S&P Global Platts', url: 'https://www.spglobal.com/commodityinsights/en/rss-feed', region: 'global', variants: ['commodity', 'finance'], category: 'energy_commodity', priority: 1, language: 'en', updateFrequency: 'hourly' },
+  { id: 'ec-3', name: 'IEA News', url: 'https://www.iea.org/news/rss', region: 'global', variants: ['global', 'commodity'], category: 'energy_commodity', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-4', name: 'EIA Today in Energy', url: 'https://www.eia.gov/todayinenergy/rss.xml', region: 'us', variants: ['commodity', 'finance'], category: 'energy_commodity', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-5', name: 'ADNOC News', url: 'https://www.adnoc.ae/en/news-and-media/rss', region: 'ae', variants: ['global', 'commodity'], category: 'energy_commodity', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-6', name: 'Saudi Aramco', url: 'https://www.aramco.com/en/news-media/rss', region: 'sa', variants: ['global', 'commodity'], category: 'energy_commodity', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-7', name: 'LME News', url: 'https://www.lme.com/News/rss', region: 'global', variants: ['commodity'], category: 'energy_commodity', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'ec-8', name: 'CME Group Energy', url: 'https://www.cmegroup.com/rss/energy.rss', region: 'us', variants: ['commodity', 'finance'], category: 'energy_commodity', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'ec-9', name: 'ICE Futures', url: 'https://www.theice.com/rss/news', region: 'global', variants: ['commodity'], category: 'energy_commodity', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'ec-10', name: 'QatarEnergy News', url: 'https://www.qatarenergy.qa/en/rss', region: 'qa', variants: ['global', 'commodity'], category: 'energy_commodity', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-11', name: 'KPC Kuwait', url: 'https://www.kpc.com.kw/rss', region: 'kw', variants: ['global', 'commodity'], category: 'energy_commodity', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-12', name: 'PDO Oman', url: 'https://www.pdo.co.om/en/news/rss', region: 'om', variants: ['global', 'commodity'], category: 'energy_commodity', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-13', name: 'Rigzone', url: 'https://www.rigzone.com/news/rss/rigzone_latest.aspx', region: 'global', variants: ['commodity'], category: 'energy_commodity', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'ec-14', name: 'OilPrice.com', url: 'https://oilprice.com/rss/main', region: 'global', variants: ['commodity', 'finance'], category: 'energy_commodity', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'ec-15', name: 'World Oil', url: 'https://www.worldoil.com/rss', region: 'global', variants: ['commodity'], category: 'energy_commodity', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-16', name: 'Upstream Online', url: 'https://www.upstreamonline.com/rss', region: 'global', variants: ['commodity'], category: 'energy_commodity', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-17', name: 'BAPCO Bahrain', url: 'https://www.bapco.net/en/news/rss', region: 'bh', variants: ['global', 'commodity'], category: 'energy_commodity', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-18', name: 'Middle East Economic Survey', url: 'https://www.mees.com/rss', region: 'mena', variants: ['commodity', 'finance'], category: 'energy_commodity', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-19', name: 'IRENA News', url: 'https://www.irena.org/rss', region: 'global', variants: ['commodity', 'happy'], category: 'energy_commodity', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-20', name: 'Natural Gas World', url: 'https://www.naturalgasworld.com/rss', region: 'global', variants: ['commodity'], category: 'energy_commodity', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-21', name: 'Bloomberg Commodities', url: 'https://www.bloomberg.com/feed/commodity', region: 'global', variants: ['commodity', 'finance'], category: 'energy_commodity', priority: 1, language: 'en', updateFrequency: 'realtime' },
+  { id: 'ec-22', name: 'Reuters Commodities', url: 'https://feeds.reuters.com/reuters/commoditiesNews', region: 'global', variants: ['commodity', 'finance'], category: 'energy_commodity', priority: 1, language: 'en', updateFrequency: 'realtime' },
+  { id: 'ec-23', name: 'Argus Media', url: 'https://www.argusmedia.com/rss', region: 'global', variants: ['commodity'], category: 'energy_commodity', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'ec-24', name: 'Mining.com', url: 'https://www.mining.com/feed/', region: 'global', variants: ['commodity'], category: 'energy_commodity', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-25', name: 'AgriCensus', url: 'https://www.agricensus.com/rss', region: 'global', variants: ['commodity'], category: 'energy_commodity', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-26', name: 'Fastmarkets', url: 'https://www.fastmarkets.com/rss', region: 'global', variants: ['commodity'], category: 'energy_commodity', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-27', name: 'JODI Oil Data', url: 'https://www.jodidata.org/rss', region: 'global', variants: ['commodity'], category: 'energy_commodity', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-28', name: 'Gulf Intelligence', url: 'https://www.thegulfintelligence.com/rss', region: 'gcc', variants: ['global', 'commodity'], category: 'energy_commodity', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'ec-29', name: 'Tanker Trackers', url: 'https://tankertrackers.com/rss', region: 'global', variants: ['commodity'], category: 'energy_commodity', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'ec-30', name: 'Energy Voice', url: 'https://www.energyvoice.com/rss', region: 'global', variants: ['commodity'], category: 'energy_commodity', priority: 3, language: 'en', updateFrequency: 'daily' },
+];
+
+// ═══════════════════════════════════════════════════════
+// v4.0 EXPANDED FEEDS — MARITIME & SHIPPING (20)
+// ═══════════════════════════════════════════════════════
+
+const MARITIME_FEEDS: FeedDefinition[] = [
+  { id: 'mar-1', name: 'Lloyd\'s List', url: 'https://www.lloydslist.com/ll/rss', region: 'global', variants: ['global', 'commodity'], category: 'maritime_shipping', priority: 1, language: 'en', updateFrequency: 'hourly' },
+  { id: 'mar-2', name: 'TradeWinds', url: 'https://www.tradewindsnews.com/rss', region: 'global', variants: ['commodity'], category: 'maritime_shipping', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'mar-3', name: 'Splash 247', url: 'https://splash247.com/rss', region: 'global', variants: ['commodity'], category: 'maritime_shipping', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'mar-4', name: 'Hellenic Shipping', url: 'https://www.hellenicshippingnews.com/rss', region: 'global', variants: ['commodity'], category: 'maritime_shipping', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'mar-5', name: 'Freightos Index', url: 'https://fbx.freightos.com/rss', region: 'global', variants: ['commodity', 'finance'], category: 'maritime_shipping', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'mar-6', name: 'DP World News', url: 'https://www.dpworld.com/rss', region: 'ae', variants: ['global', 'commodity'], category: 'maritime_shipping', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'mar-7', name: 'IMB Piracy Center', url: 'https://www.icc-ccs.org/piracy-reporting-centre/rss', region: 'global', variants: ['global', 'commodity'], category: 'maritime_shipping', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'mar-8', name: 'Suez Canal Authority', url: 'https://www.suezcanal.gov.eg/rss', region: 'mena', variants: ['global', 'commodity'], category: 'maritime_shipping', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'mar-9', name: 'BIMCO Shipping', url: 'https://www.bimco.org/rss', region: 'global', variants: ['commodity'], category: 'maritime_shipping', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'mar-10', name: 'Maritime Executive', url: 'https://www.maritime-executive.com/rss', region: 'global', variants: ['commodity'], category: 'maritime_shipping', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'mar-11', name: 'gCaptain', url: 'https://gcaptain.com/feed/', region: 'global', variants: ['commodity'], category: 'maritime_shipping', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'mar-12', name: 'Seatrade Maritime', url: 'https://www.seatrade-maritime.com/rss', region: 'global', variants: ['commodity'], category: 'maritime_shipping', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'mar-13', name: 'Drewry Shipping', url: 'https://www.drewry.co.uk/rss', region: 'global', variants: ['commodity', 'finance'], category: 'maritime_shipping', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'mar-14', name: 'UKMTO', url: 'https://www.ukmto.org/rss', region: 'mena', variants: ['global', 'commodity'], category: 'maritime_shipping', priority: 1, language: 'en', updateFrequency: 'realtime' },
+  { id: 'mar-15', name: 'Xeneta Rates', url: 'https://www.xeneta.com/rss', region: 'global', variants: ['commodity'], category: 'maritime_shipping', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'mar-16', name: 'Port Technology', url: 'https://www.porttechnology.org/rss', region: 'global', variants: ['commodity', 'tech'], category: 'maritime_shipping', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'mar-17', name: 'Jebel Ali Port', url: 'https://www.dpworld.ae/rss', region: 'ae', variants: ['global', 'commodity'], category: 'maritime_shipping', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'mar-18', name: 'King Abdullah Port', url: 'https://www.kingabdullahport.com.sa/rss', region: 'sa', variants: ['global', 'commodity'], category: 'maritime_shipping', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'mar-19', name: 'Hamad Port Qatar', url: 'https://www.mwani.com.qa/en/rss', region: 'qa', variants: ['global', 'commodity'], category: 'maritime_shipping', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'mar-20', name: 'The Loadstar', url: 'https://theloadstar.com/feed/', region: 'global', variants: ['commodity'], category: 'maritime_shipping', priority: 3, language: 'en', updateFrequency: 'daily' },
+];
+
+// ═══════════════════════════════════════════════════════
+// v4.0 EXPANDED FEEDS — CYBER SECURITY (25)
+// ═══════════════════════════════════════════════════════
+
+const CYBER_SECURITY_FEEDS: FeedDefinition[] = [
+  { id: 'cyb-1', name: 'The Hacker News', url: 'https://feeds.feedburner.com/TheHackersNews', region: 'global', variants: ['global', 'tech', 'fraud'], category: 'cyber_security', priority: 1, language: 'en', updateFrequency: 'realtime' },
+  { id: 'cyb-2', name: 'Krebs on Security', url: 'https://krebsonsecurity.com/feed/', region: 'global', variants: ['global', 'tech', 'fraud'], category: 'cyber_security', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'cyb-3', name: 'Bleeping Computer', url: 'https://www.bleepingcomputer.com/feed/', region: 'global', variants: ['tech', 'fraud'], category: 'cyber_security', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'cyb-4', name: 'Dark Reading', url: 'https://www.darkreading.com/rss_simple.asp', region: 'global', variants: ['tech', 'fraud'], category: 'cyber_security', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'cyb-5', name: 'SecurityWeek', url: 'https://www.securityweek.com/feed', region: 'global', variants: ['tech', 'fraud'], category: 'cyber_security', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'cyb-6', name: 'CISA Alerts', url: 'https://www.cisa.gov/uscert/ncas/alerts.xml', region: 'us', variants: ['global', 'tech'], category: 'cyber_security', priority: 1, language: 'en', updateFrequency: 'realtime' },
+  { id: 'cyb-7', name: 'NCSC UK', url: 'https://www.ncsc.gov.uk/api/1/services/v1/report-rss-feed.xml', region: 'uk', variants: ['global', 'tech'], category: 'cyber_security', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'cyb-8', name: 'UAE CERT', url: 'https://www.tra.gov.ae/aecert/en/rss', region: 'ae', variants: ['global', 'tech'], category: 'cyber_security', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'cyb-9', name: 'Saudi NCA', url: 'https://nca.gov.sa/en/rss', region: 'sa', variants: ['global', 'tech'], category: 'cyber_security', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'cyb-10', name: 'Mandiant Threat Intel', url: 'https://www.mandiant.com/resources/rss', region: 'global', variants: ['tech', 'fraud'], category: 'cyber_security', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'cyb-11', name: 'CrowdStrike Blog', url: 'https://www.crowdstrike.com/blog/feed/', region: 'global', variants: ['tech'], category: 'cyber_security', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cyb-12', name: 'Recorded Future', url: 'https://www.recordedfuture.com/feed', region: 'global', variants: ['tech', 'fraud'], category: 'cyber_security', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cyb-13', name: 'Threat Post', url: 'https://threatpost.com/feed/', region: 'global', variants: ['tech'], category: 'cyber_security', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'cyb-14', name: 'Kaspersky Securelist', url: 'https://securelist.com/feed/', region: 'global', variants: ['tech'], category: 'cyber_security', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cyb-15', name: 'Sophos Naked Security', url: 'https://nakedsecurity.sophos.com/feed/', region: 'global', variants: ['tech'], category: 'cyber_security', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'cyb-16', name: 'SANS ISC', url: 'https://isc.sans.edu/rssfeed.xml', region: 'global', variants: ['tech'], category: 'cyber_security', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'cyb-17', name: 'Microsoft Security', url: 'https://www.microsoft.com/security/blog/feed/', region: 'global', variants: ['tech'], category: 'cyber_security', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cyb-18', name: 'Google Project Zero', url: 'https://googleprojectzero.blogspot.com/feeds/posts/default', region: 'global', variants: ['tech'], category: 'cyber_security', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cyb-19', name: 'Palo Alto Unit 42', url: 'https://unit42.paloaltonetworks.com/feed/', region: 'global', variants: ['tech', 'fraud'], category: 'cyber_security', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cyb-20', name: 'Cisco Talos', url: 'https://blog.talosintelligence.com/feeds/posts/default', region: 'global', variants: ['tech'], category: 'cyber_security', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cyb-21', name: 'Check Point Research', url: 'https://research.checkpoint.com/feed/', region: 'global', variants: ['tech'], category: 'cyber_security', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cyb-22', name: 'SentinelOne Blog', url: 'https://www.sentinelone.com/blog/feed/', region: 'global', variants: ['tech'], category: 'cyber_security', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'cyb-23', name: 'Qatar NCSA', url: 'https://www.ncsa.gov.qa/en/rss', region: 'qa', variants: ['global', 'tech'], category: 'cyber_security', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cyb-24', name: 'Bahrain NCEA', url: 'https://www.ncea.gov.bh/en/rss', region: 'bh', variants: ['global', 'tech'], category: 'cyber_security', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cyb-25', name: 'Kuwait CITRA', url: 'https://www.citra.gov.kw/en/rss', region: 'kw', variants: ['global', 'tech'], category: 'cyber_security', priority: 2, language: 'en', updateFrequency: 'daily' },
+];
+
+// ═══════════════════════════════════════════════════════
+// v4.0 EXPANDED FEEDS — MILITARY & DEFENSE (20)
+// ═══════════════════════════════════════════════════════
+
+const MILITARY_DEFENSE_FEEDS: FeedDefinition[] = [
+  { id: 'mil-1', name: 'Jane\'s Defence', url: 'https://www.janes.com/feeds/news', region: 'global', variants: ['global'], category: 'military_defense', priority: 1, language: 'en', updateFrequency: 'hourly' },
+  { id: 'mil-2', name: 'Defense News', url: 'https://www.defensenews.com/arc/outboundfeeds/rss/?outputType=xml', region: 'global', variants: ['global'], category: 'military_defense', priority: 1, language: 'en', updateFrequency: 'hourly' },
+  { id: 'mil-3', name: 'The War Zone', url: 'https://www.thedrive.com/the-war-zone/feed', region: 'global', variants: ['global'], category: 'military_defense', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'mil-4', name: 'Breaking Defense', url: 'https://breakingdefense.com/feed/', region: 'global', variants: ['global'], category: 'military_defense', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'mil-5', name: 'IISS Analysis', url: 'https://www.iiss.org/rss', region: 'global', variants: ['global'], category: 'military_defense', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'mil-6', name: 'SIPRI News', url: 'https://www.sipri.org/rss.xml', region: 'global', variants: ['global'], category: 'military_defense', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'mil-7', name: 'CENTCOM News', url: 'https://www.centcom.mil/rss', region: 'mena', variants: ['global'], category: 'military_defense', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'mil-8', name: 'Naval News', url: 'https://www.navalnews.com/feed/', region: 'global', variants: ['global'], category: 'military_defense', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'mil-9', name: 'Army Recognition', url: 'https://www.armyrecognition.com/rss', region: 'global', variants: ['global'], category: 'military_defense', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'mil-10', name: 'C4ISRNET', url: 'https://www.c4isrnet.com/rss', region: 'global', variants: ['global', 'tech'], category: 'military_defense', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'mil-11', name: 'Middle East Eye Defence', url: 'https://www.middleeasteye.net/rss', region: 'mena', variants: ['global'], category: 'military_defense', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'mil-12', name: 'Al Monitor Military', url: 'https://www.al-monitor.com/rss', region: 'mena', variants: ['global'], category: 'military_defense', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'mil-13', name: 'GCC Military Forces', url: 'https://www.gcc-sg.org/en-us/rss', region: 'gcc', variants: ['global'], category: 'military_defense', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'mil-14', name: 'UAE Armed Forces', url: 'https://www.uaeaf.gov.ae/rss', region: 'ae', variants: ['global'], category: 'military_defense', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'mil-15', name: 'RUSI Commentary', url: 'https://rusi.org/rss', region: 'global', variants: ['global'], category: 'military_defense', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'mil-16', name: 'RAND Corporation', url: 'https://www.rand.org/news/rss.xml', region: 'global', variants: ['global'], category: 'military_defense', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'mil-17', name: 'Bellingcat', url: 'https://www.bellingcat.com/feed/', region: 'global', variants: ['global'], category: 'military_defense', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'mil-18', name: 'ISW Iraq/Syria', url: 'https://www.understandingwar.org/rss', region: 'mena', variants: ['global'], category: 'military_defense', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'mil-19', name: 'Long War Journal', url: 'https://www.longwarjournal.org/feed', region: 'global', variants: ['global'], category: 'military_defense', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'mil-20', name: 'Arms Control Assoc', url: 'https://www.armscontrol.org/rss', region: 'global', variants: ['global'], category: 'military_defense', priority: 2, language: 'en', updateFrequency: 'daily' },
+];
+
+// ═══════════════════════════════════════════════════════
+// v4.0 EXPANDED FEEDS — CLIMATE & ESG (20)
+// ═══════════════════════════════════════════════════════
+
+const CLIMATE_ESG_FEEDS: FeedDefinition[] = [
+  { id: 'cli-1', name: 'Climate Home News', url: 'https://www.climatechangenews.com/feed/', region: 'global', variants: ['global', 'happy'], category: 'climate_environment', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cli-2', name: 'Carbon Brief', url: 'https://www.carbonbrief.org/feed/', region: 'global', variants: ['global', 'happy'], category: 'climate_environment', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'cli-3', name: 'NOAA Climate', url: 'https://www.climate.gov/rss.xml', region: 'global', variants: ['global', 'commodity'], category: 'climate_environment', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'cli-4', name: 'WMO News', url: 'https://public.wmo.int/en/rss.xml', region: 'global', variants: ['global'], category: 'climate_environment', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'cli-5', name: 'Munich Re NatCat', url: 'https://www.munichre.com/rss', region: 'global', variants: ['global', 'finance'], category: 'climate_environment', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'cli-6', name: 'Swiss Re sigma', url: 'https://www.swissre.com/rss', region: 'global', variants: ['global', 'finance'], category: 'climate_environment', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'cli-7', name: 'ESG Today', url: 'https://www.esgtoday.com/feed/', region: 'global', variants: ['global', 'happy', 'finance'], category: 'esg_sustainability', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'cli-8', name: 'Responsible Investor', url: 'https://www.responsible-investor.com/feed/', region: 'global', variants: ['finance', 'happy'], category: 'esg_sustainability', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cli-9', name: 'PRI News', url: 'https://www.unpri.org/rss', region: 'global', variants: ['finance', 'happy'], category: 'esg_sustainability', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cli-10', name: 'MSCI ESG', url: 'https://www.msci.com/rss', region: 'global', variants: ['finance'], category: 'esg_sustainability', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cli-11', name: 'CDP News', url: 'https://www.cdp.net/en/rss', region: 'global', variants: ['happy'], category: 'esg_sustainability', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'cli-12', name: 'MASDAR News', url: 'https://masdar.ae/en/news/rss', region: 'ae', variants: ['global', 'happy'], category: 'climate_environment', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cli-13', name: 'NEOM Updates', url: 'https://www.neom.com/en-us/rss', region: 'sa', variants: ['global', 'happy', 'tech'], category: 'esg_sustainability', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cli-14', name: 'GCC Environment', url: 'https://www.gcc-environment.org/rss', region: 'gcc', variants: ['global', 'happy'], category: 'climate_environment', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cli-15', name: 'UNEP News', url: 'https://www.unep.org/rss', region: 'global', variants: ['global', 'happy'], category: 'climate_environment', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cli-16', name: 'Bloomberg Green', url: 'https://www.bloomberg.com/feed/green', region: 'global', variants: ['finance', 'happy'], category: 'climate_environment', priority: 1, language: 'en', updateFrequency: 'hourly' },
+  { id: 'cli-17', name: 'Saudi Green Initiative', url: 'https://www.greeninitiatives.gov.sa/rss', region: 'sa', variants: ['global', 'happy'], category: 'esg_sustainability', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cli-18', name: 'ACWA Power', url: 'https://www.acwapower.com/rss', region: 'sa', variants: ['global', 'commodity', 'happy'], category: 'esg_sustainability', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cli-19', name: 'Gulf News Sustainability', url: 'https://gulfnews.com/uae/environment/rss', region: 'ae', variants: ['global', 'happy'], category: 'climate_environment', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'cli-20', name: 'WHO EMRO', url: 'https://www.emro.who.int/rss', region: 'mena', variants: ['global', 'happy'], category: 'health_wellness', priority: 2, language: 'en', updateFrequency: 'daily' },
+];
+
+// ═══════════════════════════════════════════════════════
+// v4.0 EXPANDED FEEDS — CRYPTO & DeFi (20)
+// ═══════════════════════════════════════════════════════
+
+const CRYPTO_DEFI_FEEDS: FeedDefinition[] = [
+  { id: 'cryp-1', name: 'CoinDesk', url: 'https://www.coindesk.com/arc/outboundfeeds/rss/', region: 'global', variants: ['finance', 'tech'], category: 'crypto_defi', priority: 1, language: 'en', updateFrequency: 'realtime' },
+  { id: 'cryp-2', name: 'CoinTelegraph', url: 'https://cointelegraph.com/rss', region: 'global', variants: ['finance', 'tech'], category: 'crypto_defi', priority: 1, language: 'en', updateFrequency: 'realtime' },
+  { id: 'cryp-3', name: 'The Block', url: 'https://www.theblock.co/rss.xml', region: 'global', variants: ['finance', 'tech'], category: 'crypto_defi', priority: 1, language: 'en', updateFrequency: 'hourly' },
+  { id: 'cryp-4', name: 'Decrypt', url: 'https://decrypt.co/feed', region: 'global', variants: ['tech'], category: 'crypto_defi', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'cryp-5', name: 'DeFi Llama', url: 'https://defillama.com/rss', region: 'global', variants: ['finance', 'tech'], category: 'crypto_defi', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'cryp-6', name: 'Messari', url: 'https://messari.io/rss', region: 'global', variants: ['finance'], category: 'crypto_defi', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cryp-7', name: 'Chainalysis Blog', url: 'https://blog.chainalysis.com/feed/', region: 'global', variants: ['fraud', 'finance'], category: 'crypto_defi', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cryp-8', name: 'Elliptic Blog', url: 'https://www.elliptic.co/blog/rss', region: 'global', variants: ['fraud'], category: 'crypto_defi', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cryp-9', name: 'UAE VARA', url: 'https://www.vara.ae/en/rss', region: 'ae', variants: ['global', 'finance'], category: 'crypto_defi', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'cryp-10', name: 'Bahrain CBB Crypto', url: 'https://www.cbb.gov.bh/rss', region: 'bh', variants: ['global', 'finance'], category: 'crypto_defi', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cryp-11', name: 'Binance Blog', url: 'https://www.binance.com/en/blog/rss', region: 'global', variants: ['finance', 'tech'], category: 'crypto_defi', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cryp-12', name: 'Ethereum Foundation', url: 'https://blog.ethereum.org/feed.xml', region: 'global', variants: ['tech'], category: 'crypto_defi', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cryp-13', name: 'Bitcoin Magazine', url: 'https://bitcoinmagazine.com/feed', region: 'global', variants: ['finance'], category: 'crypto_defi', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cryp-14', name: 'Rekt News', url: 'https://rekt.news/feed/', region: 'global', variants: ['fraud', 'tech'], category: 'crypto_defi', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cryp-15', name: 'Web3 is Going Great', url: 'https://web3isgoinggreat.com/feed.xml', region: 'global', variants: ['fraud'], category: 'crypto_defi', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'cryp-16', name: 'QFC Digital Assets', url: 'https://www.qfc.qa/en/rss', region: 'qa', variants: ['global', 'finance'], category: 'crypto_defi', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cryp-17', name: 'DIFC Innovation', url: 'https://www.difc.ae/rss', region: 'ae', variants: ['global', 'tech', 'finance'], category: 'crypto_defi', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cryp-18', name: 'ADGM RegLab', url: 'https://www.adgm.com/rss', region: 'ae', variants: ['global', 'finance'], category: 'crypto_defi', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cryp-19', name: 'Saudi CMA Digital', url: 'https://cma.org.sa/en/rss', region: 'sa', variants: ['global', 'finance'], category: 'crypto_defi', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'cryp-20', name: 'CBK Kuwait Digital', url: 'https://www.cbk.gov.kw/en/rss', region: 'kw', variants: ['global', 'finance'], category: 'crypto_defi', priority: 2, language: 'en', updateFrequency: 'daily' },
+];
+
+// ═══════════════════════════════════════════════════════
+// v4.0 EXPANDED FEEDS — GLOBAL NEWS (30)
+// ═══════════════════════════════════════════════════════
+
+const GLOBAL_NEWS_FEEDS: FeedDefinition[] = [
+  { id: 'gn-1', name: 'Reuters World', url: 'https://feeds.reuters.com/reuters/worldNews', region: 'global', variants: ['global', 'finance', 'commodity'], category: 'geopolitical', priority: 1, language: 'en', updateFrequency: 'realtime' },
+  { id: 'gn-2', name: 'AP News', url: 'https://rsshub.app/apnews/topics/apf-topnews', region: 'global', variants: ['global'], category: 'geopolitical', priority: 1, language: 'en', updateFrequency: 'realtime' },
+  { id: 'gn-3', name: 'BBC World', url: 'https://feeds.bbci.co.uk/news/world/rss.xml', region: 'global', variants: ['global'], category: 'geopolitical', priority: 1, language: 'en', updateFrequency: 'realtime' },
+  { id: 'gn-4', name: 'CNN World', url: 'http://rss.cnn.com/rss/edition_world.rss', region: 'global', variants: ['global'], category: 'geopolitical', priority: 1, language: 'en', updateFrequency: 'realtime' },
+  { id: 'gn-5', name: 'Al Jazeera', url: 'https://www.aljazeera.com/xml/rss/all.xml', region: 'mena', variants: ['global'], category: 'geopolitical', priority: 1, language: 'en', updateFrequency: 'realtime' },
+  { id: 'gn-6', name: 'Sky News', url: 'https://feeds.skynews.com/feeds/rss/world.xml', region: 'global', variants: ['global'], category: 'geopolitical', priority: 1, language: 'en', updateFrequency: 'realtime' },
+  { id: 'gn-7', name: 'France 24', url: 'https://www.france24.com/en/rss', region: 'global', variants: ['global'], category: 'geopolitical', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'gn-8', name: 'DW News', url: 'https://rss.dw.com/rdf/rss-en-all', region: 'global', variants: ['global'], category: 'geopolitical', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'gn-9', name: 'Euronews', url: 'https://www.euronews.com/rss', region: 'europe', variants: ['global'], category: 'geopolitical', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'gn-10', name: 'Al Arabiya EN', url: 'https://english.alarabiya.net/tools/rss', region: 'mena', variants: ['global'], category: 'geopolitical', priority: 1, language: 'en', updateFrequency: 'realtime' },
+  { id: 'gn-11', name: 'Bloomberg', url: 'https://www.bloomberg.com/feed/podcast/decrypted.xml', region: 'global', variants: ['global', 'finance'], category: 'geopolitical', priority: 1, language: 'en', updateFrequency: 'realtime' },
+  { id: 'gn-12', name: 'Financial Times', url: 'https://www.ft.com/rss/home/international', region: 'global', variants: ['global', 'finance'], category: 'geopolitical', priority: 1, language: 'en', updateFrequency: 'hourly' },
+  { id: 'gn-13', name: 'CNBC World', url: 'https://www.cnbc.com/id/100727362/device/rss/rss.html', region: 'global', variants: ['global', 'finance'], category: 'geopolitical', priority: 1, language: 'en', updateFrequency: 'realtime' },
+  { id: 'gn-14', name: 'NHK World', url: 'https://www3.nhk.or.jp/nhkworld/en/news/rss', region: 'asia', variants: ['global'], category: 'geopolitical', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'gn-15', name: 'ABC Australia', url: 'https://www.abc.net.au/news/feed/51120/rss.xml', region: 'asia', variants: ['global'], category: 'geopolitical', priority: 3, language: 'en', updateFrequency: 'hourly' },
+  { id: 'gn-16', name: 'RT News', url: 'https://www.rt.com/rss/', region: 'global', variants: ['global'], category: 'geopolitical', priority: 3, language: 'en', updateFrequency: 'hourly' },
+  { id: 'gn-17', name: 'TASS', url: 'https://tass.com/rss/v2.xml', region: 'global', variants: ['global'], category: 'geopolitical', priority: 3, language: 'en', updateFrequency: 'hourly' },
+  { id: 'gn-18', name: 'Xinhua', url: 'https://www.xinhuanet.com/english/rss/worldrss.xml', region: 'asia', variants: ['global'], category: 'geopolitical', priority: 3, language: 'en', updateFrequency: 'hourly' },
+  { id: 'gn-19', name: 'Times of India', url: 'https://timesofindia.indiatimes.com/rssfeeds/296589292.cms', region: 'asia', variants: ['global'], category: 'geopolitical', priority: 3, language: 'en', updateFrequency: 'hourly' },
+  { id: 'gn-20', name: 'Dawn Pakistan', url: 'https://www.dawn.com/feed', region: 'asia', variants: ['global'], category: 'geopolitical', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'gn-21', name: 'Haaretz', url: 'https://www.haaretz.com/cmlink/1.4498498', region: 'mena', variants: ['global'], category: 'geopolitical', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'gn-22', name: 'Tehran Times', url: 'https://www.tehrantimes.com/rss', region: 'mena', variants: ['global'], category: 'geopolitical', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'gn-23', name: 'TRT World', url: 'https://www.trtworld.com/rss', region: 'mena', variants: ['global'], category: 'geopolitical', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'gn-24', name: 'Gulf News', url: 'https://gulfnews.com/rss', region: 'ae', variants: ['global'], category: 'geopolitical', priority: 1, language: 'en', updateFrequency: 'realtime' },
+  { id: 'gn-25', name: 'Arab News', url: 'https://www.arabnews.com/rss.xml', region: 'sa', variants: ['global'], category: 'geopolitical', priority: 1, language: 'en', updateFrequency: 'realtime' },
+  { id: 'gn-26', name: 'Khaleej Times', url: 'https://www.khaleejtimes.com/rss', region: 'ae', variants: ['global'], category: 'geopolitical', priority: 2, language: 'en', updateFrequency: 'hourly' },
+  { id: 'gn-27', name: 'The National UAE', url: 'https://www.thenationalnews.com/rss', region: 'ae', variants: ['global'], category: 'geopolitical', priority: 1, language: 'en', updateFrequency: 'hourly' },
+  { id: 'gn-28', name: 'Kuwait Times', url: 'https://www.kuwaittimes.com/feed/', region: 'kw', variants: ['global'], category: 'geopolitical', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'gn-29', name: 'Qatar Tribune', url: 'https://www.qatar-tribune.com/rss', region: 'qa', variants: ['global'], category: 'geopolitical', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'gn-30', name: 'Oman Observer', url: 'https://www.omanobserver.om/rss', region: 'om', variants: ['global'], category: 'geopolitical', priority: 2, language: 'en', updateFrequency: 'daily' },
+];
+
+// ═══════════════════════════════════════════════════════
+// v4.0 EXPANDED FEEDS — SPACE & SATELLITE (10)
+// ═══════════════════════════════════════════════════════
+
+const SPACE_SATELLITE_FEEDS: FeedDefinition[] = [
+  { id: 'spa-1', name: 'SpaceNews', url: 'https://spacenews.com/feed/', region: 'global', variants: ['tech'], category: 'space_satellite', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'spa-2', name: 'NASA News', url: 'https://www.nasa.gov/rss/dyn/breaking_news.rss', region: 'global', variants: ['tech'], category: 'space_satellite', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'spa-3', name: 'ESA News', url: 'https://www.esa.int/rssfeed/Our_Activities/Space_News', region: 'europe', variants: ['tech'], category: 'space_satellite', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'spa-4', name: 'UAE Space Agency', url: 'https://space.gov.ae/en/rss', region: 'ae', variants: ['global', 'tech'], category: 'space_satellite', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'spa-5', name: 'Saudi Space Agency', url: 'https://www.ssa.gov.sa/en/rss', region: 'sa', variants: ['global', 'tech'], category: 'space_satellite', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'spa-6', name: 'Maxar Technologies', url: 'https://www.maxar.com/rss', region: 'global', variants: ['tech'], category: 'space_satellite', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'spa-7', name: 'Planet Labs', url: 'https://www.planet.com/rss', region: 'global', variants: ['tech'], category: 'space_satellite', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'spa-8', name: 'Ars Technica Space', url: 'https://arstechnica.com/tag/space/feed/', region: 'global', variants: ['tech'], category: 'space_satellite', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'spa-9', name: 'SpaceX Updates', url: 'https://www.spacex.com/rss', region: 'global', variants: ['tech'], category: 'space_satellite', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'spa-10', name: 'N2YO Satellite Tracker', url: 'https://www.n2yo.com/rss', region: 'global', variants: ['tech'], category: 'space_satellite', priority: 3, language: 'en', updateFrequency: 'hourly' },
+];
+
+// ═══════════════════════════════════════════════════════
+// v4.0 EXPANDED FEEDS — HEALTH & WELLNESS (15)
+// ═══════════════════════════════════════════════════════
+
+const HEALTH_WELLNESS_FEEDS: FeedDefinition[] = [
+  { id: 'hw-1', name: 'WHO News', url: 'https://www.who.int/rss-feeds/news-english.xml', region: 'global', variants: ['global', 'happy'], category: 'health_wellness', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'hw-2', name: 'The Lancet', url: 'https://www.thelancet.com/rssfeed/lancet_current.xml', region: 'global', variants: ['happy'], category: 'health_wellness', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'hw-3', name: 'BMJ', url: 'https://www.bmj.com/rss/recent.xml', region: 'global', variants: ['happy'], category: 'health_wellness', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'hw-4', name: 'CCHI Saudi Health', url: 'https://www.cchi.gov.sa/en/rss', region: 'sa', variants: ['global', 'happy'], category: 'health_wellness', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'hw-5', name: 'DHA Dubai Health', url: 'https://www.dha.gov.ae/en/rss', region: 'ae', variants: ['global', 'happy'], category: 'health_wellness', priority: 1, language: 'en', updateFrequency: 'daily' },
+  { id: 'hw-6', name: 'HAAD Abu Dhabi', url: 'https://www.haad.ae/rss', region: 'ae', variants: ['global', 'happy'], category: 'health_wellness', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'hw-7', name: 'Kuwait MOH', url: 'https://www.moh.gov.kw/en/rss', region: 'kw', variants: ['global', 'happy'], category: 'health_wellness', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'hw-8', name: 'Qatar MOPH', url: 'https://www.moph.gov.qa/english/rss', region: 'qa', variants: ['global', 'happy'], category: 'health_wellness', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'hw-9', name: 'Bahrain MOH', url: 'https://www.moh.gov.bh/en/rss', region: 'bh', variants: ['global', 'happy'], category: 'health_wellness', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'hw-10', name: 'Oman MOH', url: 'https://www.moh.gov.om/en/rss', region: 'om', variants: ['global', 'happy'], category: 'health_wellness', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'hw-11', name: 'Global Health Security', url: 'https://www.ghsindex.org/rss', region: 'global', variants: ['global', 'happy'], category: 'health_wellness', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'hw-12', name: 'Nature Medicine', url: 'https://www.nature.com/nm.rss', region: 'global', variants: ['happy'], category: 'health_wellness', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'hw-13', name: 'STAT News', url: 'https://www.statnews.com/feed/', region: 'global', variants: ['happy'], category: 'health_wellness', priority: 2, language: 'en', updateFrequency: 'daily' },
+  { id: 'hw-14', name: 'Telemedicine Magazine', url: 'https://www.telemedmag.com/feed/', region: 'global', variants: ['happy', 'tech'], category: 'health_wellness', priority: 3, language: 'en', updateFrequency: 'daily' },
+  { id: 'hw-15', name: 'McKinsey Healthcare', url: 'https://www.mckinsey.com/industries/healthcare/rss', region: 'global', variants: ['happy', 'finance'], category: 'health_wellness', priority: 2, language: 'en', updateFrequency: 'daily' },
+];
+
+// ═══════════════════════════════════════════════════════
+// MASTER FEED REGISTRY (435+)
+// ═══════════════════════════════════════════════════════
+
 export const ALL_FEEDS: FeedDefinition[] = [
   ...INSURANCE_GLOBAL_FEEDS,
   ...GCC_REGIONAL_FEEDS,
@@ -304,6 +564,16 @@ export const ALL_FEEDS: FeedDefinition[] = [
   ...FINANCIAL_MARKET_FEEDS,
   ...FRAUD_FEEDS,
   ...ADDITIONAL_FEEDS,
+  // v4.0 expanded feeds
+  ...ENERGY_COMMODITY_FEEDS,
+  ...MARITIME_FEEDS,
+  ...CYBER_SECURITY_FEEDS,
+  ...MILITARY_DEFENSE_FEEDS,
+  ...CLIMATE_ESG_FEEDS,
+  ...CRYPTO_DEFI_FEEDS,
+  ...GLOBAL_NEWS_FEEDS,
+  ...SPACE_SATELLITE_FEEDS,
+  ...HEALTH_WELLNESS_FEEDS,
 ];
 
 export function getFeedsForVariant(variantId: VariantId): FeedDefinition[] {
@@ -322,6 +592,8 @@ export function getFeedStats() {
       tech: getFeedsForVariant('tech').length,
       finance: getFeedsForVariant('finance').length,
       fraud: getFeedsForVariant('fraud').length,
+      commodity: getFeedsForVariant('commodity').length,
+      happy: getFeedsForVariant('happy').length,
     },
     byCategory: Object.fromEntries(
       [...new Set(ALL_FEEDS.map(f => f.category))].map(cat => [cat, getFeedsByCategory(cat).length])

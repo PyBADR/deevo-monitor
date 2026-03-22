@@ -20,6 +20,8 @@ function detectVariant(): VariantId {
     if (host.startsWith('tech.')) return 'tech';
     if (host.startsWith('finance.')) return 'finance';
     if (host.startsWith('fraud.')) return 'fraud';
+    if (host.startsWith('commodity.')) return 'commodity';
+    if (host.startsWith('happy.')) return 'happy';
     if (host.startsWith('monitor.')) return 'global';
   } catch {
     // SSR safety

@@ -1,14 +1,17 @@
 /**
- * Deevo Monitor v3 — API Server
+ * Deevo Monitor v4.0.0 — API Server
  * Express + Socket.io backend providing:
- *   1. RSS feed aggregation from 200+ GCC insurance/regulatory sources
+ *   1. RSS feed aggregation from 435+ GCC insurance/regulatory sources
  *   2. Ollama AI proxy for local LLM insights
  *   3. Real-time risk engine computing DRI levels
  *   4. Cortex bridge to DeevoAnalytics backend
  *   5. WebSocket push for live dashboard updates
- *   6. KPI engine with 4 variant-specific datasets
+ *   6. KPI engine with 6 variant-specific datasets
  *   7. GCC stock market data
  *   8. Variant configuration API
+ *   9. Live news aggregation (12 sources)
+ *  10. Live webcam feed metadata (22 feeds)
+ *  11. Strategic posture & country intelligence API
  *
  * Port: 3001 (proxied by Vite dev server)
  */
@@ -60,6 +63,11 @@ import kpiRouter from "./routes/kpi.js";
 import stocksRouter from "./routes/stocks.js";
 import variantsRouter from "./routes/variants.js";
 
+// ── V4 Route imports ─────────────────────────────────
+import { newsRouter } from "./routes/news.js";
+import { webcamsRouter } from "./routes/webcams.js";
+import { intelligenceRouter } from "./routes/intelligence.js";
+
 // ── Routes ────────────────────────────────────────────
 app.use("/api/feed", feedRouter);
 app.use("/api/risk", riskRouter);
@@ -68,16 +76,23 @@ app.use("/api/cortex", cortexRouter);
 app.use("/api/kpi", kpiRouter);
 app.use("/api/stocks", stocksRouter);
 app.use("/api/variants", variantsRouter);
+app.use("/api/news", newsRouter);
+app.use("/api/webcams", webcamsRouter);
+app.use("/api/intelligence", intelligenceRouter);
 
 // Health check
 app.get("/api/health", (_req, res) => {
   res.json({
     status: "healthy",
-    version: "3.0.0",
+    version: "4.0.0",
     uptime: process.uptime(),
     timestamp: new Date().toISOString(),
-    variants: ["global", "tech", "finance", "fraud"],
-    endpoints: ["/api/feed", "/api/risk", "/api/ollama", "/api/cortex", "/api/kpi", "/api/stocks", "/api/variants"],
+    variants: ["global", "tech", "finance", "fraud", "commodity", "happy"],
+    endpoints: [
+      "/api/feed", "/api/risk", "/api/ollama", "/api/cortex",
+      "/api/kpi", "/api/stocks", "/api/variants",
+      "/api/news", "/api/webcams", "/api/intelligence",
+    ],
   });
 });
 
@@ -150,7 +165,7 @@ io.on("connection", (socket) => {
   // V3: Variant-aware events
   socket.on("variant:switch", (variantId: string) => {
     // Leave all variant rooms, join the new one
-    ["global", "tech", "finance", "fraud"].forEach((v) => socket.leave(`variant:${v}`));
+    ["global", "tech", "finance", "fraud", "commodity", "happy"].forEach((v) => socket.leave(`variant:${v}`));
     socket.join(`variant:${variantId}`);
     console.log(`[WS] ${socket.id} switched to variant: ${variantId}`);
   });
@@ -177,14 +192,17 @@ io.on("connection", (socket) => {
 
 // ── Start Services ────────────────────────────────────
 httpServer.listen(PORT, () => {
-  console.log(`\n  🌍 Deevo Monitor API Server v3.0.0`);
-  console.log(`  ├─ HTTP:      http://localhost:${PORT}`);
-  console.log(`  ├─ WS:        ws://localhost:${PORT}`);
-  console.log(`  ├─ Health:    http://localhost:${PORT}/api/health`);
-  console.log(`  ├─ KPI:       http://localhost:${PORT}/api/kpi`);
-  console.log(`  ├─ Stocks:    http://localhost:${PORT}/api/stocks`);
-  console.log(`  ├─ Variants:  http://localhost:${PORT}/api/variants`);
-  console.log(`  └─ CORS:      ${CORS_ORIGINS.join(", ")}\n`);
+  console.log(`\n  🌍 Deevo Monitor API Server v4.0.0`);
+  console.log(`  ├─ HTTP:         http://localhost:${PORT}`);
+  console.log(`  ├─ WS:           ws://localhost:${PORT}`);
+  console.log(`  ├─ Health:       http://localhost:${PORT}/api/health`);
+  console.log(`  ├─ KPI:          http://localhost:${PORT}/api/kpi`);
+  console.log(`  ├─ Stocks:       http://localhost:${PORT}/api/stocks`);
+  console.log(`  ├─ Variants:     http://localhost:${PORT}/api/variants`);
+  console.log(`  ├─ News:         http://localhost:${PORT}/api/news`);
+  console.log(`  ├─ Webcams:      http://localhost:${PORT}/api/webcams`);
+  console.log(`  ├─ Intelligence: http://localhost:${PORT}/api/intelligence`);
+  console.log(`  └─ CORS:         ${CORS_ORIGINS.join(", ")}\n`);
 
   // Start background services
   startFeedAggregator(io);

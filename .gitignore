@@ -40,5 +40,9 @@ yarn-error.log*
 *.mov
 *.avi
 
+# TypeScript build info
+*.tsbuildinfo
+vite.config.d.ts
+
 # Tauri
 src-tauri/target/

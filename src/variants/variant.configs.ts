@@ -1,6 +1,7 @@
 /**
- * Variant Configurations — All 4 DEEVO Monitor variants.
+ * Variant Configurations — All 6 DEEVO Monitor variants.
  * Each variant defines its own theme, layer set, feed categories, and AI prompt.
+ * v4.0: Added Commodity and Happy variants to match worldmonitor's 5 + Fraud (Deevo-specific).
  */
 import type { VariantId, VariantConfig } from './variant.types';
 
@@ -28,19 +29,21 @@ export const GLOBAL_VARIANT: VariantConfig = {
     badge: '#1C2535',
   },
   activeLayers: [
-    'claims_heatmap', 'fraud_zones', 'risk_choropleth',
-    'geopolitical_events', 'weather_alerts', 'insurer_offices',
+    'claims_heatmap', 'fraud_links', 'conflict_zones',
+    'intel_hotspots', 'iran_attacks', 'military_bases',
+    'nuclear_sites', 'pipelines',
   ],
-  feedCategories: ['global_insurance', 'gcc_regional', 'regulatory', 'weather_cat'],
+  feedCategories: ['global_insurance', 'gcc_regional', 'regulatory', 'weather_cat', 'geopolitical'],
   kpiSet: 'insurance',
   mapViewport: { lat: 25.0, lon: 51.5, zoom: 4.5 },
-  aiSystemPrompt: `You are a senior GCC insurance risk analyst. Synthesize news into actionable insurance intelligence for Kuwait, Saudi Arabia, UAE, Qatar, Bahrain, and Oman markets. Focus on: claims trends, fraud signals, regulatory changes, weather CAT events, reinsurance capacity. Be concise and data-driven.`,
+  aiSystemPrompt: `You are a senior GCC insurance risk analyst. Synthesize news into actionable insurance intelligence for Kuwait, Saudi Arabia, UAE, Qatar, Bahrain, and Oman markets. Focus on: claims trends, fraud signals, regulatory changes, weather CAT events, reinsurance capacity, geopolitical risk. Be concise and data-driven.`,
   logo: { icon: '🛡️', color: '#00D4FF' },
   metaTitle: 'DEEVO Monitor — GCC Insurance Intelligence',
   metaDescription: 'Real-time GCC insurance risk dashboard — AI-powered claims, fraud, and regulatory intelligence',
   showPanels: {
     liveFeed: true, aiInsights: true, riskIndex: true,
     kpiDashboard: true, webcast: false, marketTicker: false,
+    liveNews: true, webcams: true, strategicPosture: true, countryIntel: true,
   },
 };
 
@@ -68,8 +71,8 @@ export const TECH_VARIANT: VariantConfig = {
     badge: '#1E1740',
   },
   activeLayers: [
-    'insurer_offices', 'claim_centers', 'hospital_network',
-    'risk_choropleth', 'regulatory_alerts',
+    'ai_data_centers', 'cyber_threats', 'undersea_cables',
+    'claims_heatmap', 'claim_clusters',
   ],
   feedCategories: ['insurtech', 'ai_ml', 'digital_insurance', 'regulatory', 'gcc_regional'],
   kpiSet: 'insurtech',
@@ -81,6 +84,7 @@ export const TECH_VARIANT: VariantConfig = {
   showPanels: {
     liveFeed: true, aiInsights: true, riskIndex: false,
     kpiDashboard: true, webcast: false, marketTicker: false,
+    liveNews: true, webcams: false, strategicPosture: false, countryIntel: false,
   },
 };
 
@@ -108,8 +112,8 @@ export const FINANCE_VARIANT: VariantConfig = {
     badge: '#162A1E',
   },
   activeLayers: [
-    'risk_choropleth', 'premium_density', 'oil_price_impact',
-    'reinsurance_flow', 'sanctions_exposure',
+    'claims_heatmap', 'pipelines', 'oil_facilities',
+    'ports_shipping', 'power_grid',
   ],
   feedCategories: ['financial_markets', 'gcc_regional', 'market_intel', 'regulatory', 'reinsurance'],
   kpiSet: 'financial_markets',
@@ -121,6 +125,7 @@ export const FINANCE_VARIANT: VariantConfig = {
   showPanels: {
     liveFeed: true, aiInsights: true, riskIndex: true,
     kpiDashboard: true, webcast: false, marketTicker: true,
+    liveNews: true, webcams: false, strategicPosture: false, countryIntel: true,
   },
 };
 
@@ -148,8 +153,8 @@ export const FRAUD_VARIANT: VariantConfig = {
     badge: '#2A1515',
   },
   activeLayers: [
-    'fraud_zones', 'staging_accidents', 'medical_inflation',
-    'claims_heatmap', 'repair_shops', 'hospital_network',
+    'fraud_links', 'staging_areas', 'hospital_network',
+    'claims_heatmap', 'repair_shops',
   ],
   feedCategories: ['fraud', 'regulatory', 'gcc_regional', 'law_enforcement'],
   kpiSet: 'fraud_intel',
@@ -161,6 +166,86 @@ export const FRAUD_VARIANT: VariantConfig = {
   showPanels: {
     liveFeed: true, aiInsights: true, riskIndex: false,
     kpiDashboard: true, webcast: false, marketTicker: false,
+    liveNews: false, webcams: false, strategicPosture: false, countryIntel: false,
+  },
+};
+
+// ─── COMMODITY VARIANT (NEW v4.0) ────────────────────
+export const COMMODITY_VARIANT: VariantConfig = {
+  id: 'commodity',
+  name: 'DEEVO COMMODITY',
+  tagline: 'GCC Commodity & Energy Risk Intelligence',
+  domain: 'commodity.deevo.ai',
+  localPort: 5178,
+  colors: {
+    primary: '#FF9500',
+    secondary: '#CC7700',
+    critical: '#FF3B30',
+    warning: '#FFD600',
+    success: '#34C759',
+    bg: '#0D0A06',
+    surface: '#1A1408',
+    surfaceHover: '#2A2010',
+    border: 'rgba(255,149,0,0.18)',
+    text: 'rgba(255,255,255,0.92)',
+    textPrimary: 'rgba(255,255,255,0.92)',
+    textSecondary: 'rgba(255,220,160,0.65)',
+    textMuted: 'rgba(255,220,160,0.35)',
+    badge: '#2A2010',
+  },
+  activeLayers: [
+    'pipelines', 'oil_facilities', 'ports_shipping',
+    'power_grid', 'conflict_zones', 'iran_attacks',
+  ],
+  feedCategories: ['financial_markets', 'gcc_regional', 'geopolitical', 'reinsurance'],
+  kpiSet: 'commodity',
+  mapViewport: { lat: 25.0, lon: 51.5, zoom: 3.5 },
+  aiSystemPrompt: `You are a senior commodity analyst focused on GCC energy markets. Focus on: oil price dynamics, natural gas pricing, petrochemical supply chains, OPEC+ decisions, maritime shipping (Strait of Hormuz, Bab el-Mandeb), commodity insurance, energy infrastructure risk, and supply chain disruption. Provide data-driven commodity intelligence.`,
+  logo: { icon: '🛢', color: '#FF9500' },
+  metaTitle: 'DEEVO Commodity — GCC Energy & Commodity Risk',
+  metaDescription: 'Real-time GCC commodity and energy intelligence — oil, gas, shipping, supply chain risk',
+  showPanels: {
+    liveFeed: true, aiInsights: true, riskIndex: true,
+    kpiDashboard: true, webcast: false, marketTicker: true,
+    liveNews: true, webcams: false, strategicPosture: true, countryIntel: false,
+  },
+};
+
+// ─── HAPPY VARIANT (NEW v4.0) ────────────────────────
+export const HAPPY_VARIANT: VariantConfig = {
+  id: 'happy',
+  name: 'DEEVO HAPPY',
+  tagline: 'GCC Wellness & Positive Intelligence',
+  domain: 'happy.deevo.ai',
+  localPort: 5179,
+  colors: {
+    primary: '#FFD600',
+    secondary: '#E5C100',
+    critical: '#FF9500',
+    warning: '#FF6B35',
+    success: '#34C759',
+    bg: '#0A0D06',
+    surface: '#141A0D',
+    surfaceHover: '#1E2A15',
+    border: 'rgba(255,214,0,0.15)',
+    text: 'rgba(255,255,255,0.92)',
+    textPrimary: 'rgba(255,255,255,0.92)',
+    textSecondary: 'rgba(255,240,180,0.65)',
+    textMuted: 'rgba(255,240,180,0.35)',
+    badge: '#1E2A15',
+  },
+  activeLayers: ['claim_clusters', 'claims_heatmap'],
+  feedCategories: ['gcc_regional', 'regulatory'],
+  kpiSet: 'wellness',
+  mapViewport: { lat: 25.0, lon: 51.5, zoom: 4.5 },
+  aiSystemPrompt: `You are a positive intelligence analyst for the GCC region. Focus on: economic growth, development projects, cultural events, tourism milestones, sustainability achievements, healthcare improvements, quality of life indices, and positive insurance industry developments. Highlight opportunities and positive trends.`,
+  logo: { icon: '☀️', color: '#FFD600' },
+  metaTitle: 'DEEVO Happy — GCC Positive Intelligence',
+  metaDescription: 'GCC positive news and wellness intelligence — growth, development, and opportunity tracking',
+  showPanels: {
+    liveFeed: true, aiInsights: true, riskIndex: false,
+    kpiDashboard: true, webcast: false, marketTicker: false,
+    liveNews: true, webcams: true, strategicPosture: false, countryIntel: false,
   },
 };
 
@@ -169,6 +254,8 @@ export const VARIANTS: Record<VariantId, VariantConfig> = {
   tech: TECH_VARIANT,
   finance: FINANCE_VARIANT,
   fraud: FRAUD_VARIANT,
+  commodity: COMMODITY_VARIANT,
+  happy: HAPPY_VARIANT,
 };
 
-export const VARIANT_IDS: VariantId[] = ['global', 'tech', 'finance', 'fraud'];
+export const VARIANT_IDS: VariantId[] = ['global', 'tech', 'finance', 'fraud', 'commodity', 'happy'];
