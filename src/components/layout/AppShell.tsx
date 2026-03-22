@@ -4,6 +4,10 @@
  * v4.1: Added Finance Radar, Correlation, 3D Globe toggle.
  * v4.2: Added Market, Crypto, Energy, Gold, Central Bank, Premium Stocks,
  *        Telegram Intel, Daily Market, KPI Overview, Region News panels.
+ * v4.3: Full worldmonitor parity — 40+ panel tabs covering every category:
+ *        Technology, CryptoNews, Token, PremiumII, GCC Business/Market,
+ *        Consumer, BaseMetals, Financial, Economical, LiveCase, GlobalNews,
+ *        Topical, Strategy, BrandApplication.
  * Bottom panel now has a 3-column layout matching worldmonitor:
  *   [Live News] [Live Webcams] [AI Insights / Strategic Posture]
  *
@@ -38,6 +42,26 @@ import {
   TelegramIntelPanel,
   KPIOverviewPanel,
 } from "@/components/panels/MarketPanels";
+import {
+  TechnologyPanel,
+  CryptoNewsPanel,
+  TokenPanel,
+  PremiumStockPanel,
+  PremiumMarketNewsPanel,
+  PremiumIIPanel,
+  GCCBusinessNewsPanel,
+  GCCMarketPanel,
+  ConsumerPanel,
+  EnergyMarketPanel,
+  BaseMetalsPanel,
+  FinancialOverviewPanel,
+  EconomicalPanel,
+  LiveCasePanel,
+  GlobalNewsPanel,
+  TopicalPanel,
+  StrategyPanel,
+  BrandApplicationPanel,
+} from "@/components/panels/ExtendedPanels";
 import { useDataStore } from "@/stores/dataStore";
 import { useSocket } from "@/hooks/useSocket";
 import { useInitialData } from "@/hooks/useApi";
@@ -52,7 +76,11 @@ type BottomTabId =
   | 'feed' | 'news' | 'webcams' | 'ai' | 'posture' | 'intel'
   | 'risk' | 'forecast' | 'alerts' | 'pipeline' | 'finance'
   | 'correlation' | 'region' | 'market' | 'crypto' | 'energy'
-  | 'gold' | 'central' | 'premium' | 'daily' | 'telegram' | 'kpi';
+  | 'gold' | 'central' | 'premium' | 'daily' | 'telegram' | 'kpi'
+  | 'technology' | 'cryptonews' | 'token' | 'premstock' | 'premnews'
+  | 'premii' | 'gccbiz' | 'gccmarket' | 'consumer' | 'energymarket'
+  | 'basemetals' | 'financial' | 'economical' | 'livecase'
+  | 'globalnews' | 'topical' | 'strategy' | 'brand';
 
 export function AppShell() {
   useSocket();
@@ -63,8 +91,9 @@ export function AppShell() {
   const [mapMode, setMapMode] = useState<'2d' | '3d'>('2d');
   const [bottomTab, setBottomTab] = useState<BottomTabId>('feed');
 
-  // Build tab list based on variant's showPanels config
+  // Build tab list based on variant's showPanels config — full worldmonitor parity
   const tabs: { id: BottomTabId; label: string; color: string }[] = [
+    // ── Core Intelligence ──
     variant.showPanels.liveFeed ? { id: 'feed', label: 'INTEL FEED', color: variant.colors.primary } : null,
     variant.showPanels.liveNews ? { id: 'news', label: 'LIVE NEWS', color: '#FF6B35' } : null,
     variant.showPanels.webcams ? { id: 'webcams', label: 'WEBCAMS', color: '#5AC8FA' } : null,
@@ -72,17 +101,42 @@ export function AppShell() {
     variant.showPanels.strategicPosture ? { id: 'posture', label: 'POSTURE', color: '#FF2D55' } : null,
     variant.showPanels.countryIntel ? { id: 'intel', label: 'COUNTRY INTEL', color: '#FFD600' } : null,
     variant.showPanels.riskIndex ? { id: 'risk', label: 'RISK INDEX', color: variant.colors.warning } : null,
+    { id: 'strategy', label: 'STRATEGY', color: '#DC2626' },
+    { id: 'livecase', label: 'LIVE CASE', color: '#F97316' },
+    // ── Markets & Finance ──
     { id: 'finance', label: 'FINANCE', color: '#10B981' },
-    { id: 'correlation', label: 'CORRELATION', color: '#A78BFA' },
-    { id: 'region', label: 'REGION NEWS', color: '#F59E0B' },
     { id: 'market', label: 'MARKET', color: '#3B82F6' },
-    { id: 'crypto', label: 'CRYPTO', color: '#F7931A' },
-    { id: 'energy', label: 'ENERGY', color: '#EF4444' },
-    { id: 'gold', label: 'GOLD', color: '#FFD700' },
-    { id: 'central', label: 'CENTRAL BANKS', color: '#6366F1' },
+    { id: 'financial', label: 'FINANCIAL', color: '#059669' },
+    { id: 'economical', label: 'ECONOMICAL', color: '#7C3AED' },
     { id: 'premium', label: 'STOCKS', color: '#14B8A6' },
+    { id: 'premstock', label: 'PREM STOCK', color: '#0D9488' },
+    { id: 'premnews', label: 'PREM NEWS', color: '#0891B2' },
+    { id: 'premii', label: 'PREMIUM II', color: '#6D28D9' },
     { id: 'daily', label: 'DAILY', color: '#EC4899' },
+    // ── Commodities ──
+    { id: 'energy', label: 'ENERGY', color: '#EF4444' },
+    { id: 'energymarket', label: 'PTC MARKET', color: '#B91C1C' },
+    { id: 'gold', label: 'GOLD & SILVER', color: '#FFD700' },
+    { id: 'basemetals', label: 'BASE METALS', color: '#92400E' },
+    // ── Crypto ──
+    { id: 'crypto', label: 'CRYPTO', color: '#F7931A' },
+    { id: 'cryptonews', label: 'CRYPTO NEWS', color: '#EA580C' },
+    { id: 'token', label: 'TOKEN', color: '#D97706' },
+    // ── Banking & Consumer ──
+    { id: 'central', label: 'CENTRAL BANKS', color: '#6366F1' },
+    { id: 'consumer', label: 'CONSUMER', color: '#A855F7' },
+    // ── GCC ──
+    { id: 'gccbiz', label: 'GCC BUSINESS', color: '#059669' },
+    { id: 'gccmarket', label: 'GCC MARKET', color: '#0284C7' },
+    // ── News & Intel ──
+    { id: 'region', label: 'REGION NEWS', color: '#F59E0B' },
+    { id: 'globalnews', label: 'GLOBAL NEWS', color: '#2563EB' },
+    { id: 'topical', label: 'TOPICAL', color: '#9333EA' },
+    { id: 'technology', label: 'TECHNOLOGY', color: '#06B6D4' },
     { id: 'telegram', label: 'TELEGRAM', color: '#0EA5E9' },
+    { id: 'brand', label: 'BRAND / APP', color: '#E11D48' },
+    // ── Analysis ──
+    { id: 'correlation', label: 'CORRELATION', color: '#A78BFA' },
     { id: 'kpi', label: 'KPI', color: '#8B5CF6' },
     { id: 'forecast', label: 'FORECASTS', color: '#FF6B35' },
     { id: 'alerts', label: 'ALERTS', color: variant.colors.critical },
@@ -202,8 +256,9 @@ export function AppShell() {
               </div>
             </div>
           ) : (
-            /* ── Single tab view ── */
+            /* ── Single tab view — full worldmonitor parity (40+ panels) ── */
             <>
+              {/* Core Intelligence */}
               {bottomTab === 'feed' && <LiveFeed />}
               {bottomTab === 'news' && <LiveNewsPanel />}
               {bottomTab === 'webcams' && <LiveWebcams />}
@@ -211,21 +266,46 @@ export function AppShell() {
               {bottomTab === 'posture' && <StrategicPosture />}
               {bottomTab === 'intel' && <CountryIntelligence />}
               {bottomTab === 'risk' && <RiskScore />}
+              {bottomTab === 'strategy' && <StrategyPanel />}
+              {bottomTab === 'livecase' && <LiveCasePanel />}
+              {/* Markets & Finance */}
+              {bottomTab === 'finance' && <FinanceRadar />}
+              {bottomTab === 'market' && <MarketFinancePanel />}
+              {bottomTab === 'financial' && <FinancialOverviewPanel />}
+              {bottomTab === 'economical' && <EconomicalPanel />}
+              {bottomTab === 'premium' && <PremiumStocksPanel />}
+              {bottomTab === 'premstock' && <PremiumStockPanel />}
+              {bottomTab === 'premnews' && <PremiumMarketNewsPanel />}
+              {bottomTab === 'premii' && <PremiumIIPanel />}
+              {bottomTab === 'daily' && <DailyMarketPanel />}
+              {/* Commodities */}
+              {bottomTab === 'energy' && <EnergyPanel />}
+              {bottomTab === 'energymarket' && <EnergyMarketPanel />}
+              {bottomTab === 'gold' && <GoldSilverPanel />}
+              {bottomTab === 'basemetals' && <BaseMetalsPanel />}
+              {/* Crypto */}
+              {bottomTab === 'crypto' && <CryptoPanel />}
+              {bottomTab === 'cryptonews' && <CryptoNewsPanel />}
+              {bottomTab === 'token' && <TokenPanel />}
+              {/* Banking & Consumer */}
+              {bottomTab === 'central' && <CentralBankPanel />}
+              {bottomTab === 'consumer' && <ConsumerPanel />}
+              {/* GCC */}
+              {bottomTab === 'gccbiz' && <GCCBusinessNewsPanel />}
+              {bottomTab === 'gccmarket' && <GCCMarketPanel />}
+              {/* News & Intel */}
+              {bottomTab === 'region' && <RegionNewsPanel />}
+              {bottomTab === 'globalnews' && <GlobalNewsPanel />}
+              {bottomTab === 'topical' && <TopicalPanel />}
+              {bottomTab === 'technology' && <TechnologyPanel />}
+              {bottomTab === 'telegram' && <TelegramIntelPanel />}
+              {bottomTab === 'brand' && <BrandApplicationPanel />}
+              {/* Analysis */}
+              {bottomTab === 'correlation' && <CorrelationPanel />}
+              {bottomTab === 'kpi' && <KPIOverviewPanel />}
               {bottomTab === 'forecast' && <ForecastPanel />}
               {bottomTab === 'alerts' && <AlertFeedPanel />}
               {bottomTab === 'pipeline' && <PipelineStats />}
-              {bottomTab === 'finance' && <FinanceRadar />}
-              {bottomTab === 'correlation' && <CorrelationPanel />}
-              {bottomTab === 'region' && <RegionNewsPanel />}
-              {bottomTab === 'market' && <MarketFinancePanel />}
-              {bottomTab === 'crypto' && <CryptoPanel />}
-              {bottomTab === 'energy' && <EnergyPanel />}
-              {bottomTab === 'gold' && <GoldSilverPanel />}
-              {bottomTab === 'central' && <CentralBankPanel />}
-              {bottomTab === 'premium' && <PremiumStocksPanel />}
-              {bottomTab === 'daily' && <DailyMarketPanel />}
-              {bottomTab === 'telegram' && <TelegramIntelPanel />}
-              {bottomTab === 'kpi' && <KPIOverviewPanel />}
             </>
           )}
         </div>
