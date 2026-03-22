@@ -1,6 +1,6 @@
 {
   "name": "deevo-monitor",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "private": true,
   "type": "module",
   "description": "GCC Insurance Intelligence Dashboard — Real-time risk monitoring with DeckGL, AI-powered insights, and geopolitical tracking for Gulf Cooperation Council markets",

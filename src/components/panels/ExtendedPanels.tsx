@@ -570,18 +570,26 @@ export function KPIOverviewPanel() {
 export function BrandApplicationPanel() {
   const { variant } = useVariant();
   return (
-    <PanelShell title="Deevo Platform" icon="🏗️" accentColor={variant.colors.primary}>
-      <DataRow label="Platform Version" value="v4.0.0" />
+    <PanelShell title="Deevo Analytics Platform" icon="🏗️" accentColor={variant.colors.primary}>
+      <DataRow label="Platform Version" value="v5.1.0" />
       <DataRow label="Active Variant" value={variant.id.toUpperCase()} color={variant.colors.primary} />
-      <DataRow label="Connected Feeds" value="435+" />
-      <DataRow label="Active Layers" value="45" />
-      <DataRow label="Data Points (24h)" value="12.4K" trend="+8%" />
-      <DataRow label="AI Provider" value="Ollama (Local)" color="#10B981" />
+      <DataRow label="GitHub" value="PyBADR/deevo-monitor" color="#3B82F6" />
+      <DataRow label="Connected Feeds" value="600+" />
+      <DataRow label="Feed Categories" value="16" />
+      <DataRow label="Panel Tabs" value="55+" />
+      <DataRow label="Active Map Layers" value="45" />
+      <DataRow label="Map Styles" value="3 (Cyber/Sat/Clean)" />
+      <DataRow label="Languages (i18n)" value="21 + RTL" />
+      <DataRow label="Market Sessions" value="24 Exchanges" />
+      <DataRow label="API Routes" value="18 (Vercel)" />
+      <DataRow label="Data Points (24h)" value="14.2K" trend="+15%" />
+      <DataRow label="AI Provider" value="Ollama (Local GPU)" color="#10B981" />
+      <DataRow label="Map Engine" value="DeckGL + globe.gl" color="#10B981" />
       <DataRow label="Cache Hit Rate" value="94.2%" trend="+1.2%" color="#10B981" />
       <DataRow label="API Latency (p95)" value="45ms" trend="-3ms" color="#10B981" />
-      <DataRow label="WebSocket Clients" value="1" />
       <DataRow label="Uptime" value="99.97%" color="#10B981" />
       <DataRow label="PDPL Compliance" value="Active" color="#10B981" />
+      <DataRow label="IFRS 17" value="Compliant" color="#10B981" />
       <DataRow label="Audit Trail" value="SHA-256 Enabled" color="#10B981" />
     </PanelShell>
   );
