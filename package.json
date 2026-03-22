@@ -17,6 +17,7 @@
     "osint"
   ],
   "scripts": {
+    "render-build": "npm install && vite build",
     "dev": "vite --port 5174",
     "dev:gcc": "VITE_VARIANT=gcc vite --port 5174",
     "dev:tech": "VITE_VARIANT=tech vite --port 5175",

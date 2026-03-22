@@ -4,7 +4,7 @@ services:
     runtime: node
     region: frankfurt  # Closest to GCC
     plan: free
-    buildCommand: npm install && npm run build
+    buildCommand: npm run render-build
     startCommand: npx tsx server/index.ts
     envVars:
       - key: NODE_ENV
