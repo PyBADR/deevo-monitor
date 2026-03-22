@@ -20,7 +20,11 @@
 import { GCCMap } from "@/components/map/GCCMap";
 import { LayerPanel } from "@/components/map/LayerPanel";
 import { RiskLegend } from "@/components/map/RiskLegend";
+import { MapControls } from "@/components/map/MapControls";
 import { StatusBar } from "@/components/layout/StatusBar";
+import { GlobalSituation } from "@/components/layout/GlobalSituation";
+import { Footer } from "@/components/layout/Footer";
+import { DiscordButton } from "@/components/layout/DiscordButton";
 import { LiveFeed } from "@/components/panels/LiveFeed";
 import { AIInsights } from "@/components/panels/AIInsights";
 import { ForecastPanel } from "@/components/panels/ForecastPanel";
@@ -196,11 +200,15 @@ export function AppShell() {
       {/* ── StatusBar ─────────────────────────────────── */}
       <StatusBar />
 
+      {/* ── Global Situation Bar ─────────────────────── */}
+      <GlobalSituation />
+
       {/* ── Map Area — SmartMapEngine handles 2D/3D, styles, intel cards ── */}
       <div className="flex-1 relative overflow-hidden">
         <GCCMap />
         <LayerPanel />
         <RiskLegend />
+        <MapControls />
       </div>
 
       {/* ── Bottom Panel Section ──────────────────────── */}
@@ -370,6 +378,12 @@ export function AppShell() {
 
       {/* ── Bottom Ticker ─────────────────────────────── */}
       <BottomTicker />
+
+      {/* ── Footer ──────────────────────────────────── */}
+      <Footer />
+
+      {/* ── Floating Discord Button ─────────────────── */}
+      <DiscordButton />
     </div>
   );
 }

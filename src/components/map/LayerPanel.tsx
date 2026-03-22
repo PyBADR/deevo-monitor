@@ -15,6 +15,7 @@ import { useMapStore, type MapStyleId, type TimeRange } from "@/stores/mapStore"
 export function LayerPanel() {
   const { variant } = useVariant();
   const [collapsed, setCollapsed] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set(['GEOPOLITICAL', 'MILITARY', 'NUCLEAR', 'CLAIMS'])
   );
@@ -120,6 +121,18 @@ export function LayerPanel() {
         </div>
       </div>
 
+      {/* Search filter */}
+      <div className="px-2 py-1.5 border-b" style={{ borderColor: variant.colors.border }}>
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search layers ..."
+          className="w-full text-[10px] font-mono px-2 py-1 rounded border bg-transparent placeholder-gray-600 focus:outline-none focus:border-gray-500"
+          style={{ borderColor: variant.colors.border, color: variant.colors.text }}
+        />
+      </div>
+
       {/* Time range filter */}
       <div
         className="flex items-center gap-0.5 px-2 py-1.5 border-b"
@@ -147,7 +160,11 @@ export function LayerPanel() {
       {/* Layer list grouped by category — scrollable */}
       <div className="max-h-[340px] overflow-y-auto py-1">
         {categories.map((cat) => {
-          const layers = GLOBAL_LAYER_DEFS.filter((l) => l.category === cat);
+          const allCatLayers = GLOBAL_LAYER_DEFS.filter((l) => l.category === cat);
+          const layers = searchQuery
+            ? allCatLayers.filter((l) => l.label.toLowerCase().includes(searchQuery.toLowerCase()) || l.id.toLowerCase().includes(searchQuery.toLowerCase()))
+            : allCatLayers;
+          if (searchQuery && layers.length === 0) return null;
           const isExpanded = expandedCategories.has(cat);
           const activeCount = layers.filter((l) => activeLayers.has(l.id)).length;
           const allActive = activeCount === layers.length;

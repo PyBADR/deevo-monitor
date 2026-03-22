@@ -36,9 +36,12 @@ const SECTIONS: { id: SettingsSection; label: string; icon: string }[] = [
   { id: 'privacy', label: 'Privacy & Compliance', icon: '🛡️' },
 ];
 
+type SettingsTab = 'settings' | 'panels' | 'sources';
+
 export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
   const { variant } = useVariant();
   const [activeSection, setActiveSection] = useState<SettingsSection>('appearance');
+  const [activeTab, setActiveTab] = useState<SettingsTab>('settings');
 
   if (!open) return null;
 
@@ -49,12 +52,50 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
 
       {/* Modal */}
       <div
-        className="relative w-[900px] max-w-[92vw] h-[650px] max-h-[88vh] rounded-xl border shadow-2xl flex overflow-hidden"
+        className="relative w-[900px] max-w-[92vw] h-[650px] max-h-[88vh] rounded-xl border shadow-2xl flex flex-col overflow-hidden"
         style={{
           backgroundColor: variant.colors.surface,
           borderColor: variant.colors.border,
         }}
       >
+        {/* Top: Title + 3-tab bar (SETTINGS / PANELS / SOURCES) */}
+        <div className="flex items-center justify-between px-6 py-3 border-b shrink-0" style={{ borderColor: variant.colors.border }}>
+          <span className="text-sm font-bold uppercase tracking-widest font-mono" style={{ color: variant.colors.text }}>
+            Settings
+          </span>
+          <div className="flex items-center gap-6">
+            {(['settings', 'panels', 'sources'] as SettingsTab[]).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={clsx(
+                  'text-[11px] font-mono uppercase tracking-wider pb-1 transition-colors border-b-2',
+                  activeTab === tab ? 'font-bold' : 'text-gray-500 hover:text-gray-300 border-transparent'
+                )}
+                style={activeTab === tab ? { color: variant.colors.text, borderColor: variant.colors.primary } : undefined}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={onClose}
+            className="w-6 h-6 flex items-center justify-center rounded hover:bg-white/10 transition-colors"
+            style={{ color: variant.colors.textMuted }}
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Tab: Sources */}
+        {activeTab === 'sources' && <SourcesTab />}
+
+        {/* Tab: Panels */}
+        {activeTab === 'panels' && <PanelsTab />}
+
+        {/* Tab: Settings (existing sidebar layout) */}
+        {activeTab === 'settings' && (
+        <div className="flex-1 flex overflow-hidden">
         {/* Sidebar */}
         <div
           className="w-52 shrink-0 border-r flex flex-col"
@@ -65,7 +106,7 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
               Settings
             </span>
             <span className="text-[9px] ml-2 font-mono" style={{ color: variant.colors.textMuted }}>
-              v4.0
+              v5.1
             </span>
           </div>
           <nav className="flex-1 py-1 overflow-y-auto">
@@ -100,9 +141,9 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
 
         {/* Content area */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Header */}
+          {/* Section Header */}
           <div
-            className="flex items-center justify-between px-6 py-3 border-b shrink-0"
+            className="flex items-center px-6 py-3 border-b shrink-0"
             style={{ borderColor: variant.colors.border }}
           >
             <div className="flex items-center gap-2">
@@ -111,13 +152,6 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
                 {SECTIONS.find((s) => s.id === activeSection)?.label}
               </span>
             </div>
-            <button
-              onClick={onClose}
-              className="w-6 h-6 flex items-center justify-center rounded hover:bg-white/10 transition-colors"
-              style={{ color: variant.colors.textMuted }}
-            >
-              ✕
-            </button>
           </div>
 
           {/* Section content */}
@@ -139,6 +173,8 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
             {activeSection === 'privacy' && <PrivacySection />}
           </div>
         </div>
+        </div>
+        )}
       </div>
     </div>
   );
@@ -1086,6 +1122,272 @@ function PrivacySection() {
       <SettingRow label="PDPL Compliance" description="Enable Saudi PDPL data sovereignty controls">
         <Toggle checked={privacy.pdplCompliance} onChange={(v) => updatePrivacy({ pdplCompliance: v })} />
       </SettingRow>
+    </div>
+  );
+}
+
+// ── Sources Tab (worldmonitor parity) ─────────────────────────────────
+
+const SOURCE_CATEGORIES = [
+  'ALL', 'WORLDWIDE', 'UNITED STATES', 'EUROPE', 'MIDDLE EAST', 'AFRICA',
+  'LATIN AMERICA', 'ASIA-PACIFIC', 'TOPICAL', 'INTELLIGENCE', 'TECH NEWS',
+  'AI & ML', 'POLICY & RESEARCH',
+] as const;
+
+const ALL_SOURCES = [
+  { name: 'ABC News', region: 'UNITED STATES', cat: 'WORLDWIDE' },
+  { name: 'ABC News Australia', region: 'ASIA-PACIFIC', cat: 'WORLDWIDE' },
+  { name: 'Africa News', region: 'AFRICA', cat: 'WORLDWIDE' },
+  { name: 'Africanews', region: 'AFRICA', cat: 'WORLDWIDE' },
+  { name: 'AI News', region: 'WORLDWIDE', cat: 'AI & ML' },
+  { name: 'Al Arabiya', region: 'MIDDLE EAST', cat: 'WORLDWIDE' },
+  { name: 'Al Jazeera', region: 'MIDDLE EAST', cat: 'WORLDWIDE' },
+  { name: 'ANSA', region: 'EUROPE', cat: 'WORLDWIDE' },
+  { name: 'AP News', region: 'UNITED STATES', cat: 'WORLDWIDE' },
+  { name: 'Arab News', region: 'MIDDLE EAST', cat: 'WORLDWIDE' },
+  { name: 'Arms Control Assn', region: 'WORLDWIDE', cat: 'INTELLIGENCE' },
+  { name: 'Ars Technica', region: 'WORLDWIDE', cat: 'TECH NEWS' },
+  { name: 'ArXiv AI', region: 'WORLDWIDE', cat: 'AI & ML' },
+  { name: 'Asharq Business', region: 'MIDDLE EAST', cat: 'WORLDWIDE' },
+  { name: 'Asharq News', region: 'MIDDLE EAST', cat: 'WORLDWIDE' },
+  { name: 'Asia News', region: 'ASIA-PACIFIC', cat: 'WORLDWIDE' },
+  { name: 'Atlantic Council', region: 'WORLDWIDE', cat: 'INTELLIGENCE' },
+  { name: 'Axios', region: 'UNITED STATES', cat: 'WORLDWIDE' },
+  { name: 'BBC Africa', region: 'AFRICA', cat: 'WORLDWIDE' },
+  { name: 'BBC Asia', region: 'ASIA-PACIFIC', cat: 'WORLDWIDE' },
+  { name: 'BBC Latin America', region: 'LATIN AMERICA', cat: 'WORLDWIDE' },
+  { name: 'BBC Middle East', region: 'MIDDLE EAST', cat: 'WORLDWIDE' },
+  { name: 'BBC Persian', region: 'MIDDLE EAST', cat: 'WORLDWIDE' },
+  { name: 'Bellingcat', region: 'WORLDWIDE', cat: 'INTELLIGENCE' },
+  { name: 'Bloomberg', region: 'WORLDWIDE', cat: 'WORLDWIDE' },
+  { name: 'Brookings', region: 'WORLDWIDE', cat: 'INTELLIGENCE' },
+  { name: 'Carnegie', region: 'WORLDWIDE', cat: 'INTELLIGENCE' },
+  { name: 'CNAS', region: 'WORLDWIDE', cat: 'POLICY & RESEARCH' },
+  { name: 'CNBC', region: 'WORLDWIDE', cat: 'WORLDWIDE' },
+  { name: 'CNN', region: 'UNITED STATES', cat: 'WORLDWIDE' },
+  { name: 'CSIS', region: 'WORLDWIDE', cat: 'INTELLIGENCE' },
+  { name: 'Defense News', region: 'WORLDWIDE', cat: 'INTELLIGENCE' },
+  { name: 'Defense One', region: 'WORLDWIDE', cat: 'INTELLIGENCE' },
+  { name: 'DW', region: 'EUROPE', cat: 'WORLDWIDE' },
+  { name: 'Euronews', region: 'EUROPE', cat: 'WORLDWIDE' },
+  { name: 'Foreign Affairs', region: 'WORLDWIDE', cat: 'INTELLIGENCE' },
+  { name: 'Foreign Policy', region: 'WORLDWIDE', cat: 'INTELLIGENCE' },
+  { name: 'France 24', region: 'EUROPE', cat: 'WORLDWIDE' },
+  { name: 'Gulf News', region: 'MIDDLE EAST', cat: 'WORLDWIDE' },
+  { name: 'Krebs Security', region: 'WORLDWIDE', cat: 'INTELLIGENCE' },
+  { name: 'MIT Tech Review', region: 'WORLDWIDE', cat: 'AI & ML' },
+  { name: 'Military Times', region: 'WORLDWIDE', cat: 'INTELLIGENCE' },
+  { name: 'RAND', region: 'WORLDWIDE', cat: 'INTELLIGENCE' },
+  { name: 'Reuters', region: 'WORLDWIDE', cat: 'WORLDWIDE' },
+  { name: 'Sky News', region: 'WORLDWIDE', cat: 'WORLDWIDE' },
+  { name: 'The Verge AI', region: 'WORLDWIDE', cat: 'AI & ML' },
+  { name: 'VentureBeat AI', region: 'WORLDWIDE', cat: 'AI & ML' },
+  { name: 'The War Zone', region: 'WORLDWIDE', cat: 'INTELLIGENCE' },
+];
+
+function SourcesTab() {
+  const { variant } = useVariant();
+  const [activeCat, setActiveCat] = useState<string>('ALL');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [enabledSources, setEnabledSources] = useState<Set<string>>(
+    () => new Set(ALL_SOURCES.filter((_, i) => i % 2 === 0).map((s) => s.name))
+  );
+
+  const toggleSource = (name: string) => {
+    setEnabledSources((prev) => {
+      const next = new Set(prev);
+      if (next.has(name)) next.delete(name); else next.add(name);
+      return next;
+    });
+  };
+
+  const filteredSources = ALL_SOURCES.filter((s) => {
+    if (activeCat !== 'ALL' && s.region !== activeCat && s.cat !== activeCat) return false;
+    if (searchQuery && !s.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    return true;
+  });
+
+  return (
+    <div className="flex-1 flex flex-col overflow-hidden p-4">
+      {/* Category filter tabs */}
+      <div className="flex flex-wrap gap-1.5 mb-3">
+        {SOURCE_CATEGORIES.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setActiveCat(cat)}
+            className={clsx(
+              'text-[9px] font-mono px-2.5 py-1 rounded border transition-colors',
+              activeCat === cat ? 'font-bold text-white' : 'text-gray-500 hover:text-gray-300'
+            )}
+            style={activeCat === cat ? {
+              backgroundColor: `${variant.colors.primary}20`,
+              borderColor: variant.colors.primary,
+              color: variant.colors.primary,
+            } : { borderColor: variant.colors.border }}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      {/* Search filter */}
+      <input
+        type="text"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Filter sources ..."
+        className="w-full text-[10px] font-mono px-3 py-2 rounded border bg-transparent placeholder-gray-600 focus:outline-none mb-3"
+        style={{ borderColor: variant.colors.border, color: variant.colors.text }}
+      />
+
+      {/* Source grid */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="grid grid-cols-3 gap-2">
+          {filteredSources.map((source) => {
+            const enabled = enabledSources.has(source.name);
+            return (
+              <button
+                key={source.name}
+                onClick={() => toggleSource(source.name)}
+                className={clsx(
+                  'flex items-center gap-2 text-[10px] font-mono px-3 py-2 rounded border transition-colors text-left',
+                  enabled ? 'text-white' : 'text-gray-500'
+                )}
+                style={{
+                  borderColor: enabled ? variant.colors.primary : variant.colors.border,
+                  backgroundColor: enabled ? `${variant.colors.primary}10` : 'transparent',
+                }}
+              >
+                <span
+                  className="w-3.5 h-3.5 rounded-sm border flex items-center justify-center shrink-0 text-[8px]"
+                  style={{
+                    borderColor: enabled ? variant.colors.primary : variant.colors.border,
+                    backgroundColor: enabled ? variant.colors.primary : 'transparent',
+                    color: enabled ? '#fff' : 'transparent',
+                  }}
+                >
+                  {enabled ? '✓' : ''}
+                </span>
+                {source.name}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Footer: count + Select All / Select None */}
+      <div className="flex items-center justify-between mt-3 pt-3 border-t" style={{ borderColor: variant.colors.border }}>
+        <span className="text-[10px] font-mono" style={{ color: variant.colors.textMuted }}>
+          {enabledSources.size}/{ALL_SOURCES.length} enabled
+        </span>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setEnabledSources(new Set(ALL_SOURCES.map((s) => s.name)))}
+            className="text-[10px] font-mono px-4 py-1.5 rounded border hover:bg-white/5 transition-colors"
+            style={{ borderColor: variant.colors.border, color: variant.colors.textMuted }}
+          >
+            SELECT ALL
+          </button>
+          <button
+            onClick={() => setEnabledSources(new Set())}
+            className="text-[10px] font-mono px-4 py-1.5 rounded border hover:bg-white/5 transition-colors"
+            style={{ borderColor: variant.colors.border, color: variant.colors.textMuted }}
+          >
+            SELECT NONE
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Panels Tab ───────────────────────────────────────────────────────
+
+const PANEL_LIST = [
+  'Intel Feed', 'Live News', 'Webcams', 'AI Insights', 'Strategic Posture',
+  'Country Intel', 'Risk Index', 'Strategy', 'Live Case', 'Finance Radar',
+  'Market', 'Financial', 'Economical', 'Premium Stocks', 'Daily Market',
+  'Energy', 'Gold & Silver', 'Base Metals', 'Crypto', 'Crypto News', 'Token',
+  'Central Banks', 'Consumer', 'GCC Business', 'GCC Market', 'Region News',
+  'Global News', 'Topical', 'Technology', 'Telegram Intel', 'Brand App',
+  'Core Markets', 'Fixed Income', 'Forex', 'Crypto/Digital', 'Central Banks+',
+  'GCC Investment', 'Gulf Economic', 'Consumer Prices', 'Startups/VC',
+  'Security/Policy', 'Data Tracking', 'Supply Chain', 'Pricing/Marketing',
+  'World Clock', 'Deevo Project', 'Discord', 'Correlation', 'KPI', 'Forecasts',
+  'Alerts', 'Pipeline',
+];
+
+function PanelsTab() {
+  const { variant } = useVariant();
+  const [enabledPanels, setEnabledPanels] = useState<Set<string>>(() => new Set(PANEL_LIST));
+
+  const togglePanel = (name: string) => {
+    setEnabledPanels((prev) => {
+      const next = new Set(prev);
+      if (next.has(name)) next.delete(name); else next.add(name);
+      return next;
+    });
+  };
+
+  return (
+    <div className="flex-1 flex flex-col overflow-hidden p-4">
+      <p className="text-[10px] font-mono mb-3" style={{ color: variant.colors.textMuted }}>
+        Toggle panel visibility in the bottom tab bar. Changes take effect immediately.
+      </p>
+      <div className="flex-1 overflow-y-auto">
+        <div className="grid grid-cols-3 gap-2">
+          {PANEL_LIST.map((panel) => {
+            const enabled = enabledPanels.has(panel);
+            return (
+              <button
+                key={panel}
+                onClick={() => togglePanel(panel)}
+                className={clsx(
+                  'flex items-center gap-2 text-[10px] font-mono px-3 py-2 rounded border transition-colors text-left',
+                  enabled ? 'text-white' : 'text-gray-500'
+                )}
+                style={{
+                  borderColor: enabled ? variant.colors.primary : variant.colors.border,
+                  backgroundColor: enabled ? `${variant.colors.primary}10` : 'transparent',
+                }}
+              >
+                <span
+                  className="w-3.5 h-3.5 rounded-sm border flex items-center justify-center shrink-0 text-[8px]"
+                  style={{
+                    borderColor: enabled ? variant.colors.primary : variant.colors.border,
+                    backgroundColor: enabled ? variant.colors.primary : 'transparent',
+                    color: enabled ? '#fff' : 'transparent',
+                  }}
+                >
+                  {enabled ? '✓' : ''}
+                </span>
+                {panel}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      <div className="flex items-center justify-between mt-3 pt-3 border-t" style={{ borderColor: variant.colors.border }}>
+        <span className="text-[10px] font-mono" style={{ color: variant.colors.textMuted }}>
+          {enabledPanels.size}/{PANEL_LIST.length} enabled
+        </span>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setEnabledPanels(new Set(PANEL_LIST))}
+            className="text-[10px] font-mono px-4 py-1.5 rounded border hover:bg-white/5 transition-colors"
+            style={{ borderColor: variant.colors.border, color: variant.colors.textMuted }}
+          >
+            ENABLE ALL
+          </button>
+          <button
+            onClick={() => setEnabledPanels(new Set())}
+            className="text-[10px] font-mono px-4 py-1.5 rounded border hover:bg-white/5 transition-colors"
+            style={{ borderColor: variant.colors.border, color: variant.colors.textMuted }}
+          >
+            DISABLE ALL
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
