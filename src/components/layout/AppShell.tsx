@@ -81,6 +81,7 @@ import {
   PricingMarketingPanel,
   WorldClockPanel,
   DeevoProjectPanel,
+  DiscordPanel,
 } from "@/components/panels/FinancePanels";
 import { useDataStore } from "@/stores/dataStore";
 import { useSocket } from "@/hooks/useSocket";
@@ -104,7 +105,7 @@ type BottomTabId =
   | 'coremarkets' | 'fixedincome' | 'forex' | 'cryptodigital'
   | 'centralbanks' | 'gccinvest' | 'gulfeconomic' | 'consumerprices'
   | 'startupsvc' | 'securitypolicy' | 'datatracking' | 'supplychain'
-  | 'pricingmktg' | 'worldclock' | 'deevoproject';
+  | 'pricingmktg' | 'worldclock' | 'deevoproject' | 'discord';
 
 export function AppShell() {
   useSocket();
@@ -176,6 +177,7 @@ export function AppShell() {
     { id: 'pricingmktg', label: 'PRICING/MKTG', color: '#A855F7' },
     { id: 'worldclock', label: 'WORLD CLOCK', color: '#64748B' },
     { id: 'deevoproject', label: 'DEEVO', color: '#00D4FF' },
+    { id: 'discord', label: 'DISCORD', color: '#5865F2' },
     // ── Analysis ──
     { id: 'correlation', label: 'CORRELATION', color: '#A78BFA' },
     { id: 'kpi', label: 'KPI', color: '#8B5CF6' },
@@ -354,6 +356,7 @@ export function AppShell() {
               {bottomTab === 'pricingmktg' && <PricingMarketingPanel />}
               {bottomTab === 'worldclock' && <WorldClockPanel />}
               {bottomTab === 'deevoproject' && <DeevoProjectPanel />}
+              {bottomTab === 'discord' && <DiscordPanel />}
               {/* Analysis */}
               {bottomTab === 'correlation' && <CorrelationPanel />}
               {bottomTab === 'kpi' && <KPIOverviewPanel />}

@@ -579,7 +579,12 @@ export function DeevoProjectPanel() {
       <Row label="Platform Version" value="v5.1.0" color={variant.colors.primary} />
       <Row label="Active Variant" value={variant.id.toUpperCase()} color={variant.colors.primary} />
       <Row label="GitHub" value="PyBADR/deevo-monitor" color="#3B82F6" />
-      <Row label="License" value="Proprietary" />
+      <Row label="Discord" value="discord.gg/deevo-monitor" color="#5865F2" />
+      <Row label="License" value="AGPL-3.0" />
+      <SectionLabel text="Community" />
+      <Row label="Discord Server" value="Deevo Monitor" color="#5865F2" />
+      <Row label="Channels" value="#general #gcc-markets #dev" />
+      <Row label="GitHub Stars" value="Growing" color="#F59E0B" />
       <SectionLabel text="Data Coverage" />
       <Row label="Total RSS Feeds" value="600+" trend="+165" color="#10B981" />
       <Row label="Feed Categories" value="16" trend="+11" color="#10B981" />
@@ -604,6 +609,41 @@ export function DeevoProjectPanel() {
       <Row label="Cache Hit Rate" value="94.2%" trend="+1.2%" color="#10B981" />
       <Row label="API Latency (p95)" value="45ms" trend="-3ms" color="#10B981" />
       <Row label="Uptime" value="99.97%" color="#10B981" />
+    </Shell>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// DISCORD COMMUNITY
+// ═══════════════════════════════════════════════════════════════════
+
+export function DiscordPanel() {
+  const { variant } = useVariant();
+  return (
+    <Shell title="Discord Community" icon="💬" accent="#5865F2">
+      <SectionLabel text="Deevo Monitor Discord" />
+      <div className="flex items-center gap-2 py-2 px-2 rounded-lg mb-2" style={{ backgroundColor: '#5865F220' }}>
+        <span className="text-lg">💬</span>
+        <div>
+          <div className="text-[11px] font-mono font-bold" style={{ color: '#5865F2' }}>discord.gg/deevo-monitor</div>
+          <div className="text-[9px] font-mono" style={{ color: variant.colors.textMuted }}>Join the community</div>
+        </div>
+      </div>
+      <SectionLabel text="Channels" />
+      <Row label="#general" value="Platform discussions" />
+      <Row label="#gcc-markets" value="GCC exchange data" />
+      <Row label="#risk-intel" value="Threat intelligence" />
+      <Row label="#dev" value="Development & PRs" />
+      <Row label="#bugs" value="Bug reports" />
+      <Row label="#insurance" value="GCC insurance & IFRS 17" />
+      <Row label="#forex" value="FX & currencies" />
+      <Row label="#crypto" value="Digital assets & CBDCs" />
+      <Row label="#supply-chain" value="Logistics & shipping" />
+      <Row label="#startups" value="MENA VC & funding" />
+      <SectionLabel text="Links" />
+      <Row label="GitHub" value="PyBADR/deevo-monitor" color="#3B82F6" />
+      <Row label="Discord" value="discord.gg/deevo-monitor" color="#5865F2" />
+      <Row label="Platform" value="deevo-monitor.vercel.app" color={variant.colors.primary} />
     </Shell>
   );
 }
