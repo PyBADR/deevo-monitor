@@ -4,6 +4,10 @@
  * v4.1: Added Finance Radar, Correlation, 3D Globe toggle.
  * v4.2: Added Market, Crypto, Energy, Gold, Central Bank, Premium Stocks,
  *        Telegram Intel, Daily Market, KPI Overview, Region News panels.
+ * v5.1: 55+ panel tabs — added Core Markets, Fixed Income, Forex, Crypto/Digital,
+ *        Central Banks, GCC Investment, Gulf Economic, Consumer Prices, Startups/VC,
+ *        Security/Policy, Data Tracking, Supply Chain, Pricing/Marketing, World Clock,
+ *        Deevo Project panels. 600+ RSS feeds across 16 categories.
  * v4.3: Full worldmonitor parity — 40+ panel tabs covering every category:
  *        Technology, CryptoNews, Token, PremiumII, GCC Business/Market,
  *        Consumer, BaseMetals, Financial, Economical, LiveCase, GlobalNews,
@@ -61,6 +65,23 @@ import {
   StrategyPanel,
   BrandApplicationPanel,
 } from "@/components/panels/ExtendedPanels";
+import {
+  CoreMarketsPanel,
+  FixedIncomePanel,
+  ForexCurrenciesPanel,
+  CryptoDigitalPanel,
+  CentralBanksEconomicPanel,
+  GCCInvestmentPanel,
+  GulfEconomicPanel,
+  ConsumerPricesPanel,
+  StartupsVCPanel,
+  SecurityPolicyPanel,
+  DataTrackingPanel,
+  SupplyChainPanel,
+  PricingMarketingPanel,
+  WorldClockPanel,
+  DeevoProjectPanel,
+} from "@/components/panels/FinancePanels";
 import { useDataStore } from "@/stores/dataStore";
 import { useSocket } from "@/hooks/useSocket";
 import { useInitialData } from "@/hooks/useApi";
@@ -79,7 +100,11 @@ type BottomTabId =
   | 'technology' | 'cryptonews' | 'token' | 'premstock' | 'premnews'
   | 'premii' | 'gccbiz' | 'gccmarket' | 'consumer' | 'energymarket'
   | 'basemetals' | 'financial' | 'economical' | 'livecase'
-  | 'globalnews' | 'topical' | 'strategy' | 'brand';
+  | 'globalnews' | 'topical' | 'strategy' | 'brand'
+  | 'coremarkets' | 'fixedincome' | 'forex' | 'cryptodigital'
+  | 'centralbanks' | 'gccinvest' | 'gulfeconomic' | 'consumerprices'
+  | 'startupsvc' | 'securitypolicy' | 'datatracking' | 'supplychain'
+  | 'pricingmktg' | 'worldclock' | 'deevoproject';
 
 export function AppShell() {
   useSocket();
@@ -133,6 +158,24 @@ export function AppShell() {
     { id: 'technology', label: 'TECHNOLOGY', color: '#06B6D4' },
     { id: 'telegram', label: 'TELEGRAM', color: '#0EA5E9' },
     { id: 'brand', label: 'BRAND / APP', color: '#E11D48' },
+    // ── New Finance & Markets ──
+    { id: 'coremarkets', label: 'CORE MARKETS', color: '#3B82F6' },
+    { id: 'fixedincome', label: 'FIXED INCOME', color: '#6366F1' },
+    { id: 'forex', label: 'FOREX', color: '#10B981' },
+    { id: 'cryptodigital', label: 'CRYPTO/DIGITAL', color: '#F7931A' },
+    { id: 'centralbanks', label: 'CENTRAL BANKS+', color: '#8B5CF6' },
+    // ── GCC & MENA ──
+    { id: 'gccinvest', label: 'GCC INVEST', color: '#059669' },
+    { id: 'gulfeconomic', label: 'GULF ECONOMIC', color: '#0D9488' },
+    { id: 'consumerprices', label: 'CPI/PRICES', color: '#14B8A6' },
+    // ── Startups, Security, Data ──
+    { id: 'startupsvc', label: 'STARTUPS/VC', color: '#EC4899' },
+    { id: 'securitypolicy', label: 'SECURITY', color: '#EF4444' },
+    { id: 'datatracking', label: 'DATA TRACK', color: '#06B6D4' },
+    { id: 'supplychain', label: 'SUPPLY CHAIN', color: '#F59E0B' },
+    { id: 'pricingmktg', label: 'PRICING/MKTG', color: '#A855F7' },
+    { id: 'worldclock', label: 'WORLD CLOCK', color: '#64748B' },
+    { id: 'deevoproject', label: 'DEEVO', color: '#00D4FF' },
     // ── Analysis ──
     { id: 'correlation', label: 'CORRELATION', color: '#A78BFA' },
     { id: 'kpi', label: 'KPI', color: '#8B5CF6' },
@@ -293,6 +336,24 @@ export function AppShell() {
               {bottomTab === 'technology' && <TechnologyPanel />}
               {bottomTab === 'telegram' && <TelegramIntelPanel />}
               {bottomTab === 'brand' && <BrandApplicationPanel />}
+              {/* New Finance & Markets */}
+              {bottomTab === 'coremarkets' && <CoreMarketsPanel />}
+              {bottomTab === 'fixedincome' && <FixedIncomePanel />}
+              {bottomTab === 'forex' && <ForexCurrenciesPanel />}
+              {bottomTab === 'cryptodigital' && <CryptoDigitalPanel />}
+              {bottomTab === 'centralbanks' && <CentralBanksEconomicPanel />}
+              {/* GCC & MENA */}
+              {bottomTab === 'gccinvest' && <GCCInvestmentPanel />}
+              {bottomTab === 'gulfeconomic' && <GulfEconomicPanel />}
+              {bottomTab === 'consumerprices' && <ConsumerPricesPanel />}
+              {/* Startups, Security, Data */}
+              {bottomTab === 'startupsvc' && <StartupsVCPanel />}
+              {bottomTab === 'securitypolicy' && <SecurityPolicyPanel />}
+              {bottomTab === 'datatracking' && <DataTrackingPanel />}
+              {bottomTab === 'supplychain' && <SupplyChainPanel />}
+              {bottomTab === 'pricingmktg' && <PricingMarketingPanel />}
+              {bottomTab === 'worldclock' && <WorldClockPanel />}
+              {bottomTab === 'deevoproject' && <DeevoProjectPanel />}
               {/* Analysis */}
               {bottomTab === 'correlation' && <CorrelationPanel />}
               {bottomTab === 'kpi' && <KPIOverviewPanel />}
