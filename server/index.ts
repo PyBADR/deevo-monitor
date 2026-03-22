@@ -1,11 +1,14 @@
 /**
- * Deevo Monitor v2 — API Server
+ * Deevo Monitor v3 — API Server
  * Express + Socket.io backend providing:
- *   1. RSS feed aggregation from GCC insurance/regulatory sources
+ *   1. RSS feed aggregation from 200+ GCC insurance/regulatory sources
  *   2. Ollama AI proxy for local LLM insights
  *   3. Real-time risk engine computing DRI levels
  *   4. Cortex bridge to DeevoAnalytics backend
  *   5. WebSocket push for live dashboard updates
+ *   6. KPI engine with 4 variant-specific datasets
+ *   7. GCC stock market data
+ *   8. Variant configuration API
  *
  * Port: 3001 (proxied by Vite dev server)
  */
@@ -52,19 +55,29 @@ if (existsSync(distPath)) {
   app.use(express.static(distPath));
 }
 
+// ── V3 Route imports ─────────────────────────────────
+import kpiRouter from "./routes/kpi.js";
+import stocksRouter from "./routes/stocks.js";
+import variantsRouter from "./routes/variants.js";
+
 // ── Routes ────────────────────────────────────────────
 app.use("/api/feed", feedRouter);
 app.use("/api/risk", riskRouter);
 app.use("/api/ollama", ollamaRouter);
 app.use("/api/cortex", cortexRouter);
+app.use("/api/kpi", kpiRouter);
+app.use("/api/stocks", stocksRouter);
+app.use("/api/variants", variantsRouter);
 
 // Health check
 app.get("/api/health", (_req, res) => {
   res.json({
     status: "healthy",
-    version: "2.0.0",
+    version: "3.0.0",
     uptime: process.uptime(),
     timestamp: new Date().toISOString(),
+    variants: ["global", "tech", "finance", "fraud"],
+    endpoints: ["/api/feed", "/api/risk", "/api/ollama", "/api/cortex", "/api/kpi", "/api/stocks", "/api/variants"],
   });
 });
 
@@ -134,6 +147,29 @@ io.on("connection", (socket) => {
     }
   });
 
+  // V3: Variant-aware events
+  socket.on("variant:switch", (variantId: string) => {
+    // Leave all variant rooms, join the new one
+    ["global", "tech", "finance", "fraud"].forEach((v) => socket.leave(`variant:${v}`));
+    socket.join(`variant:${variantId}`);
+    console.log(`[WS] ${socket.id} switched to variant: ${variantId}`);
+  });
+
+  socket.on("kpi:subscribe", (variantId: string) => {
+    socket.join(`kpi:${variantId}`);
+    console.log(`[WS] ${socket.id} subscribed to KPIs for: ${variantId}`);
+  });
+
+  socket.on("fraud:subscribe", () => {
+    socket.join("fraud:alerts");
+    console.log(`[WS] ${socket.id} subscribed to fraud alerts`);
+  });
+
+  socket.on("stocks:subscribe", () => {
+    socket.join("stocks:live");
+    console.log(`[WS] ${socket.id} subscribed to stock updates`);
+  });
+
   socket.on("disconnect", () => {
     console.log(`[WS] Client disconnected: ${socket.id}`);
   });
@@ -141,11 +177,14 @@ io.on("connection", (socket) => {
 
 // ── Start Services ────────────────────────────────────
 httpServer.listen(PORT, () => {
-  console.log(`\n  🌍 Deevo Monitor API Server v2.0.0`);
-  console.log(`  ├─ HTTP:   http://localhost:${PORT}`);
-  console.log(`  ├─ WS:     ws://localhost:${PORT}`);
-  console.log(`  ├─ Health: http://localhost:${PORT}/api/health`);
-  console.log(`  └─ CORS:   ${CORS_ORIGINS.join(", ")}\n`);
+  console.log(`\n  🌍 Deevo Monitor API Server v3.0.0`);
+  console.log(`  ├─ HTTP:      http://localhost:${PORT}`);
+  console.log(`  ├─ WS:        ws://localhost:${PORT}`);
+  console.log(`  ├─ Health:    http://localhost:${PORT}/api/health`);
+  console.log(`  ├─ KPI:       http://localhost:${PORT}/api/kpi`);
+  console.log(`  ├─ Stocks:    http://localhost:${PORT}/api/stocks`);
+  console.log(`  ├─ Variants:  http://localhost:${PORT}/api/variants`);
+  console.log(`  └─ CORS:      ${CORS_ORIGINS.join(", ")}\n`);
 
   // Start background services
   startFeedAggregator(io);

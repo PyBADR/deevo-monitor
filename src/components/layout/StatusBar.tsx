@@ -1,18 +1,21 @@
 /**
  * StatusBar — Top navigation bar (worldmonitor-style).
- * Left: [DEEVO LOGO] [MONITOR] [v2.0.0] [● LIVE]
+ * Left: [VariantSwitcher] [● LIVE] [v3.0.0]
  * Center: [Date/Time UTC] [Region selector]
- * Right: [DRI Badge] [Settings]
+ * Right: [DRI Badge] [KPI toggle] [Settings]
  */
 import { useState, useEffect } from "react";
 import { useDataStore } from "@/stores/dataStore";
 import { useMapStore } from "@/stores/mapStore";
 import { DRIBadge } from "@/components/shared/DRIBadge";
 import { LiveDot } from "@/components/shared/LiveDot";
+import { VariantSwitcher } from "@/components/ui/VariantSwitcher";
+import { useVariant } from "@/variants";
 import { GCC_COUNTRIES, type GCCCountryCode } from "@/types";
 import { clsx } from "clsx";
 
 export function StatusBar() {
+  const { variant } = useVariant();
   const driLevel = useDataStore((s) => s.driLevel);
   const flyToCountry = useMapStore((s) => s.flyToCountry);
   const resetView = useMapStore((s) => s.resetView);
@@ -33,21 +36,26 @@ export function StatusBar() {
   };
 
   return (
-    <header className="h-10 flex items-center justify-between px-3 bg-[#0A0E1A] border-b border-[#1F2937] z-30 shrink-0 font-mono">
+    <header
+      className="h-10 flex items-center justify-between px-3 border-b z-30 shrink-0 font-mono"
+      style={{
+        backgroundColor: variant.colors.bg,
+        borderColor: variant.colors.border,
+      }}
+    >
       {/* Left section */}
-      <div className="flex items-center gap-3">
-        <span className="text-[#00D4FF] font-bold text-sm tracking-tight">
-          DEEVO
-        </span>
-        <span className="text-gray-400 text-xs">MONITOR</span>
-        <span className="text-gray-600 text-[10px]">v2.0.0</span>
-        <div className="w-px h-4 bg-[#1F2937]" />
+      <div className="flex items-center gap-2">
+        <VariantSwitcher />
+        <div className="w-px h-4" style={{ backgroundColor: variant.colors.border }} />
         <LiveDot status="live" size="sm" label="LIVE" />
+        <span style={{ color: variant.colors.textMuted }} className="text-[10px]">
+          v3.0.0
+        </span>
       </div>
 
       {/* Center section */}
       <div className="flex items-center gap-4">
-        <span className="text-gray-400 text-[11px]">
+        <span style={{ color: variant.colors.textSecondary }} className="text-[11px]">
           {time.toLocaleDateString("en-US", {
             weekday: "short",
             month: "short",
@@ -55,11 +63,13 @@ export function StatusBar() {
             year: "numeric",
           })}
         </span>
-        <span className="text-[#00D4FF] text-xs font-bold">
+        <span className="text-xs font-bold" style={{ color: variant.colors.primary }}>
           {time.toLocaleTimeString("en-US", { hour12: false, timeZone: "UTC" })}
-          <span className="text-gray-600 text-[9px] ml-1">UTC</span>
+          <span style={{ color: variant.colors.textMuted }} className="text-[9px] ml-1">
+            UTC
+          </span>
         </span>
-        <div className="w-px h-4 bg-[#1F2937]" />
+        <div className="w-px h-4" style={{ backgroundColor: variant.colors.border }} />
         {/* Region selector */}
         <div className="flex gap-1">
           <RegionButton
@@ -67,6 +77,7 @@ export function StatusBar() {
             label="Global"
             active={!focusedCountry}
             onClick={() => handleRegion("GLOBAL")}
+            primaryColor={variant.colors.primary}
           />
           {(Object.keys(GCC_COUNTRIES) as GCCCountryCode[]).map((code) => (
             <RegionButton
@@ -75,6 +86,7 @@ export function StatusBar() {
               label={code}
               active={focusedCountry === code}
               onClick={() => handleRegion(code)}
+              primaryColor={variant.colors.primary}
             />
           ))}
         </div>
@@ -82,9 +94,28 @@ export function StatusBar() {
 
       {/* Right section */}
       <div className="flex items-center gap-3">
-        <DRIBadge level={driLevel} size="sm" />
+        <VariantBadge />
+        {variant.showPanels.riskIndex && <DRIBadge level={driLevel} size="sm" />}
       </div>
     </header>
+  );
+}
+
+function VariantBadge() {
+  const { variantId, variant } = useVariant();
+  const labels: Record<string, string> = {
+    global: 'G', tech: 'T', finance: 'F', fraud: 'FR',
+  };
+  return (
+    <span
+      className="text-[9px] font-bold px-1.5 py-0.5 rounded"
+      style={{
+        backgroundColor: `${variant.colors.primary}20`,
+        color: variant.colors.primary,
+      }}
+    >
+      {labels[variantId]}
+    </span>
   );
 }
 
@@ -93,21 +124,22 @@ function RegionButton({
   label,
   active,
   onClick,
+  primaryColor,
 }: {
   code: string;
   label: string;
   active: boolean;
   onClick: () => void;
+  primaryColor: string;
 }) {
   return (
     <button
       onClick={onClick}
       className={clsx(
         "text-[9px] px-1.5 py-0.5 rounded transition-colors",
-        active
-          ? "bg-[#00D4FF]/20 text-[#00D4FF]"
-          : "text-gray-600 hover:text-gray-400"
+        active ? "text-white" : "text-gray-600 hover:text-gray-400"
       )}
+      style={active ? { backgroundColor: `${primaryColor}20`, color: primaryColor } : undefined}
     >
       {label}
     </button>
