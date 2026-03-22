@@ -3,8 +3,8 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [
-    { "source": "/api/:path*", "destination": "https://deevo-monitor-api.onrender.com/api/:path*" },
-    { "source": "/socket.io/:path*", "destination": "https://deevo-monitor-api.onrender.com/socket.io/:path*" },
+    { "source": "/api/:path*", "destination": "https://deevo-monitor.onrender.com/api/:path*" },
+    { "source": "/socket.io/:path*", "destination": "https://deevo-monitor.onrender.com/socket.io/:path*" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [

@@ -145,7 +145,7 @@ httpServer.listen(PORT, () => {
   console.log(`  ├─ HTTP:   http://localhost:${PORT}`);
   console.log(`  ├─ WS:     ws://localhost:${PORT}`);
   console.log(`  ├─ Health: http://localhost:${PORT}/api/health`);
-  console.log(`  └─ CORS:   ${CORS_ORIGIN}\n`);
+  console.log(`  └─ CORS:   ${CORS_ORIGINS.join(", ")}\n`);
 
   // Start background services
   startFeedAggregator(io);
