@@ -14,7 +14,10 @@ import type {
   AlertIcon,
 } from "@/types";
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "";
+// In production: connect directly to Render backend for WebSocket
+// In dev: empty string → connects to same origin (Vite proxy handles it)
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL ||
+  (import.meta.env.PROD ? "https://deevo-monitor-api.onrender.com" : "");
 
 export function useSocket() {
   const socketRef = useRef<Socket | null>(null);

@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: deevo-monitor-api
+    runtime: node
+    region: frankfurt  # Closest to GCC
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npx tsx server/index.ts
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3001"
+      - key: CORS_ORIGIN
+        value: "https://deevo-monitor.vercel.app,https://deevo-monitor.onrender.com"
+      - key: OLLAMA_BASE_URL
+        value: ""
+      - key: OLLAMA_MODEL
+        value: "llama3.2"
+    healthCheckPath: /api/health

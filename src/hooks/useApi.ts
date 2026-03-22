@@ -5,6 +5,8 @@
 import { useEffect } from "react";
 import { useDataStore } from "@/stores/dataStore";
 
+// In production: Vercel rewrites /api/* to Render backend
+// In dev: Vite proxy handles /api/* → localhost:3001
 const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 async function fetchJSON<T>(path: string): Promise<T | null> {

@@ -22,14 +22,16 @@ import { startFeedAggregator } from "./services/feed-aggregator.js";
 import { startRiskEngine } from "./services/risk-engine.js";
 
 const PORT = parseInt(process.env.PORT || "3001", 10);
-const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:5174";
+const CORS_ORIGINS = (process.env.CORS_ORIGIN || "http://localhost:5174")
+  .split(",")
+  .map((s) => s.trim());
 
 const app = express();
 const httpServer = createServer(app);
 
 // ── Socket.io ─────────────────────────────────────────
 const io = new Server(httpServer, {
-  cors: { origin: CORS_ORIGIN, methods: ["GET", "POST"] },
+  cors: { origin: CORS_ORIGINS, methods: ["GET", "POST"] },
   transports: ["websocket", "polling"],
 });
 
@@ -37,8 +39,18 @@ const io = new Server(httpServer, {
 app.set("io", io);
 
 // ── Middleware ─────────────────────────────────────────
-app.use(cors({ origin: CORS_ORIGIN }));
+app.use(cors({ origin: CORS_ORIGINS }));
 app.use(express.json());
+
+// Serve static frontend in production (when dist/ exists)
+import { existsSync } from "fs";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+const __dirname2 = dirname(fileURLToPath(import.meta.url));
+const distPath = join(__dirname2, "..", "dist");
+if (existsSync(distPath)) {
+  app.use(express.static(distPath));
+}
 
 // ── Routes ────────────────────────────────────────────
 app.use("/api/feed", feedRouter);
@@ -55,6 +67,16 @@ app.get("/api/health", (_req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+// ── SPA fallback (serve index.html for non-API routes) ─
+if (existsSync(distPath)) {
+  app.get("*", (req, res, next) => {
+    if (req.path.startsWith("/api") || req.path.startsWith("/socket.io")) {
+      return next();
+    }
+    res.sendFile(join(distPath, "index.html"));
+  });
+}
 
 // ── Socket.io Connection ──────────────────────────────
 io.on("connection", (socket) => {
@@ -77,7 +99,8 @@ io.on("connection", (socket) => {
   socket.on("insight:request", async (prompt: string) => {
     // Forward to Ollama and stream back
     try {
-      const response = await fetch("http://localhost:11434/api/generate", {
+      const ollamaUrl = process.env.OLLAMA_BASE_URL || "http://localhost:11434";
+      const response = await fetch(`${ollamaUrl}/api/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
