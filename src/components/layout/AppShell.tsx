@@ -88,6 +88,14 @@ import {
   DeevoProjectPanel,
   DiscordPanel,
 } from "@/components/panels/FinancePanels";
+// ── v3 Intelligence Panels (C5) ──
+import GCCMapIntelligence from "@/components/panels/GCCMapIntelligence";
+import ForceGraphView from "@/components/panels/ForceGraphView";
+import TimelineView from "@/components/panels/TimelineView";
+import DecisionEnginePanel from "@/components/panels/DecisionEnginePanel";
+import ArchitectureView from "@/components/panels/ArchitectureView";
+import KPIDashboardV3 from "@/components/panels/KPIDashboardV3";
+import ForexGoldPanel from "@/components/panels/ForexGoldPanel";
 import { useDataStore } from "@/stores/dataStore";
 import { useSocket } from "@/hooks/useSocket";
 import { useInitialData } from "@/hooks/useApi";
@@ -110,7 +118,9 @@ type BottomTabId =
   | 'coremarkets' | 'fixedincome' | 'forex' | 'cryptodigital'
   | 'centralbanks' | 'gccinvest' | 'gulfeconomic' | 'consumerprices'
   | 'startupsvc' | 'securitypolicy' | 'datatracking' | 'supplychain'
-  | 'pricingmktg' | 'worldclock' | 'deevoproject' | 'discord';
+  | 'pricingmktg' | 'worldclock' | 'deevoproject' | 'discord'
+  | 'v3map' | 'forcegraph' | 'timeline' | 'decisions'
+  | 'architecture' | 'kpiv3' | 'forexgold';
 
 export function AppShell() {
   useSocket();
@@ -183,6 +193,14 @@ export function AppShell() {
     { id: 'worldclock', label: 'WORLD CLOCK', color: '#64748B' },
     { id: 'deevoproject', label: 'DEEVO', color: '#00D4FF' },
     { id: 'discord', label: 'DISCORD', color: '#5865F2' },
+    // ── v3 Intelligence (C5) ──
+    { id: 'v3map', label: 'GCC INTEL MAP', color: '#f5a623' },
+    { id: 'forcegraph', label: 'FORCE GRAPH', color: '#f5a623' },
+    { id: 'timeline', label: 'TIMELINE', color: '#f5a623' },
+    { id: 'decisions', label: 'DECISIONS', color: '#f5a623' },
+    { id: 'architecture', label: 'ARCHITECTURE', color: '#f5a623' },
+    { id: 'kpiv3', label: 'KPI v3', color: '#f5a623' },
+    { id: 'forexgold', label: 'FOREX/GOLD', color: '#FFD700' },
     // ── Analysis ──
     { id: 'correlation', label: 'CORRELATION', color: '#A78BFA' },
     { id: 'kpi', label: 'KPI', color: '#8B5CF6' },
@@ -369,6 +387,14 @@ export function AppShell() {
               {bottomTab === 'worldclock' && <WorldClockPanel />}
               {bottomTab === 'deevoproject' && <DeevoProjectPanel />}
               {bottomTab === 'discord' && <DiscordPanel />}
+              {/* v3 Intelligence (C5) */}
+              {bottomTab === 'v3map' && <GCCMapIntelligence />}
+              {bottomTab === 'forcegraph' && <ForceGraphView />}
+              {bottomTab === 'timeline' && <TimelineView />}
+              {bottomTab === 'decisions' && <DecisionEnginePanel />}
+              {bottomTab === 'architecture' && <ArchitectureView />}
+              {bottomTab === 'kpiv3' && <KPIDashboardV3 />}
+              {bottomTab === 'forexgold' && <ForexGoldPanel />}
               {/* Analysis */}
               {bottomTab === 'correlation' && <CorrelationPanel />}
               {bottomTab === 'kpi' && <KPIOverviewPanel />}
