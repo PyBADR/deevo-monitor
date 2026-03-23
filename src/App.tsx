@@ -1,11 +1,11 @@
-import { AppShell } from "./components/layout/AppShell";
 import { ErrorBoundary } from "./components/layout/ErrorBoundary";
 import PDPLBanner from "./components/compliance/PDPLBanner";
+import DecisionShell from "./components/decision/DecisionShell";
 
 export function App() {
   return (
     <ErrorBoundary>
-      <AppShell />
+      <DecisionShell />
       <PDPLBanner />
     </ErrorBoundary>
   );
