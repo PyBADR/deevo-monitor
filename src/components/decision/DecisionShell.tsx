@@ -1,10 +1,15 @@
 /**
  * DEEVO Decision Shell — GCC Decision Intelligence Command Center
- * Replaces the old 40+ panel AppShell with a focused 6-panel layout.
- * Screens: Command Center, Scenario View, Sector View, Forecast View
+ * 6-panel layout with real MapContainer, scoring engine, feature gating.
  */
 
-import { useMemo, useState, memo } from 'react';
+import { useMemo, useState, memo, lazy, Suspense } from 'react';
+import { scoreSignal, correlateSignals } from '../../lib/scoring';
+import type { ScoredSignal, RiskLevel } from '../../lib/scoring';
+import type { PlanTier } from '../../lib/auth/roles';
+import { TIER_ACCESS } from '../../lib/auth/roles';
+
+const MapContainer = lazy(() => import('../map/MapContainer'));
 
 // ---------------------------------------------------------------------------
 // Types
@@ -12,13 +17,11 @@ import { useMemo, useState, memo } from 'react';
 
 interface Country { code: string; name: string; }
 interface RiskItem { title: string; level: 'Critical' | 'High' | 'Medium' | 'Low'; delta: string; }
-interface FeedItem { time: string; source: string; title: string; impact: string; }
 interface SectorItem { name: string; score: number; }
 interface GdpItem { label: string; value: string; note: string; }
 interface ForecastItem { horizon: string; note: string; }
 interface GraphNode { x: number; y: number; label: string; color: string; }
 interface GraphEdge { x1: number; y1: number; x2: number; y2: number; }
-interface MapDot { top: string; left: string; label: string; }
 
 // ---------------------------------------------------------------------------
 // Demo Data — Hormuz Escalation Scenario (live data will replace this)
@@ -48,11 +51,15 @@ const DEMO_DATA = {
     'Escalate corridor monitoring to operations desk',
     'Flag reinsurer accumulation watch for exposed routes',
   ],
-  feed: [
-    { time: '02:14 UTC', source: 'Strategic Feed', title: 'Hormuz risk index moved into critical band', impact: 'Oil, shipping, insurance' },
-    { time: '01:52 UTC', source: 'Market Feed', title: 'Brent moved higher on corridor disruption fears', impact: 'Energy, logistics, GDP exports' },
-    { time: '01:31 UTC', source: 'Insurance Feed', title: 'Marine exposure sensitivity increased for GCC routes', impact: 'Claims, underwriting, reinsurance' },
-  ] as FeedItem[],
+  // Raw signals — will be scored by the scoring engine
+  rawSignals: [
+    { id: 'SIG-001', title: 'Hormuz risk index moved into critical band', source: 'Strategic Feed', timestamp: '2026-03-23T02:14:00Z' },
+    { id: 'SIG-002', title: 'Brent crude oil price surge on corridor disruption fears', source: 'Market Feed', timestamp: '2026-03-23T01:52:00Z' },
+    { id: 'SIG-003', title: 'Marine insurance claims sensitivity increased for GCC shipping routes', source: 'Insurance Feed', timestamp: '2026-03-23T01:31:00Z' },
+    { id: 'SIG-004', title: 'Red Sea attack on commercial vessel reported near Bab al-Mandab', source: 'Security Feed', timestamp: '2026-03-23T01:12:00Z' },
+    { id: 'SIG-005', title: 'OPEC production cut announcement expected within 48h', source: 'Energy Feed', timestamp: '2026-03-23T00:45:00Z' },
+    { id: 'SIG-006', title: 'Port congestion at Jebel Ali reaches 72h average delay', source: 'Logistics Feed', timestamp: '2026-03-22T23:30:00Z' },
+  ],
   sectors: [
     { name: 'Oil & Gas', score: 87 },
     { name: 'Insurance', score: 79 },
@@ -92,18 +99,10 @@ const DEMO_DATA = {
     { x1: 60, y1: 53, x2: 74, y2: 38 },
     { x1: 60, y1: 58, x2: 80, y2: 72 },
   ] as GraphEdge[],
-  mapDots: [
-    { top: '32%', left: '43%', label: 'Kuwait' },
-    { top: '38%', left: '52%', label: 'Qatar' },
-    { top: '48%', left: '62%', label: 'UAE' },
-    { top: '62%', left: '71%', label: 'Oman' },
-    { top: '44%', left: '34%', label: 'Saudi Arabia' },
-    { top: '24%', left: '77%', label: 'Hormuz' },
-  ] as MapDot[],
 };
 
 // ---------------------------------------------------------------------------
-// Inline Style Tokens (not Tailwind — inline styles per project convention)
+// Inline Style Tokens
 // ---------------------------------------------------------------------------
 
 const C = {
@@ -133,22 +132,31 @@ const nodeColors: Record<string, string> = {
   fuchsia: C.fuchsia, emerald: C.emerald, indigo: C.indigo,
 };
 
+const LEVEL_COLORS: Record<RiskLevel, { color: string; bg: string; border: string }> = {
+  CRITICAL: { color: C.red, bg: C.redDim, border: 'rgba(248,113,113,0.4)' },
+  HIGH: { color: C.amber, bg: C.amberDim, border: 'rgba(245,166,35,0.4)' },
+  MED: { color: '#facc15', bg: 'rgba(250,204,21,0.1)', border: 'rgba(250,204,21,0.4)' },
+  LOW: { color: C.emerald, bg: C.emeraldDim, border: 'rgba(52,211,153,0.4)' },
+};
+
 function scoreTone(score: number): { color: string; bg: string; border: string } {
-  if (score >= 80) return { color: C.red, bg: C.redDim, border: 'rgba(248,113,113,0.4)' };
-  if (score >= 65) return { color: C.amber, bg: C.amberDim, border: 'rgba(245,166,35,0.4)' };
-  if (score >= 50) return { color: '#facc15', bg: 'rgba(250,204,21,0.1)', border: 'rgba(250,204,21,0.4)' };
-  return { color: C.emerald, bg: C.emeraldDim, border: 'rgba(52,211,153,0.4)' };
+  if (score >= 80) return LEVEL_COLORS.CRITICAL;
+  if (score >= 65) return LEVEL_COLORS.HIGH;
+  if (score >= 50) return LEVEL_COLORS.MED;
+  return LEVEL_COLORS.LOW;
 }
 
 // ---------------------------------------------------------------------------
-// Card Component
+// Reusable Components
 // ---------------------------------------------------------------------------
 
-function Card({ title, right, children }: { title: string; right?: React.ReactNode; children: React.ReactNode }) {
+function Card({ title, right, children, locked }: { title: string; right?: React.ReactNode; children: React.ReactNode; locked?: boolean }) {
   return (
     <div style={{
-      borderRadius: 16, border: `1px solid ${C.border}`, background: 'rgba(15,23,42,0.7)',
+      borderRadius: 16, border: `1px solid ${locked ? 'rgba(100,116,139,0.3)' : C.border}`,
+      background: 'rgba(15,23,42,0.7)', position: 'relative',
       boxShadow: '0 25px 50px -12px rgba(0,0,0,0.2)', backdropFilter: 'blur(8px)',
+      opacity: locked ? 0.5 : 1, filter: locked ? 'blur(1px)' : 'none',
     }}>
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -158,6 +166,26 @@ function Card({ title, right, children }: { title: string; right?: React.ReactNo
         {right}
       </div>
       <div style={{ padding: 16 }}>{children}</div>
+      {locked && <LockedOverlay />}
+    </div>
+  );
+}
+
+function LockedOverlay() {
+  return (
+    <div style={{
+      position: 'absolute', inset: 0, borderRadius: 16, zIndex: 20,
+      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+      background: 'rgba(2,6,23,0.75)', backdropFilter: 'blur(4px)',
+    }}>
+      <div style={{ fontSize: 28, marginBottom: 8 }}>🔒</div>
+      <div style={{ fontSize: 14, fontWeight: 600, color: C.text }}>PRO Feature</div>
+      <div style={{ fontSize: 12, color: C.textMuted, marginTop: 4 }}>Upgrade to unlock</div>
+      <button style={{
+        marginTop: 12, borderRadius: 999, border: `1px solid rgba(245,166,35,0.5)`,
+        background: C.amberDim, padding: '8px 20px', fontSize: 12, fontWeight: 600,
+        color: C.amber, cursor: 'pointer',
+      }}>Upgrade to Pro</button>
     </div>
   );
 }
@@ -183,10 +211,15 @@ function MiniCard({ children, style: extraStyle }: { children: React.ReactNode; 
 }
 
 // ---------------------------------------------------------------------------
-// Top Bar
+// Top Bar with Tier Badge
 // ---------------------------------------------------------------------------
 
-function TopBar({ selectedCountry, onSelectCountry }: { selectedCountry: string; onSelectCountry: (c: string) => void }) {
+function TopBar({ selectedCountry, onSelectCountry, tier }: {
+  selectedCountry: string; onSelectCountry: (c: string) => void; tier: PlanTier;
+}) {
+  const tierLabel = tier === 'government' ? 'GOV' : tier === 'pro' ? 'PRO' : 'FREE';
+  const tierColor = tier === 'free' ? C.textDim : C.amber;
+
   return (
     <div style={{
       marginBottom: 16, borderRadius: 24, border: `1px solid ${C.border}`,
@@ -207,7 +240,7 @@ function TopBar({ selectedCountry, onSelectCountry }: { selectedCountry: string;
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
           <Pill active style={{ background: C.emeraldDim, borderColor: 'rgba(52,211,153,0.3)', color: C.emerald }}>LIVE</Pill>
-          <Pill>UTC 02:14</Pill>
+          <Pill style={{ borderColor: `${tierColor}66`, color: tierColor }}>{tierLabel}</Pill>
           <Pill>EN | AR</Pill>
         </div>
       </div>
@@ -284,54 +317,39 @@ function HeroBoard() {
 }
 
 // ---------------------------------------------------------------------------
-// Strategic Map
+// GCC Strategic Map — Real MapLibre + deck.gl
 // ---------------------------------------------------------------------------
 
-function StrategicMap() {
+function StrategicMap({ locked }: { locked?: boolean }) {
   return (
-    <Card title="GCC Strategic Map" right={<Pill>2D | 3D</Pill>}>
-      <div style={{
-        position: 'relative', height: 320, overflow: 'hidden', borderRadius: 16,
-        border: `1px solid ${C.border}`,
-        background: `radial-gradient(circle at center, rgba(14,165,233,0.14), transparent 35%), linear-gradient(180deg, #08111f 0%, ${C.bg} 100%)`,
-      }}>
-        <div style={{
-          position: 'absolute', inset: 0, opacity: 0.5,
-          backgroundImage: 'linear-gradient(to right, rgba(51,65,85,0.18) 1px, transparent 1px), linear-gradient(to bottom, rgba(51,65,85,0.18) 1px, transparent 1px)',
-          backgroundSize: '44px 44px',
-        }} />
-        <div style={{ position: 'absolute', inset: '8%', borderRadius: '40%', border: '1px solid rgba(34,211,238,0.1)' }} />
-        <div style={{ position: 'absolute', left: '70%', top: '18%', width: 80, height: 80, borderRadius: '50%', background: 'rgba(248,113,113,0.1)', filter: 'blur(32px)' }} />
-        <div style={{ position: 'absolute', left: '28%', top: '48%', width: 112, height: 112, borderRadius: '50%', background: 'rgba(245,166,35,0.1)', filter: 'blur(48px)' }} />
-        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} viewBox="0 0 100 100" preserveAspectRatio="none">
-          <path d="M22,64 C35,48 46,40 63,33" fill="none" stroke="rgba(56,189,248,0.8)" strokeWidth="0.5" strokeDasharray="2 2" />
-          <path d="M60,33 C70,28 77,23 82,21" fill="none" stroke="rgba(248,113,113,0.9)" strokeWidth="0.5" />
-          <path d="M28,60 C39,63 48,65 61,69" fill="none" stroke="rgba(250,204,21,0.85)" strokeWidth="0.5" strokeDasharray="2 2" />
-        </svg>
-        {DEMO_DATA.mapDots.map((dot) => (
-          <div key={dot.label} style={{ position: 'absolute', top: dot.top, left: dot.left }}>
-            <div style={{ position: 'relative' }}>
-              <div style={{ position: 'absolute', left: -8, top: -8, width: 24, height: 24, borderRadius: '50%', background: 'rgba(34,211,238,0.1)', filter: 'blur(8px)' }} />
-              <div style={{ width: 10, height: 10, borderRadius: '50%', border: `1px solid ${C.cyan}`, background: C.cyan, boxShadow: '0 0 18px rgba(34,211,238,0.55)' }} />
-            </div>
-            <div style={{ marginTop: 8, whiteSpace: 'nowrap', fontSize: 11, color: C.textMuted }}>{dot.label}</div>
-          </div>
-        ))}
-        <div style={{ position: 'absolute', bottom: 16, left: 16, display: 'flex', gap: 8, fontSize: 11, color: C.textMuted }}>
-          {['Trade Routes', 'Oil Flows', 'Risk Zones', 'Insurance Exposure'].map((l) => (
-            <span key={l} style={{ borderRadius: 999, border: `1px solid ${C.borderLight}`, background: 'rgba(15,23,42,0.8)', padding: '4px 12px' }}>{l}</span>
-          ))}
-        </div>
+    <Card title="GCC Strategic Map" right={<Pill>Live Layers</Pill>} locked={locked}>
+      <div style={{ height: 320, borderRadius: 16, overflow: 'hidden', border: `1px solid ${C.border}` }}>
+        <Suspense fallback={
+          <div style={{
+            width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: C.bg, color: C.textDim, fontSize: 13,
+          }}>Loading GCC Decision Map...</div>
+        }>
+          <MapContainer />
+        </Suspense>
       </div>
     </Card>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 6 Overview Panels
+// 6 Overview Panels — with scoring engine + feature gating
 // ---------------------------------------------------------------------------
 
-function OverviewPanels() {
+function OverviewPanels({ tier }: { tier: PlanTier }) {
+  const access = TIER_ACCESS[tier];
+
+  // Score all raw signals through the scoring engine
+  const scoredSignals: ScoredSignal[] = useMemo(() => {
+    const raw = DEMO_DATA.rawSignals.map((s) => scoreSignal(s.id, s.title, s.source, s.timestamp));
+    return correlateSignals(raw);
+  }, []);
+
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
       {/* Risk Overview */}
@@ -348,23 +366,35 @@ function OverviewPanels() {
         </div>
       </Card>
 
-      {/* Intelligence Feed */}
-      <Card title="Intelligence Feed">
+      {/* Intelligence Feed — powered by scoring engine */}
+      <Card title="Intelligence Feed" right={
+        <span style={{ fontSize: 11, color: C.cyan }}>{scoredSignals.length} signals scored</span>
+      }>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {DEMO_DATA.feed.map((item) => (
-            <MiniCard key={item.title} style={{ background: 'rgba(15,23,42,0.7)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: C.textDim }}>
-                <span>{item.time}</span><span>{item.source}</span>
-              </div>
-              <div style={{ marginTop: 8, fontSize: 14, color: C.text }}>{item.title}</div>
-              <div style={{ marginTop: 8, fontSize: 12, color: C.textDim }}>{item.impact}</div>
-            </MiniCard>
-          ))}
+          {scoredSignals.slice(0, 4).map((signal) => {
+            const tone = LEVEL_COLORS[signal.level];
+            return (
+              <MiniCard key={signal.id} style={{ background: 'rgba(15,23,42,0.7)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: C.textDim }}>
+                  <span>{new Date(signal.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' })} UTC</span>
+                  <span>{signal.source}</span>
+                </div>
+                <div style={{ marginTop: 8, fontSize: 14, color: C.text }}>{signal.title}</div>
+                <div style={{ marginTop: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{
+                    borderRadius: 999, border: `1px solid ${tone.border}`, background: tone.bg,
+                    padding: '2px 10px', fontSize: 11, fontWeight: 600, color: tone.color,
+                  }}>{signal.level} · {signal.score}</span>
+                  <span style={{ fontSize: 11, color: C.textDim }}>{signal.category}</span>
+                </div>
+              </MiniCard>
+            );
+          })}
         </div>
       </Card>
 
-      {/* Sector Impact */}
-      <Card title="Sector Impact">
+      {/* Sector Impact — locked for free tier */}
+      <Card title="Sector Impact" locked={!access.sectorIntelligence}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {DEMO_DATA.sectors.map((sector) => {
             const tone = scoreTone(sector.score);
@@ -383,8 +413,8 @@ function OverviewPanels() {
         </div>
       </Card>
 
-      {/* GDP Impact */}
-      <Card title="GDP Impact">
+      {/* GDP Impact — locked for free tier */}
+      <Card title="GDP Impact" locked={!access.gdpDashboard}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {DEMO_DATA.gdp.map((item) => (
             <MiniCard key={item.label} style={{ background: 'rgba(15,23,42,0.7)' }}>
@@ -425,10 +455,10 @@ function OverviewPanels() {
 }
 
 // ---------------------------------------------------------------------------
-// Scenario Panel with Propagation Graph
+// Scenario Panel with Propagation Graph — locked for non-government
 // ---------------------------------------------------------------------------
 
-function ScenarioPanel() {
+function ScenarioPanel({ locked }: { locked?: boolean }) {
   const infoBlock = (label: string, text: string) => (
     <MiniCard style={{ background: 'rgba(15,23,42,0.7)' }}>
       <div style={{ fontSize: 11, letterSpacing: '0.25em', textTransform: 'uppercase', color: C.cyan }}>{label}</div>
@@ -437,7 +467,7 @@ function ScenarioPanel() {
   );
 
   return (
-    <Card title="Scenario View — Hormuz Escalation">
+    <Card title="Scenario View — Hormuz Escalation" locked={locked}>
       <div style={{ display: 'grid', gridTemplateColumns: '0.95fr 1.05fr', gap: 16 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {infoBlock('What happened', 'Maritime tension increased across Hormuz, with higher corridor sensitivity and stronger oil-linked market reaction.')}
@@ -469,7 +499,7 @@ function ScenarioPanel() {
 // Sector Detail Panel
 // ---------------------------------------------------------------------------
 
-function SectorPanel() {
+function SectorPanel({ locked }: { locked?: boolean }) {
   const metricBox = (label: string, value: string, color: string) => (
     <div style={{ borderRadius: 12, border: `1px solid ${C.border}`, background: 'rgba(15,23,42,0.7)', padding: 16 }}>
       <div style={{ fontSize: 11, letterSpacing: '0.25em', textTransform: 'uppercase', color: C.textDim }}>{label}</div>
@@ -478,7 +508,7 @@ function SectorPanel() {
   );
 
   return (
-    <Card title="Sector View — Insurance">
+    <Card title="Sector View — Insurance" locked={locked}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
         {metricBox('Loss Ratio Risk', '72', C.amber)}
         {metricBox('Claims Sensitivity', 'High', C.red)}
@@ -494,10 +524,17 @@ function SectorPanel() {
 
 function DecisionShellInner() {
   const [selectedCountry, setSelectedCountry] = useState('SA');
+  const [tier] = useState<PlanTier>('pro'); // Default to pro for demo; free for gating demo
+  const access = TIER_ACCESS[tier];
+
   const selectedCountryName = useMemo(() =>
     DEMO_DATA.countries.find((c) => c.code === selectedCountry)?.name ?? 'Saudi Arabia',
     [selectedCountry]
   );
+
+  const mapLocked = access.mapLayers < 4;
+  const scenarioLocked = !access.scenarioSimulation;
+  const sectorLocked = !access.sectorIntelligence;
 
   return (
     <div style={{
@@ -505,7 +542,7 @@ function DecisionShellInner() {
       background: `radial-gradient(circle at top, rgba(30,64,175,0.18), transparent 35%), linear-gradient(180deg, ${C.bg} 0%, ${C.bg} 55%, #000814 100%)`,
     }}>
       <div style={{ maxWidth: 1600, margin: '0 auto', padding: 24 }}>
-        <TopBar selectedCountry={selectedCountry} onSelectCountry={setSelectedCountry} />
+        <TopBar selectedCountry={selectedCountry} onSelectCountry={setSelectedCountry} tier={tier} />
 
         {/* Country Context Bar */}
         <div style={{
@@ -518,15 +555,15 @@ function DecisionShellInner() {
         {/* Hero Row: Decision Board + Strategic Map */}
         <div style={{ display: 'grid', gridTemplateColumns: '1.15fr 0.85fr', gap: 16 }}>
           <HeroBoard />
-          <StrategicMap />
+          <StrategicMap locked={mapLocked} />
         </div>
 
         {/* Main Grid: 6 Panels + Scenario + Sector */}
         <div style={{ marginTop: 16, display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 16 }}>
-          <OverviewPanels />
+          <OverviewPanels tier={tier} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <ScenarioPanel />
-            <SectorPanel />
+            <ScenarioPanel locked={scenarioLocked} />
+            <SectorPanel locked={sectorLocked} />
           </div>
         </div>
       </div>
