@@ -7,7 +7,7 @@
  * Each layer shows status, throughput, and active services.
  */
 
-import { useState } from 'react';
+import { useState, memo } from 'react';
 
 interface LayerData {
   id: string;
@@ -33,7 +33,7 @@ const LAYERS: LayerData[] = [
 
 const STATUS_COLORS = { healthy: '#22c55e', degraded: '#f5a623', down: '#ef4444' };
 
-export default function ArchitectureView() {
+function ArchitectureViewInner() {
   const [selectedLayer, setSelectedLayer] = useState<string | null>(null);
 
   return (
@@ -133,3 +133,5 @@ export default function ArchitectureView() {
     </div>
   );
 }
+
+export default memo(ArchitectureViewInner);

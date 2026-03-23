@@ -96,6 +96,19 @@ import DecisionEnginePanel from "@/components/panels/DecisionEnginePanel";
 import ArchitectureView from "@/components/panels/ArchitectureView";
 import KPIDashboardV3 from "@/components/panels/KPIDashboardV3";
 import ForexGoldPanel from "@/components/panels/ForexGoldPanel";
+// ── v3 C8 Panels ──
+import SanctionsWatchPanel from "@/components/panels/SanctionsWatchPanel";
+import ThermalEscalationPanel from "@/components/panels/ThermalEscalationPanel";
+import SupplyChainChokepointsPanel from "@/components/panels/SupplyChainChokepointsPanel";
+import DisplacementPanel from "@/components/panels/DisplacementPanel";
+import ClimateAnomaliesPanel from "@/components/panels/ClimateAnomaliesPanel";
+import NetworkAnalysisPanel from "@/components/panels/NetworkAnalysisPanel";
+import FieldInspectionSchedulerPanel from "@/components/panels/FieldInspectionSchedulerPanel";
+// ── C10: WorldMonitor Parity Panels ──
+import AIForecastsPanel from "@/components/panels/AIForecastsPanel";
+import CountryInstabilityPanel from "@/components/panels/CountryInstabilityPanel";
+import StrategicRiskOverviewPanel from "@/components/panels/StrategicRiskOverviewPanel";
+import LiveNewsFeedPanel from "@/components/panels/LiveNewsFeedPanel";
 import { useDataStore } from "@/stores/dataStore";
 import { useSocket } from "@/hooks/useSocket";
 import { useInitialData } from "@/hooks/useApi";
@@ -120,7 +133,10 @@ type BottomTabId =
   | 'startupsvc' | 'securitypolicy' | 'datatracking' | 'supplychain'
   | 'pricingmktg' | 'worldclock' | 'deevoproject' | 'discord'
   | 'v3map' | 'forcegraph' | 'timeline' | 'decisions'
-  | 'architecture' | 'kpiv3' | 'forexgold';
+  | 'architecture' | 'kpiv3' | 'forexgold'
+  | 'sanctions' | 'thermal' | 'chokepoints' | 'displacement'
+  | 'climate' | 'fraudnet' | 'fieldinspect'
+  | 'aiforecasts' | 'instability' | 'strategicrisk' | 'livenewsfeed';
 
 export function AppShell() {
   useSocket();
@@ -201,6 +217,19 @@ export function AppShell() {
     { id: 'architecture', label: 'ARCHITECTURE', color: '#f5a623' },
     { id: 'kpiv3', label: 'KPI v3', color: '#f5a623' },
     { id: 'forexgold', label: 'FOREX/GOLD', color: '#FFD700' },
+    // ── v3 C8 Intelligence ──
+    { id: 'sanctions', label: 'SANCTIONS', color: '#ef4444' },
+    { id: 'thermal', label: 'THERMAL', color: '#f5a623' },
+    { id: 'chokepoints', label: 'CHOKEPOINTS', color: '#ef4444' },
+    { id: 'displacement', label: 'DISPLACEMENT', color: '#f59e0b' },
+    { id: 'climate', label: 'CLIMATE', color: '#10b981' },
+    { id: 'fraudnet', label: 'FRAUD NET', color: '#ef4444' },
+    { id: 'fieldinspect', label: 'FIELD INSPECT', color: '#f5a623' },
+    // ── C10: WorldMonitor Parity ──
+    { id: 'aiforecasts', label: 'AI FORECASTS', color: '#22d3ee' },
+    { id: 'instability', label: 'INSTABILITY', color: '#ef4444' },
+    { id: 'strategicrisk', label: 'STRATEGIC RISK', color: '#f59e0b' },
+    { id: 'livenewsfeed', label: 'LIVE NEWS', color: '#22c55e' },
     // ── Analysis ──
     { id: 'correlation', label: 'CORRELATION', color: '#A78BFA' },
     { id: 'kpi', label: 'KPI', color: '#8B5CF6' },
@@ -395,6 +424,19 @@ export function AppShell() {
               {bottomTab === 'architecture' && <ArchitectureView />}
               {bottomTab === 'kpiv3' && <KPIDashboardV3 />}
               {bottomTab === 'forexgold' && <ForexGoldPanel />}
+              {/* v3 C8 Intelligence */}
+              {bottomTab === 'sanctions' && <SanctionsWatchPanel />}
+              {bottomTab === 'thermal' && <ThermalEscalationPanel />}
+              {bottomTab === 'chokepoints' && <SupplyChainChokepointsPanel />}
+              {bottomTab === 'displacement' && <DisplacementPanel />}
+              {bottomTab === 'climate' && <ClimateAnomaliesPanel />}
+              {bottomTab === 'fraudnet' && <NetworkAnalysisPanel />}
+              {bottomTab === 'fieldinspect' && <FieldInspectionSchedulerPanel />}
+              {/* C10: WorldMonitor Parity */}
+              {bottomTab === 'aiforecasts' && <AIForecastsPanel />}
+              {bottomTab === 'instability' && <CountryInstabilityPanel />}
+              {bottomTab === 'strategicrisk' && <StrategicRiskOverviewPanel />}
+              {bottomTab === 'livenewsfeed' && <LiveNewsFeedPanel />}
               {/* Analysis */}
               {bottomTab === 'correlation' && <CorrelationPanel />}
               {bottomTab === 'kpi' && <KPIOverviewPanel />}

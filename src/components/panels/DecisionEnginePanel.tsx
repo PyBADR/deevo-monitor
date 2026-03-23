@@ -8,7 +8,7 @@
  * Shows reasoning steps as a vertical chain with layer badges.
  */
 
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import type { DecisionAlert, ReasoningStep } from '../../types/decisions';
 
 // ── Demo Decisions ───────────────────────────────────────
@@ -78,7 +78,7 @@ interface DecisionEnginePanelProps {
   onReject?: (id: string) => void;
 }
 
-export default function DecisionEnginePanel({ onApprove, onReject }: DecisionEnginePanelProps) {
+function DecisionEnginePanelInner({ onApprove, onReject }: DecisionEnginePanelProps) {
   const [expandedId, setExpandedId] = useState<string | null>(DEMO_DECISIONS[0]?.id ?? null);
 
   const renderReasoningStep = (step: ReasoningStep) => (
@@ -229,3 +229,5 @@ export default function DecisionEnginePanel({ onApprove, onReject }: DecisionEng
     </div>
   );
 }
+
+export default memo(DecisionEnginePanelInner);

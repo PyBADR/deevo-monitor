@@ -34,7 +34,7 @@ const generateTimeSeries = (points: number, base: number, variance: number): num
   return data;
 };
 
-export default function TimelineView({
+function TimelineViewInner({
   signals = [],
   timeRange = '24h',
   onTimeRangeChange,
@@ -189,3 +189,5 @@ export default function TimelineView({
     </div>
   );
 }
+
+export default memo(TimelineViewInner);

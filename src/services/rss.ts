@@ -34,7 +34,7 @@ interface RSSConfig {
 }
 
 const DEFAULT_RSS_CONFIG: RSSConfig = {
-  corsProxy: 'https://api.allorigins.win/raw?url={url}',
+  corsProxy: '/api/rss-proxy?url={url}',
   pollIntervals: {
     high: 60_000,      // 1 minute
     medium: 300_000,   // 5 minutes

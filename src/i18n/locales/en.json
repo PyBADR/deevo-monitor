@@ -75,7 +75,18 @@
     "pricingMarketing": "Pricing & Marketing",
     "worldClock": "World Clock",
     "deevoProject": "Deevo Project",
-    "discord": "Discord Community"
+    "discord": "Discord Community",
+    "sanctionsWatch": "Sanctions Watch",
+    "thermalEscalation": "Thermal Escalation",
+    "supplyChainChokepoints": "Supply Chain Chokepoints",
+    "displacement": "Displacement Tracker",
+    "climateAnomalies": "Climate Anomalies",
+    "fraudNetworkAnalysis": "Fraud Network Analysis",
+    "fieldInspection": "Field Inspection Scheduler",
+    "aiForecasts": "AI Forecasts",
+    "countryInstability": "Country Instability Index",
+    "strategicRiskOverview": "Strategic Risk Overview",
+    "liveNewsFeed": "Live News Feed"
   },
   "country": {
     "SA": "Saudi Arabia",
@@ -290,5 +301,31 @@
     "privacy": "Privacy",
     "terms": "Terms",
     "contact": "Contact"
+  },
+  "pdpl": {
+    "title": "Data Privacy Notice",
+    "banner": "This platform processes data in compliance with Saudi Arabia Personal Data Protection Law (PDPL) and GCC data sovereignty requirements.",
+    "consent": "By using this platform, you consent to the processing of operational data for insurance intelligence purposes.",
+    "accept": "Accept & Continue",
+    "decline": "Decline",
+    "learnMore": "Learn More",
+    "lastUpdated": "Privacy policy last updated",
+    "cookieNotice": "This platform uses essential cookies only. No tracking cookies are used.",
+    "dataRetention": "Data retention: 7 years per IFRS 17 requirements",
+    "auditTrail": "All actions are logged with SHA-256 audit trail"
+  },
+  "hijri": {
+    "calendar": "Hijri Calendar",
+    "today": "Today (Hijri)",
+    "month": "Hijri Month",
+    "year": "Hijri Year"
+  },
+  "governance": {
+    "humanInLoop": "Human-in-the-Loop Required",
+    "criticalDecision": "Critical Decision Gate",
+    "auditLog": "Audit Log",
+    "sha256": "SHA-256 Verified",
+    "pdplCompliant": "PDPL Compliant",
+    "ifrs17": "IFRS 17 Ready"
   }
 }

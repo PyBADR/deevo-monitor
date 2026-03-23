@@ -46,7 +46,7 @@ interface ForceGraphViewProps {
   edgeFilter?: string[];
 }
 
-export default function ForceGraphView({
+function ForceGraphViewInner({
   onEntitySelect,
   selectedEntityId = null,
   edgeFilter,
@@ -233,3 +233,5 @@ export default function ForceGraphView({
     </div>
   );
 }
+
+export default memo(ForceGraphViewInner);

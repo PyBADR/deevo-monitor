@@ -50,7 +50,7 @@ const COUNTRY_POSITIONS: Record<GCCCountryCode, { x: number; y: number }> = {
   OM: { x: 400, y: 220 },
 };
 
-export default function GCCMapIntelligence({
+function GCCMapIntelligenceInner({
   signals = [],
   selectedCountry = null,
   onEntityClick,
@@ -193,3 +193,5 @@ export default function GCCMapIntelligence({
     </div>
   );
 }
+
+export default memo(GCCMapIntelligenceInner);

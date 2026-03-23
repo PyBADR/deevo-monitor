@@ -11,7 +11,7 @@
  * Design: IBM Plex Mono for all data, Gulf Amber accent.
  */
 
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import type { DeevoVariant } from '../../types/signals';
 
 interface KPICard {
@@ -39,7 +39,7 @@ interface KPIDashboardV3Props {
   variant?: DeevoVariant;
 }
 
-export default function KPIDashboardV3({ variant = 'global' }: KPIDashboardV3Props) {
+function KPIDashboardV3Inner({ variant = 'global' }: KPIDashboardV3Props) {
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
 
   // Suppress unused var
@@ -109,3 +109,5 @@ export default function KPIDashboardV3({ variant = 'global' }: KPIDashboardV3Pro
     </div>
   );
 }
+
+export default memo(KPIDashboardV3Inner);

@@ -47,7 +47,7 @@ interface ForexGoldPanelProps {
   compact?: boolean;
 }
 
-export default function ForexGoldPanel({ compact = false }: ForexGoldPanelProps) {
+function ForexGoldPanelInner({ compact = false }: ForexGoldPanelProps) {
   const [view, setView] = useState<'forex' | 'commodities'>('forex');
 
   const miniSparkline = (data: number[], color: string): string => {
@@ -154,3 +154,5 @@ export default function ForexGoldPanel({ compact = false }: ForexGoldPanelProps)
     </div>
   );
 }
+
+export default memo(ForexGoldPanelInner);
