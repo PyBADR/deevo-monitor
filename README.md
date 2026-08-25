@@ -1,10 +1,10 @@
-# Deevo Cortex
+# Deevo Monitor
 
 **Economic Intelligence Layer for GCC Insurance Markets**
 
 Transforms geopolitical events into explainable economic intelligence — causal chains, sector impact analysis, scenario scoring, and executive decision insights focused on the Gulf Cooperation Council region.
 
-> **Status**: MVP / Applied Intelligence Platform. Backend core is production-tested (39/39 tests passing). Frontend dashboard is functional and wired to live API. Not yet deployed to production.
+> **Status**: MVP / applied intelligence platform. Backend core passes its full test suite (39/39). Frontend dashboard is functional and wired to the live API. Not deployed to production; no production deployment is claimed.
 
 ---
 
